@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import './styles/index.css';
+import CubeWorld from './components/CubeWorld';
+import reportWebVitals from './util/reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <CubeWorld bgColor='#141622' />
   </React.StrictMode>,
   document.getElementById('root')
 );
