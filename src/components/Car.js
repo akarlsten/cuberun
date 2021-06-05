@@ -13,11 +13,11 @@ export default function Model(props) {
     '/models/car.gltf'
   )
 
-  const [carPos, setCarPos] = useState({ position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 3.15, z: 0 } })
+  const [carPos, setCarPos] = useState({ position: { x: 0, y: -2.5, z: 0 }, rotation: { x: 0, y: Math.PI, z: 0 } })
 
   useFrame(({ mouse }) => {
     setCarPos(prev => ({
-      position: { ...prev.position, x: mouse.x * 6, y: 0 },
+      position: { ...prev.position, x: mouse.x * 6 },
       rotation: {
         z: +mouse.x * 0.5,
         x: mouse.x >= 0 ? mouse.x * 0.5 : -mouse.x * 0.5,
