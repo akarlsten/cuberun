@@ -7,23 +7,61 @@ import { useFrame } from '@react-three/fiber'
 
 import { useGLTF } from '@react-three/drei'
 
+import useGameState from '../hooks/useGameState'
+
 export default function Model(props) {
   const car = useRef()
   const { nodes, materials } = useGLTF(
     '/models/car.gltf'
   )
-
+  const controls = useGameState(state => state.controls)
   const [carPos, setCarPos] = useState({ position: { x: 0, y: -2.5, z: 0 }, rotation: { x: 0, y: Math.PI, z: 0 } })
 
   useFrame(({ mouse }) => {
-    setCarPos(prev => ({
-      position: { ...prev.position, x: mouse.x * 6 },
-      rotation: {
-        z: +mouse.x * 0.5,
-        x: mouse.x >= 0 ? mouse.x * 0.5 : -mouse.x * 0.5,
-        y: 3.15 - mouse.x * 1.1
-      }
-    }))
+    if ((controls.left && controls.right) || (!controls.left && !controls.right)) {
+      setCarPos(prev => ({
+        position: { ...prev.position, x: prev.position.x > 0 ? prev.position.x -= 0.01 : prev.position.x < 0 ? prev.position.x += 0.01 : 0 },
+        rotation: {
+          ...prev.rotation,
+          x: prev.rotation.x > 0 ? prev.rotation.x -= 0.01 : 0,
+          y: prev.rotation.y > Math.PI ? prev.rotation.y -= 0.01 : prev.rotation.y < Math.PI ? prev.rotation.y += 0.01 : Math.PI,
+          z: prev.rotation.z > 0 ? prev.rotation.z -= 0.01 : prev.rotation.z < 0 ? prev.rotation.z += 0.01 : 0
+        }
+      }))
+    }
+
+    if ((controls.left && !controls.right)) {
+      setCarPos(prev => ({
+        position: { ...prev.position, x: Math.max(-0.5, prev.position.x -= 0.01) },
+        rotation: {
+          ...prev.rotation,
+          x: Math.min(0.1, prev.rotation.x += 0.01),
+          y: Math.min(Math.PI + 0.5, prev.rotation.y += 0.01),
+          z: Math.max(-0.3, prev.rotation.z -= 0.01)
+        }
+      }))
+    }
+
+    if ((!controls.left && controls.right)) {
+      setCarPos(prev => ({
+        position: { ...prev.position, x: Math.min(0.5, prev.position.x += 0.01) },
+        rotation: {
+          ...prev.rotation,
+          x: Math.min(0.1, prev.rotation.x += 0.01),
+          y: Math.max(Math.PI - 0.5, prev.rotation.y -= 0.01),
+          z: Math.min(0.3, prev.rotation.z += 0.01)
+        }
+      }))
+    }
+
+    // setCarPos(prev => ({
+    //   position: { ...prev.position, x: mouse.x * 6 },
+    //   rotation: {
+    //     z: +mouse.x * 0.5,
+    //     x: mouse.x >= 0 ? mouse.x * 0.5 : -mouse.x * 0.5,
+    //     y: Math.PI - mouse.x * 1.1
+    //   }
+    // }))
   })
 
   useFrame(() => {

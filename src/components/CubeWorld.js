@@ -5,18 +5,9 @@ import { useEffect, useRef } from 'react'
 import Player from './Player'
 import Ground from './Ground'
 import Text from './Text'
-
-import useStore from '../hooks/useStore'
+import KeyboardControls from './KeyboardControls'
 
 export default function CubeWorld({ color, bgColor }) {
-  const groundPosRef = useRef(useStore.getState().groundPosition)
-
-  useEffect(() => {
-    useStore.subscribe(
-      groundPosition => (groundPosRef.current = groundPosition),
-      state => state.groundPosition
-    )
-  }, [])
 
   return (
     <Canvas style={{ background: `${bgColor}` }}>
@@ -26,6 +17,7 @@ export default function CubeWorld({ color, bgColor }) {
       <Text />
       <Ground />
       <Perf />
+      <KeyboardControls />
     </Canvas>
   )
 }
