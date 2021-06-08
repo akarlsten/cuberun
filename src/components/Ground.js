@@ -48,10 +48,15 @@ export default function Ground() {
   const setGroundPosition = useStore(state => state.setGroundPosition)
   const speed = useStore(state => state.speedFactor)
   const increaseSpeed = useStore(state => state.increaseSpeed)
+  const resetSpeed = useStore(state => state.resetSpeed)
+  const controls = useStore(state => state.controls)
 
   const [color, setColor] = useState(randomColor)
+  const [speedFactor, setSpeedFactor] = useState({ leftSpeed: 0, rightSpeed: 0 })
 
-  useFrame(() => {
+  useFrame((state, delta) => {
+    const { controls: { left, right }, speedFactor: speed } = useStore.getState()
+
     ground.current.position.z += speed
 
     if (ground.current.position.z >= 5000) {
@@ -60,10 +65,40 @@ export default function Ground() {
       setColor(randomColor)
     }
 
+    if (speed > 5) {
+      resetSpeed()
+    }
+
+    if (left && !right) {
+      setSpeedFactor({ leftSpeed: Math.min(0.5, speedFactor.leftSpeed + 0.005), rightSpeed: 0 })
+      ground.current.position.x += speedFactor.leftSpeed
+    }
+
+    if (!left && right) {
+      setSpeedFactor({ leftSpeed: 0, rightSpeed: Math.min(0.5, speedFactor.rightSpeed + 0.005) })
+      ground.current.position.x -= speedFactor.rightSpeed
+    }
+
     setGroundPosition(ground.current.position.z)
   })
 
   return (
-    <gridHelper ref={ground} rotation={[0, 0, 0]} position={[0, -20, 0]} args={[20000, 400, `#${color}`, `#${color}`]} />
+    <>
+      <gridHelper ref={ground} rotation={[0, 0, 0]} position={[0, -5, 0]} args={[20000, 400, `#${color}`, `#${color}`]} />
+      <mesh
+        visible
+        position={[0, -5.05, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
+        <planeBufferGeometry attach="geometry" args={[20000, 30000, 256, 256]} />
+        <meshStandardMaterial
+          attach="material"
+          color={`black`}
+          roughness={1}
+          metalness={0}
+          roughness={1}
+        />
+      </mesh>
+    </>
   )
 }

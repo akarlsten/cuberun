@@ -1,3 +1,4 @@
+import { createRef } from 'react'
 import create from 'zustand'
 
 const useGameState = create((set, get) => {
@@ -7,10 +8,13 @@ const useGameState = create((set, get) => {
     get,
     controls: {
       left: false,
-      right: false
+      right: false,
     },
     speedFactor: 1,
     groundPosition: 0,
+    raycast: {
+      vehicle: createRef()
+    },
     setGroundPosition: (pos) => set(state => ({ groundPosition: pos })),
     increaseSpeed: () => set(state => ({ speedFactor: state.speedFactor + 1 })),
     resetSpeed: () => set(state => ({ speedFactor: 1 }))

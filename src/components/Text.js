@@ -9,7 +9,7 @@ export default function TextBox({ input }) {
   const controls = useStore(state => state.controls)
 
   return (
-    <Text fontSize={0.2} position={[-2, 2, 0]} color="white" anchorX="center" anchorY="middle">
+    <Text fontSize={0.2} position={[0, 3, 0]} color="white" anchorX="center" anchorY="middle">
       {groundPosition} - {speed} - {JSON.stringify(controls)}
     </Text>
   )

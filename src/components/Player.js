@@ -18,11 +18,13 @@ const Loading = () => {
 }
 
 
-export default function Player() {
+export default function Player({ children }) {
 
   return (
     <Suspense fallback={<Loading />}>
-      <Car />
+      <Car>
+        {children}
+      </Car>
     </Suspense>
   )
 }
