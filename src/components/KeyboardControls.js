@@ -26,7 +26,7 @@ function useKeys(target, event, up = true) {
       window.removeEventListener('keydown', downHandler)
       window.removeEventListener('keyup', upHandler)
     }
-  }, [target, event, up, pressed])
+  }, [target, event, up])
 }
 
 export default function KeyboardControls() {
