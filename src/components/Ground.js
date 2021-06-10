@@ -84,8 +84,9 @@ export default function Ground({ groundColor }) {
 
   return (
     <>
-      <gridHelper ref={ground} rotation={[0, 0, 0]} position={[0, -5, 0]} args={[20000, 400, `#${color}`, `#${color}`]} />
+      <gridHelper ref={ground} rotation={[0, 0, 0]} position={[0, -5, 0]} args={[20000, 400, 'hotpink' || `#${color}`, 'hotpink' || `#${color}`]} />
       <mesh
+        receiveShadow
         visible
         position={[0, -5.05, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
@@ -93,7 +94,7 @@ export default function Ground({ groundColor }) {
         <planeBufferGeometry attach="geometry" args={[20000, 30000, 1, 1]} />
         <meshStandardMaterial
           attach="material"
-          color={`${groundColor}`}
+          color={`black`}
           roughness={1}
           metalness={0}
           roughness={1}

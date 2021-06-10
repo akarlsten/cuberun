@@ -17,7 +17,7 @@ export default function CubeWorld({ color, bgColor }) {
 
   return (
     <Canvas dpr={[1, 1.5]} shadows style={{ background: `${bgColor}` }}>
-      <Stars transparent opacity={0} radius={200} depth={50} count={5000} factor={10} saturation={0} fade />
+      <Skybox />
       <directionalLight
         ref={setLight}
         intensity={4}
@@ -30,6 +30,7 @@ export default function CubeWorld({ color, bgColor }) {
         castShadow
         position={[0, Math.PI, 0]}
       />
+      <fog attach="fog" args={['hotpink', 10, 500]} />
       <ambientLight intensity={0.1} />
       <Player>
         {light && <primitive object={light.target} />}
@@ -39,7 +40,6 @@ export default function CubeWorld({ color, bgColor }) {
       <Perf />
       <KeyboardControls />
       <Effects />
-      <fog attach="fog" args={['black', 10, 500]} />
     </Canvas>
   )
 }
