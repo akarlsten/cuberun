@@ -5,7 +5,7 @@ import { Stars } from '@react-three/drei'
 
 import { useEffect, useRef, useState } from 'react'
 
-import Player from './Player'
+import Ship from './Ship'
 import Ground from './Ground'
 import Text from './Text'
 import KeyboardControls from './KeyboardControls'
@@ -32,9 +32,9 @@ export default function CubeWorld({ color, bgColor }) {
       />
       <fog attach="fog" args={['hotpink', 10, 500]} />
       <ambientLight intensity={0.1} />
-      <Player>
+      <Ship>
         {light && <primitive object={light.target} />}
-      </Player>
+      </Ship>
       <Ground groundColor={bgColor} />
       <Text />
       <Perf />

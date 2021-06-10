@@ -1,7 +1,7 @@
 import { createRef } from 'react'
 import create from 'zustand'
 
-const useGameState = create((set, get) => {
+const useStore = create((set, get) => {
 
   return {
     set,
@@ -12,13 +12,18 @@ const useGameState = create((set, get) => {
     },
     speedFactor: 1,
     groundPosition: 0,
-    raycast: {
-      vehicle: createRef()
-    },
+    camera: createRef(),
+    ship: createRef(),
+    sun: createRef(),
     setGroundPosition: (pos) => set(state => ({ groundPosition: pos })),
     increaseSpeed: () => set(state => ({ speedFactor: state.speedFactor + 1 })),
     resetSpeed: () => set(state => ({ speedFactor: 1 }))
   }
 })
 
-export default useGameState
+const mutation = {
+  velocity: [0, 0, 0],
+  gameSpeed: 0
+}
+
+export default useStore

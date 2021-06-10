@@ -1,36 +1,37 @@
-import { Suspense, useRef } from 'react'
-import { useThree, extend, useFrame } from '@react-three/fiber'
-import { shaderMaterial, useTexture, Stars } from '@react-three/drei'
+import { Suspense, useRef, useMemo, useLayoutEffect } from 'react'
+import { useThree, useFrame } from '@react-three/fiber'
+import { useTexture, Stars } from '@react-three/drei'
 import * as THREE from 'three'
 
+import useStore from '../hooks/useStore'
 
+function Sun() {
+  const { clock, camera } = useThree()
 
-const SkyboxMaterial = shaderMaterial({
-  tex: new THREE.Texture()
-},
-  `
-varying vec2 vUv;
+  const sun = useStore((s) => s.sun)
 
-void main() {
-  vUv = uv;
-  vec4 posi = vec4(position, 1.0);
-  gl_Position = projectionMatrix * modelViewMatrix * posi;
-}`, `
-uniform sampler2D text;
-varying vec2 vUv;
+  const sunColor = useMemo(() => new THREE.Color(0xffb12b), [sun])
 
-void main() {
-  vec4 text = texture2D(text, vUv);
-  gl_FragColor = vec4(text.xyz, text.w);
+  useLayoutEffect(() => { }, [])
+
+  useFrame((state, delta) => {
+    sun.current.scale.x += Math.sin(clock.getElapsedTime() * 3) / 3000
+    sun.current.scale.y += Math.sin(clock.getElapsedTime() * 3) / 3000
+  })
+
+  return (
+    <mesh ref={sun} scale={[1, 1, 1]} position={[0, 0, -1000]}>
+      <sphereGeometry attach="geometry" args={[200, 30, 30]} />
+      <meshPhongMaterial fog={false} emissive={sunColor} emissiveIntensity={1} attach="material" color="red" />
+    </mesh>
+  )
 }
-`)
-
-extend({ SkyboxMaterial })
 
 function Sky() {
   const texture = useTexture('wallup-140739.jpg')
   const sky = useRef()
   const stars = useRef()
+
 
   useFrame((state, delta) => {
     sky.current.rotation.z += delta / 50
@@ -48,7 +49,6 @@ function Sky() {
         <pointLight position={[0, -5000, 0]} intensity={0.9} />
         <sphereGeometry attach="geometry" args={[1000, 10, 10]} />
         <meshPhongMaterial fog={false} side={THREE.BackSide} attach="material" map={texture} />
-        {/* <skyboxMaterial attach="material" texture={texture} /> */}
       </mesh>
     </>
   )
@@ -58,6 +58,7 @@ export default function Skybox() {
 
   return (
     <Suspense fallback={null}>
+      <Sun />
       <Sky />
     </Suspense>
   )

@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 
-import useStore from '../hooks/useGameState'
+import useStore from '../hooks/useStore'
 
 const randomColor = () => Math.floor(Math.random() * 16777215).toString(16);
 
@@ -57,7 +57,7 @@ export default function Ground({ groundColor }) {
   useFrame((state, delta) => {
     const { controls: { left, right }, speedFactor: speed } = useStore.getState()
 
-    ground.current.position.z += speed
+    ground.current.position.z += 200 * delta * speed
 
     if (ground.current.position.z >= 5000) {
       ground.current.position.z = 0

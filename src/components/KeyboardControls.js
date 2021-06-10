@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import useGameState from '../hooks/useGameState'
+import useGameState from '../hooks/useStore'
 
 const pressed = []
 
