@@ -7,6 +7,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader'
+import { BokehShader } from 'three/examples/jsm/shaders/BokehShader'
 
 extend({ EffectComposer, ShaderPass, RenderPass, UnrealBloomPass, SSAOPass })
 

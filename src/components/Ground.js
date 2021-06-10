@@ -5,7 +5,7 @@ import useStore from '../hooks/useGameState'
 
 const randomColor = () => Math.floor(Math.random() * 16777215).toString(16);
 
-export default function Ground() {
+export default function Ground({ groundColor }) {
   // const ground = useRef()
   // const setGroundPosition = useStore(state => state.setGroundPosition)
   // const speed = useStore(state => state.speedFactor)
@@ -90,10 +90,10 @@ export default function Ground() {
         position={[0, -5.05, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
       >
-        <planeBufferGeometry attach="geometry" args={[20000, 30000, 256, 256]} />
+        <planeBufferGeometry attach="geometry" args={[20000, 30000, 1, 1]} />
         <meshStandardMaterial
           attach="material"
-          color={`black`}
+          color={`${groundColor}`}
           roughness={1}
           metalness={0}
           roughness={1}

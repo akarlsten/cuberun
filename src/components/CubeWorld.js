@@ -10,13 +10,14 @@ import Ground from './Ground'
 import Text from './Text'
 import KeyboardControls from './KeyboardControls'
 import Effects from './Effects'
+import Skybox from './Skybox'
 
 export default function CubeWorld({ color, bgColor }) {
   const [light, setLight] = useState()
 
   return (
     <Canvas dpr={[1, 1.5]} shadows style={{ background: `${bgColor}` }}>
-      <Stars radius={200} depth={50} count={5000} factor={10} saturation={0} fade />
+      <Stars transparent opacity={0} radius={200} depth={50} count={5000} factor={10} saturation={0} fade />
       <directionalLight
         ref={setLight}
         intensity={4}
@@ -33,12 +34,12 @@ export default function CubeWorld({ color, bgColor }) {
       <Player>
         {light && <primitive object={light.target} />}
       </Player>
-      <Ground />
+      <Ground groundColor={bgColor} />
       <Text />
       <Perf />
       <KeyboardControls />
       <Effects />
-      <fog attach="fog" args={['black', 0, 500]} />
+      <fog attach="fog" args={['black', 10, 500]} />
     </Canvas>
   )
 }
