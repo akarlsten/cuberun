@@ -1,18 +1,16 @@
-import { Suspense, useRef, useMemo, useLayoutEffect } from 'react'
+import { Suspense, useState, useRef, useMemo, useLayoutEffect } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import { useTexture, Stars } from '@react-three/drei'
 import * as THREE from 'three'
 
-import useStore from '../hooks/useStore'
+import { useStore } from '../hooks/useStore'
 
 function Sun() {
   const { clock, camera } = useThree()
 
   const sun = useStore((s) => s.sun)
 
-  const sunColor = useMemo(() => new THREE.Color(0xffb12b), [sun])
-
-  useLayoutEffect(() => { }, [])
+  const sunColor = useMemo(() => new THREE.Color(1, 0.694, 0.168), [sun])
 
   useFrame((state, delta) => {
     sun.current.scale.x += Math.sin(clock.getElapsedTime() * 3) / 3000
@@ -54,12 +52,14 @@ function Sky() {
   )
 }
 
+
 export default function Skybox() {
 
   return (
     <Suspense fallback={null}>
       <Sun />
       <Sky />
+      <fog attach="fog" args={['#bf6c00', 10, 500]} />
     </Suspense>
   )
 }

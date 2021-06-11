@@ -2,7 +2,7 @@ import { Text } from '@react-three/drei'
 import { useEffect, useRef, useState } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 
-import useStore from '../hooks/useStore'
+import { useStore, mutation } from '../hooks/useStore'
 
 export default function TextBox({ input }) {
   const groundPosition = useStore(state => state.groundPosition)
@@ -26,8 +26,11 @@ export default function TextBox({ input }) {
 
   return (
     <group ref={textGroup}>
+      <Text fontSize={0.2} position={[0, 2.7, 0]} color="white" anchorX="center" anchorY="middle">
+        Left: {mutation.leftSpeed.toFixed(3)} | Right: {mutation.rightSpeed.toFixed(3)}
+      </Text>
       <Text fontSize={0.2} position={[0, 3, 0]} color="white" anchorX="center" anchorY="middle">
-        {groundPosition.toFixed(1)} - {speed} - {JSON.stringify(controls)}
+        {mutation.gameSpeed} - {JSON.stringify(controls)}
       </Text>
       <Text fontSize={0.2} position={[0, 3.3, 0]} color="white" anchorX="center" anchorY="middle">
         {clock.getElapsedTime().toFixed(3)} - {deltaRef.current.toPrecision(3)}

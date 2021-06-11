@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import useGameState from '../hooks/useStore'
+import { useStore } from '../hooks/useStore'
 
 const pressed = []
 
@@ -30,7 +30,7 @@ function useKeys(target, event, up = true) {
 }
 
 export default function KeyboardControls() {
-  const set = useGameState((state) => state.set)
+  const set = useStore((state) => state.set)
   useKeys(['ArrowLeft', 'a', 'A'], (left) => set((state) => ({ ...state, controls: { ...state.controls, left } })))
   useKeys(['ArrowRight', 'd', 'D'], (right) => set((state) => ({ ...state, controls: { ...state.controls, right } })))
 

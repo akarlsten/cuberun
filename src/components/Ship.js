@@ -4,9 +4,11 @@ import { useGLTF, PerspectiveCamera, MeshDistortMaterial, Html } from '@react-th
 
 import * as THREE from 'three'
 
-import useStore from '../hooks/useStore'
+import { useStore, mutation } from '../hooks/useStore'
 
 const v = new THREE.Vector3()
+
+// TODO: move the ship instead of cubes
 
 function ShipModel(props, { children }) {
   const { nodes, materials } = useGLTF('/models/spaceship.gltf')
@@ -24,9 +26,6 @@ function ShipModel(props, { children }) {
   const rightWingTrail = useRef()
 
   const { clock } = useThree()
-
-  const leftSpeed = useRef(0)
-  const rightSpeed = useRef(0)
 
   // subscribe to controller updates on mount
   const controlsRef = useRef(useStore.getState().controls)
@@ -66,8 +65,8 @@ function ShipModel(props, { children }) {
     ship.current.position.y -= slowSine / 80
 
     if ((left && right) || (!left && !right)) {
-      leftSpeed.current = 0
-      rightSpeed.current = 0
+      mutation.leftSpeed = 0
+      mutation.rightSpeed = 0
 
       // Pos
       if (ship.current.position.x > 0 + delta) {
@@ -103,60 +102,60 @@ function ShipModel(props, { children }) {
     }
 
     if ((left && !right)) {
-      rightSpeed.current = 0
-      leftSpeed.current += accelDelta
+      mutation.rightSpeed = 0
+      mutation.leftSpeed += accelDelta
 
       // pos 
-      ship.current.position.x = Math.min(1.4, ship.current.position.x += leftSpeed.current / 5)
+      ship.current.position.x = Math.min(1.4, ship.current.position.x += mutation.leftSpeed / 5)
 
       // rot
       ship.current.rotation.x = Math.min(0.1, ship.current.rotation.x += bigDelta / 15)
-      ship.current.rotation.y = Math.min(Math.PI + 0.5, ship.current.rotation.y += leftSpeed.current / 15)
-      ship.current.rotation.z = Math.max(-0.3, ship.current.rotation.z -= leftSpeed.current / 15)
+      ship.current.rotation.y = Math.min(Math.PI + 0.5, ship.current.rotation.y += mutation.leftSpeed / 15)
+      ship.current.rotation.z = Math.max(-0.3, ship.current.rotation.z -= mutation.leftSpeed / 15)
 
       // wing trail
-      rightWingTrail.current.scale.x = Math.sin(time * 15) / 40
-      rightWingTrail.current.scale.y = Math.sin(time * 10) / 40
-      leftWingTrail.current.scale.x = Math.sin(time * 15) / 200
-      leftWingTrail.current.scale.y = Math.sin(time * 10) / 200
+      rightWingTrail.current.scale.x = fastSine / 40
+      rightWingTrail.current.scale.y = slowSine / 40
+      leftWingTrail.current.scale.x = fastSine / 200
+      leftWingTrail.current.scale.y = slowSine / 200
     }
 
     if ((!left && right)) {
-      rightSpeed.current += accelDelta
-      leftSpeed.current = 0
+      mutation.rightSpeed += accelDelta
+      mutation.leftSpeed = 0
 
       // pos 
-      ship.current.position.x = Math.max(-1.4, ship.current.position.x -= rightSpeed.current / 5)
+      ship.current.position.x = Math.max(-1.4, ship.current.position.x -= mutation.rightSpeed / 5)
 
       // rot
       ship.current.rotation.x = Math.min(0.1, ship.current.rotation.x += bigDelta / 15)
-      ship.current.rotation.y = Math.max(Math.PI - 0.5, ship.current.rotation.y -= rightSpeed.current / 15)
-      ship.current.rotation.z = Math.min(0.3, ship.current.rotation.z += rightSpeed.current / 15)
+      ship.current.rotation.y = Math.max(Math.PI - 0.5, ship.current.rotation.y -= mutation.rightSpeed / 15)
+      ship.current.rotation.z = Math.min(0.3, ship.current.rotation.z += mutation.rightSpeed / 15)
 
       // wing trail
-      leftWingTrail.current.scale.x = Math.sin(time * 15) / 40
-      leftWingTrail.current.scale.y = Math.sin(time * 10) / 40
-      rightWingTrail.current.scale.x = Math.sin(time * 15) / 200
-      rightWingTrail.current.scale.y = Math.sin(time * 10) / 200
+      leftWingTrail.current.scale.x = fastSine / 40
+      leftWingTrail.current.scale.y = slowSine / 40
+      rightWingTrail.current.scale.x = fastSine / 200
+      rightWingTrail.current.scale.y = slowSine / 200
     }
 
-    outerExhaust.current.scale.x = 0.15 + Math.sin(time * 15) / 15
-    outerExhaust.current.scale.y = 0.30 + Math.sin(time * 10) / 10
-    innerExhaust.current.scale.x = 0.10 + Math.sin(time * 15) / 15
-    innerExhaust.current.scale.y = 0.25 + Math.sin(time * 10) / 10
+    outerExhaust.current.scale.x = 0.15 + fastSine / 15
+    outerExhaust.current.scale.y = 0.30 + slowSine / 10
+    innerExhaust.current.scale.x = 0.10 + fastSine / 15
+    innerExhaust.current.scale.y = 0.25 + slowSine / 10
   })
 
   return (
-    <group receiveShadow castShadow ref={ship} position={[0, 0.87, 0]} {...props} dispose={null}>
+    <group receiveShadow ref={ship} position={[0, 0.87, 0]} {...props} dispose={null}>
       <PerspectiveCamera makeDefault ref={camera} fov={75} rotation={[0, Math.PI, 0]} position={[0, 10, -20]} />
       <pointLight ref={pointLight} color="red" decay={4} distance={50} intensity={15} position={[0, 0, -2]} />
       {children}
       <mesh geometry={nodes.Ship_Body.geometry} material={materials.Cockpit} />
-      <mesh geometry={nodes.Ship_Body_1.geometry} material={materials.Chassis} />
+      <mesh receiveShadow castShadow geometry={nodes.Ship_Body_1.geometry} material={materials.Chassis} />
       <mesh geometry={nodes.Ship_Body_2.geometry}>
         <meshBasicMaterial attach="material" color="orange" />
       </mesh>
-      <mesh geometry={nodes.Ship_Body_3.geometry} material={materials['Gray Metal']} />
+      <mesh receiveShadow castShadow geometry={nodes.Ship_Body_3.geometry} material={materials['Gray Metal']} />
       <mesh geometry={nodes.Ship_Body_4.geometry}>
         <meshBasicMaterial attach="material" color="lightpink" />
       </mesh>

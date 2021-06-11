@@ -15,6 +15,7 @@ const useStore = create((set, get) => {
     camera: createRef(),
     ship: createRef(),
     sun: createRef(),
+    cubes: [],
     setGroundPosition: (pos) => set(state => ({ groundPosition: pos })),
     increaseSpeed: () => set(state => ({ speedFactor: state.speedFactor + 1 })),
     resetSpeed: () => set(state => ({ speedFactor: 1 }))
@@ -22,8 +23,9 @@ const useStore = create((set, get) => {
 })
 
 const mutation = {
-  velocity: [0, 0, 0],
-  gameSpeed: 0
+  gameSpeed: 0.3,
+  leftSpeed: 0,
+  rightSpeed: 0
 }
 
-export default useStore
+export { useStore, mutation }
