@@ -14,6 +14,7 @@ const useStore = create((set, get) => {
     },
     speedFactor: 1,
     groundPosition: 0,
+    directionalLight: createRef(),
     camera: createRef(),
     ship: createRef(),
     sun: createRef(),
@@ -30,7 +31,7 @@ const useStore = create((set, get) => {
 
 const mutation = {
   gameOver: false,
-  gameSpeed: 0.3,
+  gameSpeed: 0,
   leftSpeed: 0,
   rightSpeed: 0
 }

@@ -14,28 +14,21 @@ import Skybox from './Skybox'
 import Cubes from './Cubes'
 import Walls from './Walls'
 
-export default function CubeWorld({ color, bgColor }) {
-  const [light, setLight] = useState()
 
+export default function CubeWorld({ color, bgColor }) {
+  const directionalLight = useStore((s) => s.directionalLight)
 
   return (
     <Canvas dpr={[1, 1.5]} shadows style={{ background: `${bgColor}` }}>
       <Skybox />
       <directionalLight
-        ref={setLight}
-        intensity={4}
-        shadow-bias={-0.001}
-        shadow-mapSize={[4096, 4096]}
-        shadow-camera-left={-150}
-        shadow-camera-right={150}
-        shadow-camera-top={150}
-        shadow-camera-bottom={-150}
-        castShadow
+        ref={directionalLight}
+        intensity={3} // 4
         position={[0, Math.PI, 0]}
       />
       <ambientLight intensity={0.1} />
       <Ship>
-        {light && <primitive object={light.target} />}
+        {directionalLight.current && <primitive object={directionalLight.current.target} />}
       </Ship>
       <Walls />
       <Cubes />

@@ -36,11 +36,6 @@ export default function Walls() {
       <Cone args={[wallRadius, PLANE_SIZE, 16]} position={[PLANE_SIZE / 2, 0, -5]} rotation={[Math.PI / 2, 0, Math.PI]} ref={rightWall}>
         <meshBasicMaterial attach="material" color="orange" />
       </Cone>
-      {/* <group ref={walls}>
-        <Box rotation={[0, 0, 0]} position={[-PLANE_SIZE / 2, 0, 0]} args={[5, 20, 20000]}>
-          <meshBasicMaterial attach="material" color="hotpink" />
-        </Box>
-      </group> */}
     </>
   )
 }

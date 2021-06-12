@@ -32,7 +32,7 @@ const Cube = forwardRef((_, cube) => {
     // cube.current.position.x -= Math.min(0.5, mutation.rightSpeed)
 
     if (ship.current) {
-      if (distance2D(ship.current.position.x, ship.current.position.z, cube.current.position.x, cube.current.position.z) < 10) {
+      if (distance2D(ship.current.position.x, ship.current.position.z, cube.current.position.x, cube.current.position.z) < 13) {
         mutation.gameSpeed = 0
         mutation.gameOver = true
       }
