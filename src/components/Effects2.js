@@ -2,16 +2,9 @@ import { forwardRef, useMemo, useEffect } from 'react'
 import { EffectComposer, Bloom, GodRays, SMAA } from '@react-three/postprocessing'
 import { useThree } from '@react-three/fiber'
 import { Resizer, KernelSize, BlendFunction, Effect } from 'postprocessing'
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
-import { UnrealBloom } from '../shaders/unrealBloom'
-
-import useStore from '../hooks/useStore'
 
 
-
-
-
-
+import { useStore } from '../hooks/useStore'
 
 export default function Effects() {
   const sun = useStore((s) => s.sun)
@@ -23,11 +16,11 @@ export default function Effects() {
       {sun.current && (
         <GodRays
           sun={sun.current}
-          blendFunction={BlendFunction.SCREEN} // The blend function of this effect.
+          blendFunction={BlendFunction.NEGATION} // The blend function of this effect.
           samples={30} // The number of samples per pixel.
           density={0.97} // The density of the light rays.
           decay={0.97} // An illumination decay factor.
-          weight={0.2} // A light ray weight factor.
+          weight={0.8} // A light ray weight factor.
           exposure={0.4} // A constant attenuation coefficient.
           clampMax={1} // An upper bound for the saturation of the overall effect.
           width={Resizer.AUTO_SIZE} // Render width.
@@ -36,8 +29,7 @@ export default function Effects() {
           blur={true} // Whether the god rays should be blurred to reduce artifacts.
         />
       )}
-      <UnrealBloom resolution={size.width} />
-      {/* <Bloom
+      <Bloom
         blendFunction={BlendFunction.ADD}
         intensity={0.3} // The bloom intensity.
         blurPass={undefined} // A blur pass.
@@ -46,7 +38,7 @@ export default function Effects() {
         kernelSize={KernelSize.LARGE} // blur kernel size
         luminanceThreshold={0.4} // luminance threshold. Raise this value to mask out darker elements in the scene.
         luminanceSmoothing={0.3} // smoothness of the luminance threshold. Range is [0, 1]
-      /> */}
+      />
     </EffectComposer>
   )
 }

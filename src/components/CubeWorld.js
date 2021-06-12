@@ -1,9 +1,9 @@
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { Perf } from 'r3f-perf'
 import { Stars } from '@react-three/drei'
+import { useEffect, useRef, useState, Suspense } from 'react'
 
-
-import { useEffect, useRef, useState } from 'react'
+import { useStore } from '../hooks/useStore'
 
 import Ship from './Ship'
 import Ground from './Ground'
@@ -11,10 +11,12 @@ import Text from './Text'
 import KeyboardControls from './KeyboardControls'
 import Effects from './Effects'
 import Skybox from './Skybox'
-import Cube from './Cube'
+import Cubes from './Cubes'
+import Walls from './Walls'
 
 export default function CubeWorld({ color, bgColor }) {
   const [light, setLight] = useState()
+
 
   return (
     <Canvas dpr={[1, 1.5]} shadows style={{ background: `${bgColor}` }}>
@@ -35,234 +37,8 @@ export default function CubeWorld({ color, bgColor }) {
       <Ship>
         {light && <primitive object={light.target} />}
       </Ship>
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
-      <Cube />
+      <Walls />
+      <Cubes />
       <Ground groundColor={bgColor} />
       <Text />
       <Perf />

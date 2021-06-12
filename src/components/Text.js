@@ -21,19 +21,21 @@ export default function TextBox({ input }) {
     deltaRef.current = delta
     if (ship.current) {
       textGroup.current.position.y = ship.current.position.y
+      textGroup.current.position.z = ship.current.position.z
+      textGroup.current.position.x = ship.current.position.x
     }
   })
 
   return (
     <group ref={textGroup}>
-      <Text fontSize={0.2} position={[0, 2.7, 0]} color="white" anchorX="center" anchorY="middle">
-        Left: {mutation.leftSpeed.toFixed(3)} | Right: {mutation.rightSpeed.toFixed(3)}
+      <Text fontSize={0.2} position={[0, 3.3, 0]} color="white" anchorX="center" anchorY="middle">
+        Game over: {JSON.stringify(mutation.gameOver)} - {deltaRef.current.toPrecision(3)}
       </Text>
       <Text fontSize={0.2} position={[0, 3, 0]} color="white" anchorX="center" anchorY="middle">
         {mutation.gameSpeed} - {JSON.stringify(controls)}
       </Text>
-      <Text fontSize={0.2} position={[0, 3.3, 0]} color="white" anchorX="center" anchorY="middle">
-        {clock.getElapsedTime().toFixed(3)} - {deltaRef.current.toPrecision(3)}
+      <Text fontSize={0.2} position={[0, 2.7, 0]} color="white" anchorX="center" anchorY="middle">
+        Left: {mutation.leftSpeed.toFixed(3)} | Right: {mutation.rightSpeed.toFixed(3)}
       </Text>
     </group>
   )

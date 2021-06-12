@@ -9,12 +9,18 @@ function Sun() {
   const { clock, camera } = useThree()
 
   const sun = useStore((s) => s.sun)
+  const ship = useStore((s) => s.ship)
 
   const sunColor = useMemo(() => new THREE.Color(1, 0.694, 0.168), [sun])
 
   useFrame((state, delta) => {
     sun.current.scale.x += Math.sin(clock.getElapsedTime() * 3) / 3000
     sun.current.scale.y += Math.sin(clock.getElapsedTime() * 3) / 3000
+
+    if (ship.current) {
+      sun.current.position.z = ship.current.position.z - 1000
+      sun.current.position.x = ship.current.position.x
+    }
   })
 
   return (
@@ -30,12 +36,21 @@ function Sky() {
   const sky = useRef()
   const stars = useRef()
 
+  const ship = useStore((s) => s.ship)
+
 
   useFrame((state, delta) => {
     sky.current.rotation.z += delta / 50
     stars.current.rotation.z += delta / 50
     sky.current.rotation.y -= delta / 50
     sky.current.rotation.y += delta / 50
+
+    if (ship.current) {
+      sky.current.position.x = ship.current.position.x
+      stars.current.position.x = ship.current.position.x
+      sky.current.position.z = ship.current.position.z
+      stars.current.position.z = ship.current.position.z
+    }
   })
 
 

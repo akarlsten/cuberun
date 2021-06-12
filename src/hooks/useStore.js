@@ -1,6 +1,8 @@
 import { createRef } from 'react'
 import create from 'zustand'
 
+import { CUBE_AMOUNT } from '../constants'
+
 const useStore = create((set, get) => {
 
   return {
@@ -15,7 +17,11 @@ const useStore = create((set, get) => {
     camera: createRef(),
     ship: createRef(),
     sun: createRef(),
-    cubes: [],
+    cubes: new Array(CUBE_AMOUNT).fill().map(() => {
+      const ref = createRef()
+
+      return ref
+    }),
     setGroundPosition: (pos) => set(state => ({ groundPosition: pos })),
     increaseSpeed: () => set(state => ({ speedFactor: state.speedFactor + 1 })),
     resetSpeed: () => set(state => ({ speedFactor: 1 }))
@@ -23,6 +29,7 @@ const useStore = create((set, get) => {
 })
 
 const mutation = {
+  gameOver: false,
   gameSpeed: 0.3,
   leftSpeed: 0,
   rightSpeed: 0
