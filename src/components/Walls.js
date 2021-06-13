@@ -17,7 +17,6 @@ export default function Walls() {
 
   useFrame((state, delta) => {
     if (ship.current) {
-      // walls.current.position.z = ship.current.position.z
       rightWall.current.position.z = ship.current.position.z
       leftWall.current.position.z = ship.current.position.z
 

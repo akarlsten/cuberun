@@ -1,7 +1,7 @@
 import { createRef } from 'react'
 import create from 'zustand'
 
-import { CUBE_AMOUNT } from '../constants'
+import { CUBE_AMOUNT, STARTING_GAME_SPEED } from '../constants'
 
 const useStore = create((set, get) => {
 
@@ -31,9 +31,10 @@ const useStore = create((set, get) => {
 
 const mutation = {
   gameOver: false,
-  gameSpeed: 0,
+  gameSpeed: STARTING_GAME_SPEED,
   leftSpeed: 0,
-  rightSpeed: 0
+  rightSpeed: 0,
+  horizontalVelocity: 0
 }
 
 export { useStore, mutation }

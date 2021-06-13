@@ -35,7 +35,7 @@ export default function TextBox({ input }) {
         {mutation.gameSpeed} - {JSON.stringify(controls)}
       </Text>
       <Text fontSize={0.2} position={[0, 2.7, 0]} color="white" anchorX="center" anchorY="middle">
-        Left: {mutation.leftSpeed.toFixed(3)} | Right: {mutation.rightSpeed.toFixed(3)}
+        {mutation.horizontalVelocity}
       </Text>
     </group>
   )

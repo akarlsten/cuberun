@@ -16,7 +16,6 @@ function ShipModel(props, { children }) {
   // tie ship and camera ref to store to allow getting at them elsewhere
   const ship = useStore((s) => s.ship)
   const camera = useStore((s) => s.camera)
-  const directionalLight = useStore((s) => s.directionalLight)
 
   const pointLight = useRef()
 
@@ -47,7 +46,7 @@ function ShipModel(props, { children }) {
   useFrame((state, delta) => {
     const bigDelta = 1 * delta * 10.0
     const smallDelta = 1 * delta * 2.0
-    const accelDelta = 1 * delta * 1.0
+    const accelDelta = 1 * delta * 1.5
 
     const time = clock.getElapsedTime()
 
@@ -62,7 +61,11 @@ function ShipModel(props, { children }) {
     leftWingTrail.current.scale.x = fastSine / 100
     leftWingTrail.current.scale.y = medSine / 100
 
-    ship.current.position.z -= 200 * delta * mutation.gameSpeed
+    ship.current.position.z -= mutation.gameSpeed * delta * 165
+    ship.current.position.x += mutation.horizontalVelocity * delta * 165
+
+    ship.current.rotation.z = mutation.horizontalVelocity * 1.5
+
 
     pointLight.current.position.z = ship.current.position.z + 1
     pointLight.current.position.x = ship.current.position.x
@@ -72,24 +75,21 @@ function ShipModel(props, { children }) {
     ship.current.position.y -= slowSine / 80
 
     // uncomment to unlock camera
-    // camera.current.position.z = ship.current.position.z + 9
-    // camera.current.position.y = ship.current.position.y + 4
-    // camera.current.position.x = ship.current.position.x
+    camera.current.position.z = ship.current.position.z + 13.5 // + 12
+    camera.current.position.y = ship.current.position.y + 5
+    camera.current.position.x = ship.current.position.x
 
-    // camera.current.rotation.y = Math.PI
+    camera.current.rotation.y = Math.PI
 
     if ((left && right) || (!left && !right)) {
-      mutation.leftSpeed = 0
-      mutation.rightSpeed = 0
+      if (mutation.horizontalVelocity < 0) {
+        mutation.horizontalVelocity += accelDelta
+      }
 
-      // Pos
-      // if (ship.current.position.x > 0 + delta) {
-      //   ship.current.position.x -= delta
-      // } else if (ship.current.position.x < 0 - delta) {
-      //   ship.current.position.x += delta
-      // } else {
-      //   ship.current.position.x = 0
-      // }
+      if (mutation.horizontalVelocity > 0) {
+        mutation.horizontalVelocity -= accelDelta
+      }
+
 
       // Rot
       if (ship.current.rotation.x > 0) {
@@ -98,36 +98,14 @@ function ShipModel(props, { children }) {
         ship.current.rotation.x = 0
       }
 
-      if (ship.current.rotation.y > Math.PI + smallDelta) {
-        ship.current.rotation.y -= smallDelta
-      } else if (ship.current.rotation.y < Math.PI - smallDelta) {
-        ship.current.rotation.y += smallDelta
-      } else {
-        ship.current.rotation.y = Math.PI
-      }
-
-      if (ship.current.rotation.z > 0 + delta) {
-        ship.current.rotation.z -= delta
-      } else if (ship.current.rotation.z < 0 - delta) {
-        ship.current.rotation.z += delta
-      } else {
-        ship.current.rotation.z = 0
-      }
     }
 
     if (!mutation.gameOver) {
       if ((left && !right)) {
-        mutation.rightSpeed = 0
-        mutation.leftSpeed += accelDelta
-
-        // pos 
-        // ship.current.position.x = Math.min(1.4, ship.current.position.x += mutation.leftSpeed / 5)
-        ship.current.position.x -= Math.min(1, mutation.leftSpeed)
+        mutation.horizontalVelocity = Math.max(-0.5, mutation.horizontalVelocity - accelDelta)
 
         // rot
         ship.current.rotation.x = Math.min(0.1, ship.current.rotation.x += bigDelta / 15)
-        ship.current.rotation.y = Math.min(Math.PI + 0.5, ship.current.rotation.y += mutation.leftSpeed / 15)
-        ship.current.rotation.z = Math.max(-0.3, ship.current.rotation.z -= mutation.leftSpeed / 10)
 
         // wing trail
         rightWingTrail.current.scale.x = fastSine / 40
@@ -137,17 +115,10 @@ function ShipModel(props, { children }) {
       }
 
       if ((!left && right)) {
-        mutation.rightSpeed += accelDelta
-        mutation.leftSpeed = 0
-
-        // pos 
-        // ship.current.position.x = Math.max(-1.4, ship.current.position.x -= mutation.rightSpeed / 5)
-        ship.current.position.x += Math.min(1, mutation.rightSpeed)
+        mutation.horizontalVelocity = Math.min(0.5, mutation.horizontalVelocity + accelDelta)
 
         // rot
         ship.current.rotation.x = Math.min(0.1, ship.current.rotation.x += bigDelta / 15)
-        ship.current.rotation.y = Math.max(Math.PI - 0.5, ship.current.rotation.y -= mutation.rightSpeed / 15)
-        ship.current.rotation.z = Math.min(0.3, ship.current.rotation.z += mutation.rightSpeed / 15)
 
         // wing trail
         leftWingTrail.current.scale.x = fastSine / 40
@@ -167,9 +138,9 @@ function ShipModel(props, { children }) {
   return (
     <>
       <pointLight ref={pointLight} color="orange" decay={10} distance={40} intensity={5} position={[0, 3, 5]} />
+      <PerspectiveCamera makeDefault ref={camera} fov={75} rotation={[0, Math.PI, 0]} position={[0, 10, -20]} />
       <group castShadow receiveShadow ref={ship} position={[0, 3, 0]} {...props} dispose={null}>
         {children}
-        <PerspectiveCamera makeDefault ref={camera} fov={75} rotation={[0, Math.PI, 0]} position={[0, 10, -20]} />
         <mesh geometry={nodes.Ship_Body.geometry} material={materials.Cockpit} />
         <mesh receiveShadow castShadow geometry={nodes.Ship_Body_1.geometry} material={materials.Chassis} />
         <mesh geometry={nodes.Ship_Body_2.geometry}>
@@ -177,21 +148,21 @@ function ShipModel(props, { children }) {
         </mesh>
         <mesh receiveShadow castShadow geometry={nodes.Ship_Body_3.geometry} material={materials['Gray Metal']} />
         <mesh geometry={nodes.Ship_Body_4.geometry}>
-          <meshBasicMaterial attach="material" color="lightpink" />
+          <meshBasicMaterial attach="material" color="white" />
         </mesh>
-        <mesh ref={leftWingTrail} scale={[0.01, 0.01, 2]} position={[1.60, -0.3, -6.2]}>
+        <mesh ref={leftWingTrail} scale={[0.1, 0.05, 2]} position={[1.4, 0.2, -7]}>
           <dodecahedronBufferGeometry args={[1.5, 3]} />
           <meshBasicMaterial transparent opacity={0.8} color="white" />
         </mesh>
-        <mesh ref={rightWingTrail} scale={[0.01, 0.01, 2]} position={[-1.60, -0.3, -6.2]}>
+        <mesh ref={rightWingTrail} scale={[0.1, 0.05, 2]} position={[-1.4, 0.2, -7]}>
           <dodecahedronBufferGeometry args={[1.5, 3]} />
           <meshBasicMaterial transparent opacity={0.8} color="white" />
         </mesh>
-        <mesh ref={outerExhaust} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4.5]}>
+        <mesh ref={outerExhaust} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4]}>
           <dodecahedronBufferGeometry args={[1.5, 3]} />
           <MeshDistortMaterial speed={2} distort={0.2} radius={1} transparent opacity={0.6} color="red" />
         </mesh>
-        <mesh ref={innerExhaust} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4.5]}>
+        <mesh ref={innerExhaust} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4]}>
           <dodecahedronBufferGeometry args={[1.5, 3]} />
           <meshBasicMaterial color="white" />
         </mesh>

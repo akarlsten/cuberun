@@ -1,7 +1,11 @@
 import * as THREE from 'three'
 
 export const PLANE_SIZE = 1000
+
 export const CUBE_AMOUNT = 100
+
+export const STARTING_GAME_SPEED = 0.3
+
 export const COLORS = {
   red: {
     hex: '#ff0000',
