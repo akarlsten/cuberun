@@ -3,7 +3,7 @@ import { useThree, useFrame } from '@react-three/fiber'
 import { useTexture, Stars } from '@react-three/drei'
 import * as THREE from 'three'
 
-import { useStore } from '../hooks/useStore'
+import { useStore } from '../state/useStore'
 
 function Sun() {
   const { clock, camera } = useThree()
@@ -42,8 +42,6 @@ function Sky() {
   useFrame((state, delta) => {
     sky.current.rotation.z += delta / 50
     stars.current.rotation.z += delta / 50
-    sky.current.rotation.y -= delta / 50
-    sky.current.rotation.y += delta / 50
 
     if (ship.current) {
       sky.current.position.x = ship.current.position.x

@@ -2,13 +2,14 @@ import { Box, Cone } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef, useLayoutEffect } from 'react'
 
-import { useStore, mutation } from '../hooks/useStore'
+import { useStore, mutation } from '../state/useStore'
 import { PLANE_SIZE } from '../constants'
 
 
 export default function Walls() {
   const walls = useRef()
   const ship = useStore((s) => s.ship)
+
 
   const rightWall = useRef()
   const leftWall = useRef()

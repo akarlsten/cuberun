@@ -1,34 +1,45 @@
 import * as THREE from 'three'
 
-export const PLANE_SIZE = 1000
+export const PLANE_SIZE = 1024
 
 export const CUBE_AMOUNT = 100
 
-export const STARTING_GAME_SPEED = 0.3
+export const GAME_SPEED_MULTIPLIER = 0.3
 
-export const COLORS = {
-  red: {
+export const COLORS = [
+  {
+    name: 'red',
     hex: '#ff0000',
     three: new THREE.Color(0xff0000)
   },
-  orange: {
+  {
+    name: 'orange',
     hex: '#FFA500',
     three: new THREE.Color(0xFFA500)
   },
-  pink: {
-    hex: '#ff69b4',
-    three: new THREE.Color(0xff69b4)
-  },
-  green: {
+  {
+    name: 'green',
     hex: '#3cff00',
     three: new THREE.Color(0x3cff00)
   },
-  blue: {
+  {
+    name: 'blue',
     hex: '#0066ff',
     three: new THREE.Color(0x0066ff)
   },
-  purple: {
+  {
+    name: 'purple',
     hex: '#9370D8',
     three: new THREE.Color(0x9370D8)
+  },
+  {
+    name: 'pink',
+    hex: '#ff69b4',
+    three: new THREE.Color(0xff69b4)
+  },
+  {
+    name: 'white',
+    hex: '#ffffff',
+    three: new THREE.Color(0xffffff)
   }
-}
+]

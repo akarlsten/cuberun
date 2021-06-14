@@ -1,14 +1,14 @@
 import React, { useRef, useLayoutEffect, useEffect, Suspense } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useGLTF, PerspectiveCamera, MeshDistortMaterial } from '@react-three/drei'
-
 import * as THREE from 'three'
 
-import { useStore, mutation } from '../hooks/useStore'
+import EngineSparks from './EngineSparks'
+
+
+import { useStore, mutation } from '../state/useStore'
 
 const v = new THREE.Vector3()
-
-// TODO: move the ship instead of cubes
 
 function ShipModel(props, { children }) {
   const { nodes, materials } = useGLTF('/models/spaceship.gltf')
@@ -21,6 +21,7 @@ function ShipModel(props, { children }) {
 
   const outerExhaust = useRef()
   const innerExhaust = useRef()
+  const engineSparks = useRef()
 
   const leftWingTrail = useRef()
   const rightWingTrail = useRef()
@@ -61,11 +62,21 @@ function ShipModel(props, { children }) {
     leftWingTrail.current.scale.x = fastSine / 100
     leftWingTrail.current.scale.y = medSine / 100
 
+    // Forward Movement
     ship.current.position.z -= mutation.gameSpeed * delta * 165
+
+
+    // Lateral Movement
+    if (mutation.gameOver) {
+      mutation.horizontalVelocity = 0
+    }
+
     ship.current.position.x += mutation.horizontalVelocity * delta * 165
 
+    // Curving
     ship.current.rotation.z = mutation.horizontalVelocity * 1.5
-
+    ship.current.rotation.y = Math.PI - mutation.horizontalVelocity * 0.4
+    ship.current.rotation.x = Math.abs(mutation.horizontalVelocity) / 5 // max/min velocity is -0.5/0.5, divide by five to get our desired max rotation of 0.1
 
     pointLight.current.position.z = ship.current.position.z + 1
     pointLight.current.position.x = ship.current.position.x
@@ -75,8 +86,8 @@ function ShipModel(props, { children }) {
     ship.current.position.y -= slowSine / 80
 
     // uncomment to unlock camera
-    camera.current.position.z = ship.current.position.z + 13.5 // + 12
-    camera.current.position.y = ship.current.position.y + 5
+    camera.current.position.z = ship.current.position.z + 13.5 // + 13.5
+    camera.current.position.y = ship.current.position.y + 5 // 5
     camera.current.position.x = ship.current.position.x
 
     camera.current.rotation.y = Math.PI
@@ -98,18 +109,16 @@ function ShipModel(props, { children }) {
         ship.current.rotation.x = 0
       }
 
+
     }
 
     if (!mutation.gameOver) {
       if ((left && !right)) {
         mutation.horizontalVelocity = Math.max(-0.5, mutation.horizontalVelocity - accelDelta)
 
-        // rot
-        ship.current.rotation.x = Math.min(0.1, ship.current.rotation.x += bigDelta / 15)
-
         // wing trail
-        rightWingTrail.current.scale.x = fastSine / 40
-        rightWingTrail.current.scale.y = slowSine / 40
+        rightWingTrail.current.scale.x = fastSine / 30
+        rightWingTrail.current.scale.y = slowSine / 30
         leftWingTrail.current.scale.x = fastSine / 200
         leftWingTrail.current.scale.y = slowSine / 200
       }
@@ -117,18 +126,15 @@ function ShipModel(props, { children }) {
       if ((!left && right)) {
         mutation.horizontalVelocity = Math.min(0.5, mutation.horizontalVelocity + accelDelta)
 
-        // rot
-        ship.current.rotation.x = Math.min(0.1, ship.current.rotation.x += bigDelta / 15)
-
         // wing trail
-        leftWingTrail.current.scale.x = fastSine / 40
-        leftWingTrail.current.scale.y = slowSine / 40
+        leftWingTrail.current.scale.x = fastSine / 30
+        leftWingTrail.current.scale.y = slowSine / 30
         rightWingTrail.current.scale.x = fastSine / 200
         rightWingTrail.current.scale.y = slowSine / 200
       }
     }
 
-    pointLight.current.intensity = 5 + (fastSine * 5)
+    pointLight.current.intensity = 10 + (fastSine * 5)
     outerExhaust.current.scale.x = 0.15 + fastSine / 15
     outerExhaust.current.scale.y = 0.30 + slowSine / 10
     innerExhaust.current.scale.x = 0.10 + fastSine / 15
@@ -137,11 +143,13 @@ function ShipModel(props, { children }) {
 
   return (
     <>
-      <pointLight ref={pointLight} color="orange" decay={10} distance={40} intensity={5} position={[0, 3, 5]} />
+      <pointLight ref={pointLight} color="tomato" decay={10} distance={40} intensity={5} position={[0, 3, 5]} />
       <PerspectiveCamera makeDefault ref={camera} fov={75} rotation={[0, Math.PI, 0]} position={[0, 10, -20]} />
       <group castShadow receiveShadow ref={ship} position={[0, 3, 0]} {...props} dispose={null}>
         {children}
-        <mesh geometry={nodes.Ship_Body.geometry} material={materials.Cockpit} />
+        <mesh geometry={nodes.Ship_Body.geometry}>
+          <meshStandardMaterial attach="material" color="lightblue" metalness={0.8} reflectivity={1} clearcoat={1} roughness={0} />
+        </mesh>
         <mesh receiveShadow castShadow geometry={nodes.Ship_Body_1.geometry} material={materials.Chassis} />
         <mesh geometry={nodes.Ship_Body_2.geometry}>
           <meshBasicMaterial attach="material" color="orange" />
@@ -166,6 +174,7 @@ function ShipModel(props, { children }) {
           <dodecahedronBufferGeometry args={[1.5, 3]} />
           <meshBasicMaterial color="white" />
         </mesh>
+        <EngineSparks position={[0, -2, -4]} ref={engineSparks} />
       </group>
     </>
   )

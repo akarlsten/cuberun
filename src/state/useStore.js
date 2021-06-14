@@ -1,13 +1,14 @@
 import { createRef } from 'react'
 import create from 'zustand'
 
-import { CUBE_AMOUNT, STARTING_GAME_SPEED } from '../constants'
+import { CUBE_AMOUNT } from '../constants'
 
 const useStore = create((set, get) => {
 
   return {
     set,
     get,
+    gameOver: false,
     controls: {
       left: false,
       right: false,
@@ -23,18 +24,16 @@ const useStore = create((set, get) => {
 
       return ref
     }),
-    setGroundPosition: (pos) => set(state => ({ groundPosition: pos })),
-    increaseSpeed: () => set(state => ({ speedFactor: state.speedFactor + 1 })),
-    resetSpeed: () => set(state => ({ speedFactor: 1 }))
+    toggleGameOver: () => set(state => ({ gameOver: !state.gameOver }))
   }
 })
 
 const mutation = {
   gameOver: false,
-  gameSpeed: STARTING_GAME_SPEED,
-  leftSpeed: 0,
-  rightSpeed: 0,
-  horizontalVelocity: 0
+  gameSpeed: 0.6,
+  horizontalVelocity: 0,
+  score: 0,
+  level: 0
 }
 
 export { useStore, mutation }

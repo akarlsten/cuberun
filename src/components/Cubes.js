@@ -2,7 +2,7 @@ import { Box } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef, useLayoutEffect, forwardRef, createRef } from 'react'
 
-import { mutation, useStore } from '../hooks/useStore'
+import { mutation, useStore } from '../state/useStore'
 
 import { PLANE_SIZE, CUBE_AMOUNT } from '../constants'
 

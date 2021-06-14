@@ -8,7 +8,7 @@ import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader'
 
-import { mutation } from '../hooks/useStore'
+import { mutation } from '../state/useStore'
 
 extend({ EffectComposer, ShaderPass, RenderPass, UnrealBloomPass, SSAOPass })
 

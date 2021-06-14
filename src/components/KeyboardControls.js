@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useStore } from '../hooks/useStore'
+import { useStore } from '../state/useStore'
 
 const pressed = []
 

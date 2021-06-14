@@ -1,9 +1,8 @@
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Perf } from 'r3f-perf'
-import { Loader } from '@react-three/drei'
 import { useEffect, useRef, useState, Suspense } from 'react'
 
-import { useStore } from '../hooks/useStore'
+import { useStore } from '../state/useStore'
 
 import Ship from './Ship'
 import Ground from './Ground'
@@ -14,6 +13,7 @@ import Skybox from './Skybox'
 import Cubes from './Cubes'
 import InstancedCubes from './InstancedCubes'
 import Walls from './Walls'
+import Loader from './html/Loader'
 
 
 export default function CubeWorld({ color, bgColor }) {
