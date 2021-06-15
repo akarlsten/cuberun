@@ -1,8 +1,9 @@
 
-![Cuberun Logo](./src/textures/cuberun-logo.png)
-# CUBERUN
+![Cuberun](./src/textures/cuberun-logo.png)
 
+<p align="center>
 A Cubefield-like game built with react-three-fiber.
+</p>
 
 ### TODO
 
