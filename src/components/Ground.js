@@ -43,9 +43,9 @@ function Ground() {
   const lastMove = useRef(0)
   const { clock } = useThree()
   useFrame((state, delta) => {
-    const mySine = Math.sin(clock.getElapsedTime())
+    // const mySine = Math.sin(clock.getElapsedTime())
 
-    plane.current.material.emissiveIntensity = (mySine + 1) / 2
+    // plane.current.material.emissiveIntensity = (mySine + 1) / 2
 
     if (ship.current) {
       // Alternates moving the two ground planes when we've just passed over onto a new plane, with logic to make sure it only happens once per pass
@@ -55,11 +55,12 @@ function Ground() {
         // Ensures we only move the plane once per pass
         if (moveCounter.current === 1 || Math.abs(ship.current.position.z) - Math.abs(lastMove.current) <= 10) {
 
-          // change the grid color every 4 moves or 4000 meters
+          // change the level every 4 moves or 4000 meters
           if (moveCounter.current % 4 === 0) {
             mutation.level++
             mutation.desiredSpeed += GAME_SPEED_MULTIPLIER
-            if (mutation.level > textures.length) {
+
+            if (mutation.level >= textures.length) {
               mutation.level = 0
             }
           }
@@ -76,6 +77,28 @@ function Ground() {
         }
 
         moveCounter.current++
+      }
+    }
+
+    if (mutation.level > 0) {
+      if (plane.current.material.map.uuid !== planeTwo.current.material.map.uuid) {
+        if (plane.current.material.emissiveIntensity < 1) {
+          if (plane.current.material.emissiveIntensity + delta * mutation.gameSpeed > 1) {
+            plane.current.material.emissiveIntensity = 1
+          } else {
+            plane.current.material.emissiveIntensity += delta * mutation.gameSpeed
+            // plane.current.material.color.addScalar(-(delta / (4 - mutation.gameSpeed)))
+          }
+        } else {
+          plane.current.material.map = textures[mutation.level]
+          if (mutation.level === textures.length - 1) {
+            plane.current.material.emissiveMap = textures[0]
+          } else {
+            plane.current.material.emissiveMap = textures[mutation.level + 1]
+          }
+          plane.current.material.emissiveIntensity = 0
+          // plane.current.material.color.set(0xFFFFFF)
+        }
       }
     }
   })
@@ -96,7 +119,7 @@ function Ground() {
             color={color.set(0xFFFFFF)}
             emissiveMap={textures[1]}
             emissive={color.set(0xFFFFFF)}
-            emissiveIntensity={1}
+            emissiveIntensity={0}
             attach="material"
             map={textures[0]}
             roughness={1}
@@ -119,7 +142,6 @@ function Ground() {
             map={textures[0]}
             roughness={1}
             metalness={0}
-            roughness={1}
           />
         </mesh>
       </group>

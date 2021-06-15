@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-export const PLANE_SIZE = 1024
+export const PLANE_SIZE = 1000
 
 export const CUBE_AMOUNT = 100
 

@@ -41,9 +41,9 @@ export default function CubeWorld({ color, bgColor }) {
           {directionalLight.current && <primitive object={directionalLight.current.target} />}
         </Ship>
         <Walls />
-        <Cubes />
+        {/* <Cubes /> */}
         <Ground groundColor={bgColor} />
-        <Text />
+        {/* <Text /> */}
         <Perf />
         <KeyboardControls />
         <Effects />

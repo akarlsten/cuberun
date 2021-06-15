@@ -6,7 +6,7 @@
 .bottomLeft {
   position: absolute;
   bottom: 2vh;
-  left: 3vh;
+  left: 4vh;
   transform: skew(-10deg, -10deg);
   width: 200px;
   margin: 0

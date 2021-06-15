@@ -17,7 +17,7 @@ const GameOverScreen = () => {
 
   useEffect(() => {
     let t
-    if (gameOver !== opaque) t = setTimeout(() => setOpaque(gameOver), 1000)
+    if (gameOver !== opaque) t = setTimeout(() => setOpaque(gameOver), 500)
     return () => clearTimeout(t)
   }, [gameOver])
 
