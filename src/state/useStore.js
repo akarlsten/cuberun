@@ -1,38 +1,37 @@
 import { createRef } from 'react'
 import create from 'zustand'
 
-import { CUBE_AMOUNT } from '../constants'
-
 const useStore = create((set, get) => {
 
   return {
     set,
     get,
+    score: 0,
+    currentSpeed: 0,
     gameOver: false,
+    gameStarted: false,
+    music: true,
     controls: {
       left: false,
       right: false,
     },
-    speedFactor: 1,
-    groundPosition: 0,
     directionalLight: createRef(),
     camera: createRef(),
     ship: createRef(),
     sun: createRef(),
-    cubes: new Array(CUBE_AMOUNT).fill().map(() => {
-      const ref = createRef()
-
-      return ref
-    }),
-    toggleGameOver: () => set(state => ({ gameOver: !state.gameOver }))
+    setCurrentSpeed: (speed) => set(state => ({ currentSpeed: speed })),
+    setScore: (score) => set(state => ({ score: score })),
+    setGameStarted: (started) => set(state => ({ gameStarted: started })),
+    setGameOver: (over) => set(state => ({ gameOver: over })),
+    toggleMusic: () => set(state => ({ music: !state.music }))
   }
 })
 
 const mutation = {
   gameOver: false,
-  gameSpeed: 0.6,
+  gameSpeed: 0.0,
+  desiredSpeed: 0.0,
   horizontalVelocity: 0,
-  score: 0,
   level: 0
 }
 

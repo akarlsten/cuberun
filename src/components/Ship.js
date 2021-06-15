@@ -5,13 +5,15 @@ import * as THREE from 'three'
 
 import EngineSparks from './EngineSparks'
 
+import shipModel from '../models/spaceship.gltf'
+
 
 import { useStore, mutation } from '../state/useStore'
 
 const v = new THREE.Vector3()
 
 function ShipModel(props, { children }) {
-  const { nodes, materials } = useGLTF('/models/spaceship.gltf')
+  const { nodes, materials } = useGLTF(shipModel)
 
   // tie ship and camera ref to store to allow getting at them elsewhere
   const ship = useStore((s) => s.ship)
@@ -38,7 +40,7 @@ function ShipModel(props, { children }) {
   useLayoutEffect(() => {
     camera.current.rotation.set(0, Math.PI, 0)
     camera.current.position.set(0, 4, -9) // 0, 1.5, -8
-    camera.current.lookAt(v.set(ship.current.position.x, ship.current.position.y, ship.current.position.z + 10/*10*/)) // modify the camera tracking to look above the center of the ship
+    camera.current.lookAt(v.set(ship.current.position.x, ship.current.position.y, ship.current.position.z + 10)) // modify the camera tracking to look above the center of the ship
 
     camera.current.rotation.z = Math.PI
     ship.current.rotation.y = Math.PI
@@ -70,20 +72,22 @@ function ShipModel(props, { children }) {
     if (mutation.gameOver) {
       mutation.horizontalVelocity = 0
     }
-
     ship.current.position.x += mutation.horizontalVelocity * delta * 165
 
-    // Curving
+    // Curving during turns
     ship.current.rotation.z = mutation.horizontalVelocity * 1.5
     ship.current.rotation.y = Math.PI - mutation.horizontalVelocity * 0.4
-    ship.current.rotation.x = Math.abs(mutation.horizontalVelocity) / 5 // max/min velocity is -0.5/0.5, divide by five to get our desired max rotation of 0.1
+    ship.current.rotation.x = Math.abs(mutation.horizontalVelocity) / 10 // max/min velocity is -0.5/0.5, divide by ten to get our desired max rotation of 0.05
 
+    // Ship Jitter - small incidental movements
+    ship.current.position.y -= slowSine / 200
+    ship.current.rotation.x += slowSine / 100
+    ship.current.rotation.z += Math.sin(time * 4) / 100
+
+    // pointLight follow along 
     pointLight.current.position.z = ship.current.position.z + 1
     pointLight.current.position.x = ship.current.position.x
     pointLight.current.position.y -= slowSine / 80
-
-    // hovering up and down slightly
-    ship.current.position.y -= slowSine / 80
 
     // uncomment to unlock camera
     camera.current.position.z = ship.current.position.z + 13.5 // + 13.5
@@ -94,25 +98,23 @@ function ShipModel(props, { children }) {
 
     if ((left && right) || (!left && !right)) {
       if (mutation.horizontalVelocity < 0) {
-        mutation.horizontalVelocity += accelDelta
+        if (mutation.horizontalVelocity + accelDelta > 0) {
+          mutation.horizontalVelocity = 0
+        } else {
+          mutation.horizontalVelocity += accelDelta
+        }
       }
 
       if (mutation.horizontalVelocity > 0) {
-        mutation.horizontalVelocity -= accelDelta
+        if (mutation.horizontalVelocity - accelDelta < 0) {
+          mutation.horizontalVelocity = 0
+        } else {
+          mutation.horizontalVelocity -= accelDelta
+        }
       }
-
-
-      // Rot
-      if (ship.current.rotation.x > 0) {
-        ship.current.rotation.x -= delta / 3
-      } else {
-        ship.current.rotation.x = 0
-      }
-
-
     }
 
-    if (!mutation.gameOver) {
+    if (!mutation.gameOver && mutation.gameSpeed > 0) {
       if ((left && !right)) {
         mutation.horizontalVelocity = Math.max(-0.5, mutation.horizontalVelocity - accelDelta)
 
@@ -143,9 +145,9 @@ function ShipModel(props, { children }) {
 
   return (
     <>
-      <pointLight ref={pointLight} color="tomato" decay={10} distance={40} intensity={5} position={[0, 3, 5]} />
-      <PerspectiveCamera makeDefault ref={camera} fov={75} rotation={[0, Math.PI, 0]} position={[0, 10, -20]} />
-      <group castShadow receiveShadow ref={ship} position={[0, 3, 0]} {...props} dispose={null}>
+      <pointLight ref={pointLight} color="tomato" decay={10} distance={40} intensity={5} position={[0, 3, -5]} />
+      <PerspectiveCamera makeDefault ref={camera} fov={75} rotation={[0, Math.PI, 0]} position={[0, 10, -10]} />
+      <group castShadow receiveShadow ref={ship} position={[0, 3, -10]} {...props} dispose={null}>
         {children}
         <mesh geometry={nodes.Ship_Body.geometry}>
           <meshStandardMaterial attach="material" color="lightblue" metalness={0.8} reflectivity={1} clearcoat={1} roughness={0} />
@@ -181,8 +183,7 @@ function ShipModel(props, { children }) {
 }
 
 
-useGLTF.preload('/models/spaceship.gltf')
-
+useGLTF.preload(shipModel)
 
 function Loading() {
   return (

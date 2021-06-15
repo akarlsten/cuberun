@@ -6,46 +6,28 @@ import { useStore, mutation } from '../state/useStore'
 
 import { PLANE_SIZE, GAME_SPEED_MULTIPLIER } from '../constants'
 
-import { CrossFadeMaterial } from '../shaders/CrossFadeMaterial'
+import gridRed from '../textures/grid-red.png'
+import gridOrange from '../textures/grid-orange.png'
+import gridGreen from '../textures/grid-green.png'
+import gridBlue from '../textures/grid-blue.png'
+import gridPurple from '../textures/grid-purple.png'
+import gridPink from '../textures/grid-pink.png'
+import gridRainbow from '../textures/grid-rainbow.png'
+import gridWhite from '../textures/grid-white.png'
 
 const TEXTURE_SIZE = PLANE_SIZE * 0.075
 const MOVE_DISTANCE = PLANE_SIZE * 2
 
-const onBeforeCompile = shader => {
-  shader.uniforms = {
-    ...shader.uniforms,
-    mixFactor: { type: 'f', value: 0.5 },
-    map2: { value: new THREE.Texture() }
-  }
-  shader.fragmentShader = shader.fragmentShader.replace(`#include <map_pars_fragment>`,
-    `
-              #ifdef USE_MAP
-                uniform sampler2D map;
-                uniform sampler2D map2;
-                uniform float mixFactor;
-              #endif
-              `)
-  shader.fragmentShader = shader.fragmentShader.replace(`#include <map_fragment>`,
-    `
-              #ifdef USE_MAP
-                vec4 _texture = texture2D( map, vUv );
-                vec4 _texture2 = texture2D( map2, vUv);
-                vec4 texelColor = mix(_texture, _texture2, mixFactor);
-                texelColor = mapTexelToLinear( texelColor );
-                diffuseColor *= texelColor;
-              #endif
-              `)
-}
+const color = new THREE.Color(0x000000)
 
-
-function Ground({ groundColor }) {
+function Ground() {
   const ground = useRef()
   const groundTwo = useRef()
 
   const plane = useRef()
   const planeTwo = useRef()
 
-  const textures = useTexture(['textures/grid-red.png', 'textures/grid-orange.png', 'textures/grid-green.png', 'textures/grid-blue.png', 'textures/grid-purple.png', 'textures/grid-pink.png', 'textures/grid-rainbow.png'])
+  const textures = useTexture([gridRed, gridOrange, gridGreen, gridBlue, gridPurple, gridPink, gridRainbow, gridWhite])
 
   const ship = useStore((s) => s.ship)
 
@@ -61,8 +43,10 @@ function Ground({ groundColor }) {
   const lastMove = useRef(0)
   const { clock } = useThree()
   useFrame((state, delta) => {
-    // plane.current.material.mixFactor = Math.sin(clock.getElapsedTime())
-    plane.current.material.contrast = 1 + Math.sin(clock.getElapsedTime())
+    const mySine = Math.sin(clock.getElapsedTime())
+
+    plane.current.material.emissiveIntensity = (mySine + 1) / 2
+
     if (ship.current) {
       // Alternates moving the two ground planes when we've just passed over onto a new plane, with logic to make sure it only happens once per pass
       // Checks if weve moved 10 meters into the new plane (-10) (so the old plane is no longer visible)
@@ -74,7 +58,7 @@ function Ground({ groundColor }) {
           // change the grid color every 4 moves or 4000 meters
           if (moveCounter.current % 4 === 0) {
             mutation.level++
-            mutation.gameSpeed += GAME_SPEED_MULTIPLIER
+            mutation.desiredSpeed += GAME_SPEED_MULTIPLIER
             if (mutation.level > textures.length) {
               mutation.level = 0
             }
@@ -96,12 +80,6 @@ function Ground({ groundColor }) {
     }
   })
 
-  const oBC = useCallback(onBeforeCompile)
-
-  const uniforms = useMemo(() => ({
-    map2: { value: textures[1] },
-    mixFactor: { value: 0.5 }
-  }), [])
 
   return (
     <>
@@ -113,17 +91,16 @@ function Ground({ groundColor }) {
           rotation={[-Math.PI / 2, 0, 0]}
         >
           <planeBufferGeometry attach="geometry" args={[PLANE_SIZE, PLANE_SIZE, 1, 1]} />
-          <crossFadeMaterial
-            texture1={textures[0]}
-            texture2={textures[1]}
-            repeats={80}
-            mixFactor={0.0}
-            brightness={0.0}
-            contrast={1.2}
+          <meshStandardMaterial
             receiveShadow
+            color={color.set(0xFFFFFF)}
+            emissiveMap={textures[1]}
+            emissive={color.set(0xFFFFFF)}
+            emissiveIntensity={1}
             attach="material"
-            metalness={0}
+            map={textures[0]}
             roughness={1}
+            metalness={0}
           />
         </mesh>
       </group>
@@ -137,6 +114,7 @@ function Ground({ groundColor }) {
           <planeBufferGeometry attach="geometry" args={[PLANE_SIZE, PLANE_SIZE, 1, 1]} />
           <meshStandardMaterial
             receiveShadow
+            emissiveMap={textures[1]}
             attach="material"
             map={textures[0]}
             roughness={1}
@@ -170,7 +148,7 @@ function LoadingGround() {
   )
 }
 
-export default function CompleteGround({ groundColor }) {
+export default function CompleteGround() {
 
   return (
     <Suspense fallback={<LoadingGround />}>

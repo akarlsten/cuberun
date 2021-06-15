@@ -1,5 +1,7 @@
 import { Loader } from '@react-three/drei'
 
+import '../../styles/hud.css'
+
 export default function CustomLoader() {
   const loaderProps = {
     dataInterpolation: (p) => `Loading: ${p.toFixed(0)}%`,
@@ -19,7 +21,7 @@ const styles = {
     left: 0,
     width: '100%',
     height: '100%',
-    background: '#171717',
+    background: '#141622',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -31,13 +33,15 @@ const styles = {
     height: 20,
     background: 'white',
     textAlign: 'center',
+    boxShadow: '0 0 20px 0px #fe2079'
   },
   bar: {
     height: 20,
     width: '100%',
-    background: 'hotpink',
+    background: '#fe2079',
     transition: 'transform 200ms',
     transformOrigin: 'left center',
+    boxShadow: '0 0 20px 0px #fe2079'
   },
   data: {
     textAlign: 'center',
@@ -46,7 +50,8 @@ const styles = {
     marginTop: '0.8em',
     color: '#f0f0f0',
     fontSize: '2em',
-    fontFamily: `Inconsolata, mono, monospace, -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", "Helvetica Neue", Helvetica, Arial, Roboto, Ubuntu, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
+    fontFamily: `'Commando', mono, monospace, -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", "Helvetica Neue", Helvetica, Arial, Roboto, Ubuntu, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
     whiteSpace: 'nowrap',
+    textShadow: '0 0 20px #fe2079'
   },
 }

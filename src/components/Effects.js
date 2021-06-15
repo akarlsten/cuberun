@@ -32,7 +32,7 @@ export default function Effects() {
   return (
     <effectComposer ref={composer} args={[gl]}>
       <renderPass attachArray="passes" scene={scene} camera={camera} />
-      <unrealBloomPass attachArray="passes" args={[size.width, 1, 1, 0.4]} />
+      <unrealBloomPass attachArray="passes" args={[undefined, 1, 1, 0.4]} />
       <shaderPass attachArray="passes" args={[FXAAShader]} material-uniforms-resolution-value={[1 / size.width, 1 / size.height]} />
     </effectComposer>
   )

@@ -19,6 +19,13 @@ export default function TextBox({ input }) {
 
   const ship = useStore(state => state.ship)
 
+  // subscribe to controller updates on mount
+  const scoreRef = useRef(useStore.getState().score)
+  useEffect(() => useStore.subscribe(
+    score => (scoreRef.current = score),
+    state => state.score
+  ), [])
+
   useFrame((state, delta) => {
     deltaRef.current = delta
     velocityRef.current = mutation.horizontalVelocity
@@ -33,7 +40,7 @@ export default function TextBox({ input }) {
   return (
     <group ref={textGroup}>
       <Text fontSize={0.2} position={[0, 3.3, 0]} color="white" anchorX="center" anchorY="middle">
-        Game over: {JSON.stringify(mutation.gameOver)} - X: {shipRef?.current?.position?.x.toFixed(2)} Z: {shipRef?.current?.position?.z.toFixed(2)}
+        Game over: {JSON.stringify(mutation.gameOver)} - Score: {scoreRef.current}
       </Text>
       <Text fontSize={0.2} position={[0, 3, 0]} color="white" anchorX="center" anchorY="middle">
         {mutation.gameSpeed} - {JSON.stringify(controls)}

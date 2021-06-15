@@ -1,68 +1,70 @@
-import { Box } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
-import { useRef, useLayoutEffect, forwardRef, createRef } from 'react'
+import * as THREE from 'three'
+import { useRef, useMemo } from 'react'
+import { useFrame, useThree } from '@react-three/fiber'
 
-import { mutation, useStore } from '../state/useStore'
+import { CUBE_AMOUNT, PLANE_SIZE } from '../constants'
+import { useStore, mutation } from '../state/useStore'
 
-import { PLANE_SIZE, CUBE_AMOUNT } from '../constants'
+import randomInRange from '../util/randomInRange'
+import distance2D from '../util/distance2D'
 
-const randPosNeg = (from, to) => Math.floor(Math.random() * (to - from + 1)) - to
+const halfPlane = PLANE_SIZE / 2
 
-function distance2D(p1x, p1y, p2x, p2y) {
-  const a = p2x - p1x;
-  const b = p2y - p1y;
-
-  return Math.sqrt(a * a + b * b);
-}
-
-const Cube = forwardRef((_, cube) => {
-  // const cube = useRef()
-  const cubeOpacityFactor = useRef(0)
+export default function InstancedCubes() {
+  const mesh = useRef()
 
   const ship = useStore((s) => s.ship)
+  const { clock } = useThree()
 
-  useLayoutEffect(() => {
-    cube.current.position.z = -500 + randPosNeg(-300, 300)
-    cube.current.position.x = randPosNeg(-(PLANE_SIZE / 2), PLANE_SIZE / 2)
+  const dummy = useMemo(() => new THREE.Object3D(), [])
+  const cubes = useMemo(() => {
+    // Setup initial cube positions
+    const temp = []
+    for (let i = 0; i < CUBE_AMOUNT; i++) {
+      const x = randomInRange(-halfPlane, halfPlane)
+      const y = 10
+      const z = -800 + randomInRange(-400, 400)
+
+      temp.push({ x, y, z })
+    }
+    return temp
   }, [])
 
   useFrame((state, delta) => {
-    // uncomment to have cubes move
-    // cube.current.position.z += 200 * delta * mutation.gameSpeed
+    cubes.forEach((cube, i) => {
+      if (ship.current) {
+        if (distance2D(ship.current.position.x, ship.current.position.z, cube.x, cube.z) < 12) {
+          mutation.gameSpeed = 0
+          mutation.gameOver = true
+        }
 
-
-    if (ship.current) {
-      if (distance2D(ship.current.position.x, ship.current.position.z, cube.current.position.x, cube.current.position.z) < 13) {
-        mutation.gameSpeed = 0
-        mutation.gameOver = true
-      }
-
-      if (cube.current.position.z - ship.current.position.z > 15) {
-        cube.current.position.z = ship.current.position.z - 800 + randPosNeg(-300, 300)
-        cube.current.position.x = randPosNeg(-(PLANE_SIZE / 2), PLANE_SIZE)
-        cube.current.material.opacity = 0
-      }
-
-      if (cube.current.position.z - ship.current.position.z < -500) {
-        if (cube.current.material.opacity < 1.0) {
-          cubeOpacityFactor.current += delta / 5
-          cube.current.material.opacity += cubeOpacityFactor.current
+        if (cube.z - ship.current.position.z > 15) {
+          cube.z = ship.current.position.z - 800 // + randomInRange(-400, 400)
+          cube.x = randomInRange(-halfPlane, halfPlane)
         }
       }
-    }
+
+
+
+      dummy.position.set(
+        cube.x,
+        cube.y,
+        cube.z
+      )
+
+      // apply changes to dummy and to the instanced matrix
+      dummy.updateMatrix()
+      mesh.current.setMatrixAt(i, dummy.matrix)
+    })
+
+    // Tells THREE to draw the updated matrix, I guess?
+    mesh.current.instanceMatrix.needsUpdate = true
   })
 
   return (
-    <Box ref={cube} position={[0, 10, -800]} args={[20, 20, 20]}>
-      <meshBasicMaterial attach="material" color="orange" />
-    </Box>
+    <instancedMesh ref={mesh} args={[null, null, CUBE_AMOUNT]}>
+      <boxBufferGeometry args={[20, 20, 20]} />
+      <meshBasicMaterial color="orange" />
+    </instancedMesh>
   )
-})
-
-export default function Cubes() {
-  const cubes = useStore((s) => s.cubes)
-
-  return cubes.map((ref, idx) => {
-    return <Cube key={idx} ref={ref} />
-  })
 }

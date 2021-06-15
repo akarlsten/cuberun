@@ -4,16 +4,24 @@ import { useEffect, useRef, useState, Suspense } from 'react'
 
 import { useStore } from '../state/useStore'
 
+// THREE components
 import Ship from './Ship'
 import Ground from './Ground'
 import Text from './Text'
-import KeyboardControls from './KeyboardControls'
 import Effects from './Effects'
 import Skybox from './Skybox'
 import Cubes from './Cubes'
-import InstancedCubes from './InstancedCubes'
 import Walls from './Walls'
+
+// State/dummy components
+import KeyboardControls from './KeyboardControls'
+import GameState from './GameState'
+
+// HTML components
 import Loader from './html/Loader'
+import Overlay from './html/Overlay'
+import Hud from './html/Hud'
+import GameOverScreen from './html/GameOverScreen'
 
 
 export default function CubeWorld({ color, bgColor }) {
@@ -22,6 +30,7 @@ export default function CubeWorld({ color, bgColor }) {
   return (
     <>
       <Canvas dpr={[1, 1.5]} shadows style={{ background: `${bgColor}` }}>
+        <GameState />
         <Skybox />
         <directionalLight
           ref={directionalLight}
@@ -33,15 +42,17 @@ export default function CubeWorld({ color, bgColor }) {
           {directionalLight.current && <primitive object={directionalLight.current.target} />}
         </Ship>
         <Walls />
-        <InstancedCubes />
-        {/* <Cubes /> */}
+        <Cubes />
         <Ground groundColor={bgColor} />
         <Text />
         <Perf />
         <KeyboardControls />
         <Effects />
       </Canvas>
+      <Hud />
       <Loader />
+      <GameOverScreen />
+      <Overlay />
     </>
   )
 }

@@ -3,6 +3,8 @@ import { useThree, useFrame } from '@react-three/fiber'
 import { useTexture, Stars } from '@react-three/drei'
 import * as THREE from 'three'
 
+import galaxyTexture from '../textures/galaxy.jpg'
+
 import { useStore } from '../state/useStore'
 
 function Sun() {
@@ -32,7 +34,7 @@ function Sun() {
 }
 
 function Sky() {
-  const texture = useTexture('wallup-140739.jpg')
+  const texture = useTexture(galaxyTexture)
   const sky = useRef()
   const stars = useRef()
 

@@ -4,6 +4,8 @@ export const PLANE_SIZE = 1024
 
 export const CUBE_AMOUNT = 100
 
+export const INITIAL_GAME_SPEED = 0.6
+
 export const GAME_SPEED_MULTIPLIER = 0.3
 
 export const COLORS = [
