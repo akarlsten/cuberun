@@ -1,6 +1,8 @@
 import { useProgress } from '@react-three/drei'
 import { useState, useEffect } from 'react'
 
+import Loader from './CustomLoader'
+
 import cubeRunLogo from '../../textures/cuberun-logo.png'
 
 import '../../styles/gameMenu.css'
@@ -9,7 +11,8 @@ import { useStore, mutation } from '../../state/useStore'
 
 const Overlay = () => {
   const [shown, setShown] = useState(true)
-  const { active } = useProgress()
+  const [opaque, setOpaque] = useState(true)
+  const { active, progress } = useProgress()
 
   const gameStarted = useStore(s => s.gameStarted)
   const gameOver = useStore(s => s.gameOver)
@@ -18,16 +21,18 @@ const Overlay = () => {
   const toggleMusic = useStore(s => s.toggleMusic)
 
   useEffect(() => {
-    console.log('active', active)
-    console.log('started', gameStarted)
-    console.log('over', gameOver)
-
-    if (active || gameStarted || gameOver) {
+    if (gameStarted || gameOver) {
       setShown(false)
     } else if (!gameStarted) {
       setShown(true)
     }
   }, [gameStarted, active])
+
+  useEffect(() => {
+    let t
+    if (active !== opaque) t = setTimeout(() => setOpaque(active), 300)
+    return () => clearTimeout(t)
+  }, [active])
 
   const handleStart = () => {
     setGameStarted(true)
@@ -38,11 +43,19 @@ const Overlay = () => {
   }
 
   return shown ? (
-    <div className="game__container" style={{ opacity: shown ? 1 : 0 }}>
+    <div className={`game__container`} style={{ opacity: shown ? 1 : 0, background: opaque ? '#141622FF' : '#141622CC' }}>
       <div className="game__menu">
         <img className="game__logo" src={cubeRunLogo} alt="Cuberun Logo" />
-        <button onClick={handleStart} className="game__menu-button">START</button>
-        <button onClick={handleMusic} className="game__menu-button">MUSIC {music ? 'OFF' : 'ON'}</button>
+        <div className="game__subcontainer">
+          {active ? (
+            <Loader active={active} progress={progress} />
+          ) : (
+            <>
+              <button onClick={handleStart} className="game__menu-button">START</button>
+              <button onClick={handleMusic} className="game__menu-button">MUSIC {music ? 'OFF' : 'ON'}</button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   ) : null

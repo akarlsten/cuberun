@@ -5,8 +5,8 @@
 
 .bottomLeft {
   position: absolute;
-  bottom: 5px;
-  left: 50px;
+  bottom: 2vh;
+  left: 3vh;
   transform: skew(-10deg, -10deg);
   width: 200px;
   margin: 0

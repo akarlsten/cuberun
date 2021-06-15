@@ -18,7 +18,6 @@ import KeyboardControls from './KeyboardControls'
 import GameState from './GameState'
 
 // HTML components
-import Loader from './html/Loader'
 import Overlay from './html/Overlay'
 import Hud from './html/Hud'
 import GameOverScreen from './html/GameOverScreen'
@@ -50,7 +49,6 @@ export default function CubeWorld({ color, bgColor }) {
         <Effects />
       </Canvas>
       <Hud />
-      <Loader />
       <GameOverScreen />
       <Overlay />
     </>
