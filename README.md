@@ -1,7 +1,7 @@
 
 ![Cuberun](./src/textures/cuberun-logo.png)
 
-<p align="center>
+<p align="center">
 A Cubefield-like game built with react-three-fiber.
 </p>
 
