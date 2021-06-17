@@ -7,13 +7,14 @@ A Cubefield-like game built with react-three-fiber.
 
 ### TODO
 
-- [ ] Add interpolating between colors of: cubes, walls, fog, ground when level changes (find a formula that will do this slowly over a plate)
+- [x] Add interpolating between colors of: cubes, walls, fog, ground when level changes (find a formula that will do this slowly over a plate)
+- [ ] Find some way to make it easier to distinguish distant cubes from the background
 - [ ] Add reset logic when restarting game (move everything back to initial values and reset all variables) - maybe we can "remount" all components to achieve this with React?
-- [ ] Make skybox spin in time with gameSpeed
-- [ ] Find way to make rainbow level interpolate quickly between all colors
-- [ ] Write music track for game (32 bar loop enough?) - Maybe increase playback rate with gameSpeed
+- [x] Make skybox spin in time with gameSpeed
+- [x] Find way to make rainbow level interpolate quickly between all colors
+- [x] Write music track for game (32 bar loop enough?) - Maybe increase playback rate with gameSpeed
 - [ ] Package game as a single component to allow use on my website? Otherwise host on Netlify 
-- [ ] Favicon
+- [x] Favicon
 
 
 ### Potentials
