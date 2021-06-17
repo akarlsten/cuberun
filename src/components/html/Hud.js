@@ -23,7 +23,7 @@ export default function Hud() {
     <div className="bottomLeft">
       <div className="score">
         <h3 className="score__title">KM/H</h3>
-        <h1 className="score__number">{(speed * 300).toFixed(0)}</h1>
+        <h1 className="score__number">{(speed * 400).toFixed(0)}</h1>
         <h3 className="score__title">SCORE</h3>
         <h1 className="score__number">{score.toFixed(0)}</h1>
       </div>

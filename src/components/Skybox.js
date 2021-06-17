@@ -74,7 +74,7 @@ export default function Skybox() {
     <Suspense fallback={null}>
       <Sun />
       <Sky />
-      <fog attach="fog" args={['#bf6c00', 10, 500]} />
+      <fog attach="fog" args={['#bf6c00', 600, 800]} />
     </Suspense>
   )
 }

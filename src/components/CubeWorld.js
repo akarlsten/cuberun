@@ -16,6 +16,7 @@ import Walls from './Walls'
 // State/dummy components
 import KeyboardControls from './KeyboardControls'
 import GameState from './GameState'
+import GlobalColor from './GlobalColor'
 
 // HTML components
 import Overlay from './html/Overlay'
@@ -41,12 +42,13 @@ export default function CubeWorld({ color, bgColor }) {
           {directionalLight.current && <primitive object={directionalLight.current.target} />}
         </Ship>
         <Walls />
-        {/* <Cubes /> */}
+        <Cubes />
         <Ground groundColor={bgColor} />
         {/* <Text /> */}
         <Perf />
         <KeyboardControls />
         <Effects />
+        <GlobalColor />
       </Canvas>
       <Hud />
       <GameOverScreen />

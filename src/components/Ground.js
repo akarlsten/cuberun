@@ -13,7 +13,6 @@ import gridBlue from '../textures/grid-blue.png'
 import gridPurple from '../textures/grid-purple.png'
 import gridPink from '../textures/grid-pink.png'
 import gridRainbow from '../textures/grid-rainbow.png'
-import gridWhite from '../textures/grid-white.png'
 
 const TEXTURE_SIZE = PLANE_SIZE * 0.075
 const MOVE_DISTANCE = PLANE_SIZE * 2
@@ -27,7 +26,7 @@ function Ground() {
   const plane = useRef()
   const planeTwo = useRef()
 
-  const textures = useTexture([gridRed, gridOrange, gridGreen, gridBlue, gridPurple, gridPink, gridRainbow, gridWhite])
+  const textures = useTexture([gridRed, gridOrange, gridGreen, gridBlue, gridPurple, gridPink, gridRainbow])
 
   const ship = useStore((s) => s.ship)
 
@@ -43,9 +42,6 @@ function Ground() {
   const lastMove = useRef(0)
   const { clock } = useThree()
   useFrame((state, delta) => {
-    // const mySine = Math.sin(clock.getElapsedTime())
-
-    // plane.current.material.emissiveIntensity = (mySine + 1) / 2
 
     if (ship.current) {
       // Alternates moving the two ground planes when we've just passed over onto a new plane, with logic to make sure it only happens once per pass
@@ -80,6 +76,8 @@ function Ground() {
       }
     }
 
+
+    // handles changing ground color between levels (really interpolating the emissiveness and changing the emissive map around)
     if (mutation.level > 0) {
       if (plane.current.material.map.uuid !== planeTwo.current.material.map.uuid) {
         if (plane.current.material.emissiveIntensity < 1) {
@@ -87,7 +85,6 @@ function Ground() {
             plane.current.material.emissiveIntensity = 1
           } else {
             plane.current.material.emissiveIntensity += delta * mutation.gameSpeed
-            // plane.current.material.color.addScalar(-(delta / (4 - mutation.gameSpeed)))
           }
         } else {
           plane.current.material.map = textures[mutation.level]
@@ -97,7 +94,6 @@ function Ground() {
             plane.current.material.emissiveMap = textures[mutation.level + 1]
           }
           plane.current.material.emissiveIntensity = 0
-          // plane.current.material.color.set(0xFFFFFF)
         }
       }
     }

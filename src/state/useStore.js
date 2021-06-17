@@ -1,3 +1,4 @@
+import { Color } from 'three'
 import { createRef } from 'react'
 import create from 'zustand'
 
@@ -32,7 +33,8 @@ const mutation = {
   gameSpeed: 0.0,
   desiredSpeed: 0.0,
   horizontalVelocity: 0,
-  level: 0
+  level: 0,
+  globalColor: new Color()
 }
 
 export { useStore, mutation }

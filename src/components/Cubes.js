@@ -2,16 +2,18 @@ import * as THREE from 'three'
 import { useRef, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 
-import { CUBE_AMOUNT, PLANE_SIZE } from '../constants'
+import { CUBE_AMOUNT, PLANE_SIZE, COLORS, WALL_RADIUS } from '../constants'
 import { useStore, mutation } from '../state/useStore'
 
 import randomInRange from '../util/randomInRange'
 import distance2D from '../util/distance2D'
 
-const halfPlane = PLANE_SIZE / 2
+const negativeBound = -(PLANE_SIZE / 2) + WALL_RADIUS / 2
+const positiveBound = (PLANE_SIZE / 2) - WALL_RADIUS / 2
 
 export default function InstancedCubes() {
   const mesh = useRef()
+  const material = useRef()
 
   const ship = useStore((s) => s.ship)
   const { clock } = useThree()
@@ -21,7 +23,7 @@ export default function InstancedCubes() {
     // Setup initial cube positions
     const temp = []
     for (let i = 0; i < CUBE_AMOUNT; i++) {
-      const x = randomInRange(-halfPlane, halfPlane)
+      const x = randomInRange(negativeBound, positiveBound)
       const y = 10
       const z = -800 + randomInRange(-400, 400)
 
@@ -40,11 +42,11 @@ export default function InstancedCubes() {
 
         if (cube.z - ship.current.position.z > 15) {
           cube.z = ship.current.position.z - 800 // + randomInRange(-400, 400)
-          cube.x = randomInRange(-halfPlane, halfPlane)
+          cube.x = randomInRange(negativeBound, positiveBound)
         }
       }
 
-
+      material.current.color = mutation.globalColor
 
       dummy.position.set(
         cube.x,
@@ -64,7 +66,7 @@ export default function InstancedCubes() {
   return (
     <instancedMesh ref={mesh} args={[null, null, CUBE_AMOUNT]}>
       <boxBufferGeometry args={[20, 20, 20]} />
-      <meshBasicMaterial color="orange" />
+      <meshBasicMaterial ref={material} color={COLORS[0].three} />
     </instancedMesh>
   )
 }
