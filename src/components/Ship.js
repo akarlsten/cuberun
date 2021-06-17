@@ -47,8 +47,6 @@ function ShipModel(props, { children }) {
   }, [])
 
   useFrame((state, delta) => {
-    const bigDelta = 1 * delta * 10.0
-    const smallDelta = 1 * delta * 2.0
     const accelDelta = 1 * delta * 1.5
 
     const time = clock.getElapsedTime()

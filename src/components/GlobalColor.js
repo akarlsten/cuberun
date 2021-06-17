@@ -25,7 +25,7 @@ export default function GlobalColor({ materialRef }) {
 
     // Rainbow Level
     if (mutation.level === 6) {
-      const rainbowSpeed = delta * 0.03
+      const rainbowSpeed = delta * 3
 
       if (rainbowAlpha1.current < 1) {
         rainbowAlpha1.current += rainbowSpeed

@@ -5,7 +5,7 @@ import * as THREE from 'three'
 
 import galaxyTexture from '../textures/galaxy.jpg'
 
-import { useStore } from '../state/useStore'
+import { mutation, useStore } from '../state/useStore'
 
 function Sun() {
   const { clock, camera } = useThree()
@@ -42,8 +42,8 @@ function Sky() {
 
 
   useFrame((state, delta) => {
-    sky.current.rotation.z += delta / 50
-    stars.current.rotation.z += delta / 50
+    sky.current.rotation.z += delta * 0.02 * mutation.gameSpeed
+    stars.current.rotation.z += delta * 0.02 * mutation.gameSpeed
 
     if (ship.current) {
       sky.current.position.x = ship.current.position.x

@@ -11,7 +11,7 @@ const useStore = create((set, get) => {
     currentSpeed: 0,
     gameOver: false,
     gameStarted: false,
-    music: true,
+    musicEnabled: true,
     controls: {
       left: false,
       right: false,
@@ -24,7 +24,7 @@ const useStore = create((set, get) => {
     setScore: (score) => set(state => ({ score: score })),
     setGameStarted: (started) => set(state => ({ gameStarted: started })),
     setGameOver: (over) => set(state => ({ gameOver: over })),
-    toggleMusic: () => set(state => ({ music: !state.music }))
+    toggleMusic: () => set(state => ({ musicEnabled: !state.musicEnabled }))
   }
 })
 

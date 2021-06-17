@@ -21,7 +21,8 @@ export default function GameState() {
   }, [gameStarted])
 
   useFrame((state, delta) => {
-    const accelDelta = 1 * delta / 2
+    const accelDelta = 1 * delta * 0.25
+
     if (!mutation.gameOver) {
       if (mutation.gameSpeed < mutation.desiredSpeed) {
         if (mutation.gameSpeed + accelDelta > mutation.desiredSpeed) {
