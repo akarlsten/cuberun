@@ -19,12 +19,12 @@ export default function GlobalColor({ materialRef }) {
 
   useFrame((state, delta) => {
     // Make sure the first level is red
-    if (mutation.level === 0) {
+    if (mutation.colorLevel === 0) {
       mutation.globalColor.set(COLORS[0].three)
     }
 
     // Rainbow Level
-    if (mutation.level === 6) {
+    if (mutation.colorLevel === 6) {
       const rainbowSpeed = delta * 3
 
       if (rainbowAlpha1.current < 1) {
@@ -53,8 +53,8 @@ export default function GlobalColor({ materialRef }) {
       previousLevel.current = 0
 
       // regular levels
-    } else if (mutation.level > previousLevel.current) {
-      mutation.globalColor.lerpColors(COLORS[previousLevel.current].three, COLORS[mutation.level].three, colorAlpha.current)
+    } else if (mutation.colorLevel > previousLevel.current) {
+      mutation.globalColor.lerpColors(COLORS[previousLevel.current].three, COLORS[mutation.colorLevel].three, colorAlpha.current)
       if (colorAlpha.current + (delta * mutation.gameSpeed) * 0.5 > 1) {
         colorAlpha.current = 1
       } else {
@@ -62,7 +62,7 @@ export default function GlobalColor({ materialRef }) {
       }
 
       if (colorAlpha.current === 1) {
-        previousLevel.current = mutation.level
+        previousLevel.current = mutation.colorLevel
         colorAlpha.current = 0
       }
     }

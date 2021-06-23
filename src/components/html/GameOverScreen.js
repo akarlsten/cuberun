@@ -29,8 +29,8 @@ const GameOverScreen = () => {
     }
   }, [gameOver])
 
-  const handleStart = () => {
-    setGameStarted(true)
+  const handleRestart = () => {
+    window.location.reload() // TODO: make a proper restart
   }
 
   return shown ? (
@@ -40,7 +40,7 @@ const GameOverScreen = () => {
         <h1 className="game__score-gameover">GAME OVER</h1>
         <h1 className="game__score-title">SCORE</h1>
         <h1 className="game__score">{score.toFixed(0)}</h1>
-        <button onClick={handleStart} className="game__menu-button">RESTART</button>
+        <button onClick={handleRestart} className="game__menu-button">RESTART</button>
       </div>
     </div>
   ) : null

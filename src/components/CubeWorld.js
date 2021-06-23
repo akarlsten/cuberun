@@ -18,6 +18,7 @@ import KeyboardControls from './KeyboardControls'
 import GameState from './GameState'
 import GlobalColor from './GlobalColor'
 import Music from './Music'
+import Sound from './Sound'
 
 // HTML components
 import Overlay from './html/Overlay'
@@ -51,6 +52,7 @@ export default function CubeWorld({ color, bgColor }) {
         <Effects />
         <GlobalColor />
         <Music />
+        <Sound />
       </Canvas>
       <Hud />
       <GameOverScreen />

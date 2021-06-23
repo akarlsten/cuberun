@@ -12,6 +12,7 @@ function Sun() {
 
   const sun = useStore((s) => s.sun)
   const ship = useStore((s) => s.ship)
+  const level = useStore(s => s.level)
 
   const sunColor = useMemo(() => new THREE.Color(1, 0.694, 0.168), [sun])
 
@@ -22,6 +23,11 @@ function Sun() {
     if (ship.current) {
       sun.current.position.z = ship.current.position.z - 1000
       sun.current.position.x = ship.current.position.x
+
+      // TODO: implement
+      // if (level > 0) {
+      //   sun.current.material.emissive.set(0x000000)
+      // }
     }
   })
 

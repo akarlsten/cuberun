@@ -30,6 +30,9 @@ function ShipModel(props, { children }) {
 
   const { clock } = useThree()
 
+  const gameStarted = useStore(s => s.gameStarted)
+  const gameOver = useStore(s => s.gameOver)
+
   // subscribe to controller updates on mount
   const controlsRef = useRef(useStore.getState().controls)
   useEffect(() => useStore.subscribe(
@@ -45,6 +48,25 @@ function ShipModel(props, { children }) {
     camera.current.rotation.z = Math.PI
     ship.current.rotation.y = Math.PI
   }, [])
+
+  // turn off movement related parts when we arent moving
+  useLayoutEffect(() => {
+    if (!gameStarted || gameOver) {
+      outerExhaust.current.material.visible = false
+      innerExhaust.current.material.visible = false
+      leftWingTrail.current.material.visible = false
+      rightWingTrail.current.material.visible = false
+      engineSparks.current.material.visible = false
+      pointLight.current.visible = false
+    } else {
+      outerExhaust.current.material.visible = true
+      innerExhaust.current.material.visible = true
+      leftWingTrail.current.material.visible = true
+      rightWingTrail.current.material.visible = true
+      engineSparks.current.material.visible = true
+      pointLight.current.visible = true
+    }
+  }, [gameStarted, gameOver])
 
   useFrame((state, delta) => {
     const accelDelta = 1 * delta * 1.5
@@ -139,6 +161,14 @@ function ShipModel(props, { children }) {
     outerExhaust.current.scale.y = 0.30 + slowSine / 10
     innerExhaust.current.scale.x = 0.10 + fastSine / 15
     innerExhaust.current.scale.y = 0.25 + slowSine / 10
+
+    if (mutation.desiredSpeed > mutation.gameSpeed) {
+      pointLight.current.intensity = 30 + (fastSine * 5)
+      outerExhaust.current.scale.x = 0.25 + fastSine / 15
+      outerExhaust.current.scale.y = 0.35 + slowSine / 10
+      innerExhaust.current.scale.x = 0.15 + fastSine / 15
+      innerExhaust.current.scale.y = 0.30 + slowSine / 10
+    }
   })
 
   return (

@@ -8,10 +8,11 @@ const useStore = create((set, get) => {
     set,
     get,
     score: 0,
-    currentSpeed: 0,
+    level: 0,
     gameOver: false,
     gameStarted: false,
     musicEnabled: true,
+    hasInteracted: false,
     controls: {
       left: false,
       right: false,
@@ -20,6 +21,9 @@ const useStore = create((set, get) => {
     camera: createRef(),
     ship: createRef(),
     sun: createRef(),
+    sfx: createRef(),
+    setInteracted: () => set(state => ({ hasInteracted: true })),
+    incrementLevel: () => set(state => ({ level: state.level + 1 })),
     setCurrentSpeed: (speed) => set(state => ({ currentSpeed: speed })),
     setScore: (score) => set(state => ({ score: score })),
     setGameStarted: (started) => set(state => ({ gameStarted: started })),
@@ -33,7 +37,7 @@ const mutation = {
   gameSpeed: 0.0,
   desiredSpeed: 0.0,
   horizontalVelocity: 0,
-  level: 0,
+  colorLevel: 0,
   globalColor: new Color()
 }
 

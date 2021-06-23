@@ -28,7 +28,8 @@ function Ground() {
 
   const textures = useTexture([gridRed, gridOrange, gridGreen, gridBlue, gridPurple, gridPink, gridRainbow])
 
-  const ship = useStore((s) => s.ship)
+  const ship = useStore(s => s.ship)
+  const incrementLevel = useStore(s => s.incrementLevel)
 
   useLayoutEffect(() => {
     textures.forEach(texture => {
@@ -53,22 +54,23 @@ function Ground() {
 
           // change the level every 4 moves or 4000 meters
           if (moveCounter.current % 4 === 0) {
-            mutation.level++
+            incrementLevel()
+            mutation.colorLevel++
             mutation.desiredSpeed += GAME_SPEED_MULTIPLIER
 
-            if (mutation.level >= textures.length) {
-              mutation.level = 0
+            if (mutation.colorLevel >= textures.length) {
+              mutation.colorLevel = 0
             }
           }
 
           if (moveCounter.current % 2 === 0) {
             groundTwo.current.position.z -= MOVE_DISTANCE
             lastMove.current = groundTwo.current.position.z
-            planeTwo.current.material.map = textures[mutation.level]
+            planeTwo.current.material.map = textures[mutation.colorLevel]
           } else {
             ground.current.position.z -= MOVE_DISTANCE
             lastMove.current = ground.current.position.z
-            plane.current.material.map = textures[mutation.level]
+            plane.current.material.map = textures[mutation.colorLevel]
           }
         }
 
@@ -78,7 +80,7 @@ function Ground() {
 
 
     // handles changing ground color between levels (really interpolating the emissiveness and changing the emissive map around)
-    if (mutation.level > 0) {
+    if (mutation.colorLevel > 0) {
       if (plane.current.material.map.uuid !== planeTwo.current.material.map.uuid) {
         if (plane.current.material.emissiveIntensity < 1) {
           if (plane.current.material.emissiveIntensity + delta * mutation.gameSpeed > 1) {
@@ -87,11 +89,11 @@ function Ground() {
             plane.current.material.emissiveIntensity += delta * mutation.gameSpeed
           }
         } else {
-          plane.current.material.map = textures[mutation.level]
-          if (mutation.level === textures.length - 1) {
+          plane.current.material.map = textures[mutation.colorLevel]
+          if (mutation.colorLevel === textures.length - 1) {
             plane.current.material.emissiveMap = textures[0]
           } else {
-            plane.current.material.emissiveMap = textures[mutation.level + 1]
+            plane.current.material.emissiveMap = textures[mutation.colorLevel + 1]
           }
           plane.current.material.emissiveIntensity = 0
         }

@@ -7,7 +7,7 @@
   position: absolute;
   bottom: 2vh;
   left: 4vh;
-  transform: skew(-10deg, -10deg);
+  transform: skew(0deg, -10deg);
   width: 200px;
   margin: 0
 }
@@ -17,6 +17,10 @@
   color: #eee;
   text-shadow: 0 0 40px #fe2079;
   font-family: 'Commando', sans-serif;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 
 .score__number {

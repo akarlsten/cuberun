@@ -15,8 +15,7 @@ export default function InstancedCubes() {
   const mesh = useRef()
   const material = useRef()
 
-  const ship = useStore((s) => s.ship)
-  const { clock } = useThree()
+  const ship = useStore(s => s.ship)
 
   const dummy = useMemo(() => new THREE.Object3D(), [])
   const cubes = useMemo(() => {
@@ -35,7 +34,9 @@ export default function InstancedCubes() {
   useFrame((state, delta) => {
     cubes.forEach((cube, i) => {
       if (ship.current) {
-        if (distance2D(ship.current.position.x, ship.current.position.z, cube.x, cube.z) < 12) {
+        const distanceToShip = distance2D(ship.current.position.x, ship.current.position.z, cube.x, cube.z)
+
+        if (distanceToShip < 12) {
           mutation.gameSpeed = 0
           mutation.gameOver = true
         }

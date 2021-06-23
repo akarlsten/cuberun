@@ -4,77 +4,130 @@ import { useLoader, useFrame, useThree } from '@react-three/fiber'
 
 import { useStore, mutation } from '../state/useStore'
 
-import introSong from '../audio/intro.mp3'
+import { INITIAL_GAME_SPEED } from '../constants'
+
+import introSong from '../audio/intro-loop.mp3'
 import mainSong from '../audio/main.mp3'
 
 function Music() {
-  const sound = useRef()
+  const introPlayer = useRef()
+  const themePlayer = useRef()
   const soundOrigin = useRef()
-
 
   const musicEnabled = useStore(s => s.musicEnabled)
   const gameStarted = useStore(s => s.gameStarted)
   const gameOver = useStore(s => s.gameOver)
   const camera = useStore(s => s.camera)
+  const level = useStore(s => s.level)
 
   const [listener] = useState(() => new THREE.AudioListener())
 
   const introTheme = useLoader(THREE.AudioLoader, introSong)
   const mainTheme = useLoader(THREE.AudioLoader, mainSong)
+  const themeFilter = useRef()
+
+  const introVolume = useRef(1)
+  const themeVolume = useRef(0)
+
+  const introPlaying = useRef(true)
+  const startCrossfade = useRef(false)
 
   useEffect(() => {
-    if (gameOver) {
-      if (sound.current.isPlaying) {
-        sound.current.stop()
-      }
+    introPlayer.current.setBuffer(introTheme)
+  }, [introTheme])
 
-      sound.current.setBuffer(introTheme)
-    }
+  useEffect(() => {
+    themePlayer.current.setBuffer(mainTheme)
+    themeFilter.current = themePlayer.current.context.createBiquadFilter()
+    themeFilter.current.type = "lowpass"
+    themeFilter.current.frequency.value = 0
+    themePlayer.current.setFilter(themeFilter.current)
+  }, [mainTheme])
 
-    if (gameStarted && !gameOver) {
-      if (sound.current.isPlaying) {
-        sound.current.stop()
-      }
-      sound.current.setBuffer(mainTheme)
-    } else {
-      sound.current.setBuffer(introTheme)
-      sound.current.setVolume(0)
-    }
-
+  useEffect(() => {
     if (musicEnabled && !gameOver) {
-      if (!sound.current.isPlaying) {
-        sound.current.play()
-        sound.current.setVolume(0)
+      if (!introPlayer.current.isPlaying) {
+        introPlayer.current.play()
+        introPlaying.current = true
       }
     } else {
-      sound.current.stop()
+      introPlayer.current.stop()
     }
 
-    sound.current.setLoop(true)
+    introPlayer.current.setLoop(true)
+    themePlayer.current.setLoop(true)
     camera.current.add(listener)
     return () => camera.current.remove(listener)
   }, [musicEnabled, introTheme, mainTheme, gameStarted, gameOver])
 
+  useEffect(() => {
+    if (level > 0 && level % 2 === 0) {
+      themePlayer.current.setPlaybackRate(1 + level * 0.02)
+    } else {
+      themePlayer.current.setPlaybackRate(1)
+    }
+  }, [level])
+
   useFrame((state, delta) => {
-    // slowly increase volume
-    const currentVolume = sound.current.getVolume()
-    if (currentVolume < 1) {
-      sound.current.setVolume(currentVolume + delta * 0.5)
+    if (gameStarted && !themePlayer.current.isPlaying) {
+      if (introPlayer.current.context.currentTime.toFixed(1) % 9.6 === 0) {
+        startCrossfade.current = true
+        themePlayer.current.play()
+        themePlayer.current.setVolume(0)
+      }
     }
 
-    // change playback rate with level
-    if (mutation.gameSpeed > 2) { // TODO: Maybe just set it every 2 levels, dont interpolate - also potentially add crash and speedup sounds
-      if (sound.current.getPlaybackRate() < 1 + (mutation.gameSpeed * 0.1)) {
-        sound.current.setPlaybackRate(1 + (mutation.gameSpeed * 0.05))
+    if (gameStarted && !gameOver && themeVolume.current < 1) {
+      if (!themePlayer.current.isPlaying) {
+        themePlayer.current.play()
       }
-    } else {
-      sound.current.setPlaybackRate(1)
+
+      themeFilter.current.frequency.value += delta * 4000
+
+      if (themeVolume.current + delta * 0.2 > 1) {
+        themeVolume.current = 1
+      } else {
+        themeVolume.current += delta * 0.2
+      }
+
+      if (introVolume.current - delta * 0.2 < 0) {
+        introVolume.current = 0
+      } else {
+        introVolume.current -= delta * 0.2
+      }
+
+      introPlayer.current.setVolume(introVolume.current)
+      themePlayer.current.setVolume(themeVolume.current)
+    }
+
+    if (gameOver && introVolume.current < 1) {
+      if (!introPlayer.current.isPlaying) {
+        introPlayer.current.play()
+      }
+
+      themeFilter.current.frequency.value -= delta * 4000
+
+      if (themeVolume.current - delta * 0.2 < 0) {
+        themeVolume.current = 0
+      } else {
+        themeVolume.current -= delta * 0.2
+      }
+
+      if (introVolume.current + delta * 0.2 > 1) {
+        introVolume.current = 1
+      } else {
+        introVolume.current += delta * 0.2
+      }
+
+      introPlayer.current.setVolume(introVolume.current)
+      themePlayer.current.setVolume(themeVolume.current)
     }
   })
 
   return (
     <group ref={soundOrigin}>
-      <audio ref={sound} args={[listener]} />
+      <audio ref={introPlayer} args={[listener]} />
+      <audio ref={themePlayer} args={[listener]} />
     </group>
   )
 }
