@@ -2,6 +2,8 @@ import * as THREE from 'three'
 
 export const PLANE_SIZE = 1000
 
+export const CUBE_SIZE = 20
+
 export const CUBE_AMOUNT = 100
 
 export const INITIAL_GAME_SPEED = 0.6
@@ -11,6 +13,11 @@ export const GAME_SPEED_MULTIPLIER = 0.3
 export const WALL_RADIUS = 40
 
 export const COLORS = [
+  {
+    name: 'pink',
+    hex: '#ff69b4',
+    three: new THREE.Color(0xff2190)
+  },
   {
     name: 'red',
     hex: '#ff2919',
@@ -29,17 +36,12 @@ export const COLORS = [
   {
     name: 'blue',
     hex: '#217aff',
-    three: new THREE.Color(0x217aff)
+    three: new THREE.Color(0x2069d6)
   },
   {
     name: 'purple',
     hex: '#9370D8',
     three: new THREE.Color(0x6942b8)
-  },
-  {
-    name: 'pink',
-    hex: '#ff69b4',
-    three: new THREE.Color(0xff2190)
   },
   {
     name: 'white',

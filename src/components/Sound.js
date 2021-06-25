@@ -30,8 +30,10 @@ function Sound() {
       sound.current.setVolume(0)
     }
 
-    camera.current.add(listener)
-    return () => camera.current.remove(listener)
+    if (camera.current) {
+      camera.current.add(listener)
+      return () => camera.current.remove(listener)
+    }
   }, [speedUpSound, musicEnabled])
 
   useEffect(() => {

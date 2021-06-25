@@ -63,12 +63,13 @@ function Music() {
   useEffect(() => {
     if (level > 0 && level % 2 === 0) {
       themePlayer.current.setPlaybackRate(1 + level * 0.02)
-    } else {
+    } else if (level === 0) {
       themePlayer.current.setPlaybackRate(1)
     }
   }, [level])
 
   useFrame((state, delta) => {
+    // start playing main theme "on the beat" when game starts
     if (gameStarted && !themePlayer.current.isPlaying) {
       if (introPlayer.current.context.currentTime.toFixed(1) % 9.6 === 0) {
         startCrossfade.current = true
@@ -77,6 +78,7 @@ function Music() {
       }
     }
 
+    // crossfade intro music to main theme when game starts
     if (gameStarted && !gameOver && themeVolume.current < 1) {
       if (!themePlayer.current.isPlaying) {
         themePlayer.current.play()
@@ -100,6 +102,8 @@ function Music() {
       themePlayer.current.setVolume(themeVolume.current)
     }
 
+
+    // Crossfade main theme back to intro on game over
     if (gameOver && introVolume.current < 1) {
       if (!introPlayer.current.isPlaying) {
         introPlayer.current.play()

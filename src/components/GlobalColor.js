@@ -32,10 +32,10 @@ export default function GlobalColor({ materialRef }) {
         mutation.globalColor.lerpColors(COLORS[0].three, COLORS[2].three, rainbowAlpha1.current)
       } else if (rainbowAlpha2.current < 1) {
         rainbowAlpha2.current += rainbowSpeed
-        mutation.globalColor.lerpColors(COLORS[2].three, COLORS[4].three, rainbowAlpha2.current)
+        mutation.globalColor.lerpColors(COLORS[2].three, COLORS[3].three, rainbowAlpha2.current)
       } else if (rainbowAlpha3.current < 1) {
         rainbowAlpha3.current += rainbowSpeed
-        mutation.globalColor.lerpColors(COLORS[4].three, COLORS[1].three, rainbowAlpha3.current)
+        mutation.globalColor.lerpColors(COLORS[3].three, COLORS[1].three, rainbowAlpha3.current)
       } else if (rainbowAlpha4.current < 1) {
         rainbowAlpha4.current += rainbowSpeed
         mutation.globalColor.lerpColors(COLORS[1].three, COLORS[5].three, rainbowAlpha4.current)

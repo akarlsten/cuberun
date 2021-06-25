@@ -26,7 +26,7 @@ function Ground() {
   const plane = useRef()
   const planeTwo = useRef()
 
-  const textures = useTexture([gridRed, gridOrange, gridGreen, gridBlue, gridPurple, gridPink, gridRainbow])
+  const textures = useTexture([gridPink, gridRed, gridOrange, gridGreen, gridBlue, gridPurple, gridRainbow])
 
   const ship = useStore(s => s.ship)
   const incrementLevel = useStore(s => s.incrementLevel)

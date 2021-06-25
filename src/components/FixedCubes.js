@@ -2,11 +2,12 @@ import * as THREE from 'three'
 import { useRef, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 
-import { CUBE_AMOUNT, CUBE_SIZE, PLANE_SIZE, COLORS, WALL_RADIUS } from '../constants'
+import { CUBE_AMOUNT, PLANE_SIZE, COLORS, WALL_RADIUS } from '../constants'
 import { useStore, mutation } from '../state/useStore'
 
 import randomInRange from '../util/randomInRange'
 import distance2D from '../util/distance2D'
+import createCubeCoords from '../util/generateFixedCubes'
 
 const negativeBound = -(PLANE_SIZE / 2) + WALL_RADIUS / 2
 const positiveBound = (PLANE_SIZE / 2) - WALL_RADIUS / 2
@@ -17,14 +18,16 @@ export default function InstancedCubes() {
 
   const ship = useStore(s => s.ship)
 
+  const cubeCoords = useMemo(() => createCubeCoords(), [])
+
   const dummy = useMemo(() => new THREE.Object3D(), [])
   const cubes = useMemo(() => {
     // Setup initial cube positions
     const temp = []
-    for (let i = 0; i < CUBE_AMOUNT; i++) {
-      const x = randomInRange(negativeBound, positiveBound)
-      const y = 10
-      const z = -800 + randomInRange(-400, 200)
+    for (let i = 0; i < cubeCoords.length; i++) {
+      const x = cubeCoords[i].x
+      const y = cubeCoords[i].y
+      const z = 300 + cubeCoords[i].z
 
       temp.push({ x, y, z })
     }
@@ -41,10 +44,10 @@ export default function InstancedCubes() {
           mutation.gameOver = true
         }
 
-        if (cube.z - ship.current.position.z > 15) {
-          cube.z = ship.current.position.z - 800 // + randomInRange(-400, 400)
-          cube.x = randomInRange(negativeBound, positiveBound)
-        }
+        // if (cube.z - ship.current.position.z > 15) {
+        //   cube.z = ship.current.position.z - 800 // + randomInRange(-400, 400)
+        //   cube.x = randomInRange(negativeBound, positiveBound)
+        // }
       }
 
       material.current.color = mutation.globalColor
@@ -65,8 +68,8 @@ export default function InstancedCubes() {
   })
 
   return (
-    <instancedMesh ref={mesh} args={[null, null, CUBE_AMOUNT]}>
-      <boxBufferGeometry args={[CUBE_SIZE, CUBE_SIZE, CUBE_SIZE]} />
+    <instancedMesh ref={mesh} args={[null, null, cubeCoords.length]}>
+      <boxBufferGeometry args={[20, 20, 20]} />
       <meshBasicMaterial ref={material} color={COLORS[0].three} />
     </instancedMesh>
   )

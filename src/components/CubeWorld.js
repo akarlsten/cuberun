@@ -7,10 +7,10 @@ import { useStore } from '../state/useStore'
 // THREE components
 import Ship from './Ship'
 import Ground from './Ground'
-import Text from './Text'
 import Effects from './Effects'
 import Skybox from './Skybox'
 import Cubes from './Cubes'
+import FixedCubes from './FixedCubes'
 import Walls from './Walls'
 
 // State/dummy components
@@ -36,7 +36,7 @@ export default function CubeWorld({ color, bgColor }) {
         <Skybox />
         <directionalLight
           ref={directionalLight}
-          intensity={3} // 4
+          intensity={3}
           position={[0, Math.PI, 0]}
         />
         <ambientLight intensity={0.1} />
@@ -45,8 +45,8 @@ export default function CubeWorld({ color, bgColor }) {
         </Ship>
         <Walls />
         <Cubes />
+        <FixedCubes />
         <Ground groundColor={bgColor} />
-        {/* <Text /> */}
         <Perf />
         <KeyboardControls />
         <Effects />
