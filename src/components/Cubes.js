@@ -16,6 +16,7 @@ export default function InstancedCubes() {
   const material = useRef()
 
   const ship = useStore(s => s.ship)
+  const level = useStore(s => s.level)
 
   const dummy = useMemo(() => new THREE.Object3D(), [])
   const cubes = useMemo(() => {
@@ -41,9 +42,12 @@ export default function InstancedCubes() {
           mutation.gameOver = true
         }
 
-        if (cube.z - ship.current.position.z > 15) {
-          cube.z = ship.current.position.z - 800 // + randomInRange(-400, 400)
-          cube.x = randomInRange(negativeBound, positiveBound)
+        // TODO: Optimize this so all the calculations dont happen at once after diamond stretch, maybe by having the placements still happen but offset
+        if (ship.current.position.z > -(level * PLANE_SIZE * 4) - PLANE_SIZE * 1.5 || ship.current.position.z < -(level * PLANE_SIZE * 4) - PLANE_SIZE * 3) {
+          if (cube.z - ship.current.position.z > 15) {
+            cube.z = ship.current.position.z - 1000 + randomInRange(-500, 0)
+            cube.x = randomInRange(negativeBound, positiveBound)
+          }
         }
       }
 

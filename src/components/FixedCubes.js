@@ -7,7 +7,7 @@ import { useStore, mutation } from '../state/useStore'
 
 import randomInRange from '../util/randomInRange'
 import distance2D from '../util/distance2D'
-import createCubeCoords from '../util/generateFixedCubes'
+import { generateCubeTunnel, generateDiamond } from '../util/generateFixedCubes'
 
 const negativeBound = -(PLANE_SIZE / 2) + WALL_RADIUS / 2
 const positiveBound = (PLANE_SIZE / 2) - WALL_RADIUS / 2
@@ -17,17 +17,19 @@ export default function InstancedCubes() {
   const material = useRef()
 
   const ship = useStore(s => s.ship)
+  const level = useStore(s => s.level)
 
-  const cubeCoords = useMemo(() => createCubeCoords(), [])
+  const tunnelCoords = useMemo(() => generateCubeTunnel(), [])
+  const diamondCoords = useMemo(() => generateDiamond(), [])
 
   const dummy = useMemo(() => new THREE.Object3D(), [])
   const cubes = useMemo(() => {
     // Setup initial cube positions
     const temp = []
-    for (let i = 0; i < cubeCoords.length; i++) {
-      const x = cubeCoords[i].x
-      const y = cubeCoords[i].y
-      const z = 300 + cubeCoords[i].z
+    for (let i = 0; i < diamondCoords.length; i++) {
+      const x = tunnelCoords[i]?.x || 0
+      const y = tunnelCoords[i]?.y || 0
+      const z = 300 + tunnelCoords[i]?.z || 10
 
       temp.push({ x, y, z })
     }
@@ -44,6 +46,11 @@ export default function InstancedCubes() {
           mutation.gameOver = true
         }
 
+        if (ship.current.position.z < -PLANE_SIZE && ship.current.position.z < -(level * PLANE_SIZE * 4)) {
+          cube.x = diamondCoords[i].x
+          cube.y = diamondCoords[i].y
+          cube.z = -(level * PLANE_SIZE * 4) - 2000 + diamondCoords[i].z
+        }
         // if (cube.z - ship.current.position.z > 15) {
         //   cube.z = ship.current.position.z - 800 // + randomInRange(-400, 400)
         //   cube.x = randomInRange(negativeBound, positiveBound)
@@ -68,7 +75,7 @@ export default function InstancedCubes() {
   })
 
   return (
-    <instancedMesh ref={mesh} args={[null, null, cubeCoords.length]}>
+    <instancedMesh ref={mesh} args={[null, null, diamondCoords.length]}>
       <boxBufferGeometry args={[20, 20, 20]} />
       <meshBasicMaterial ref={material} color={COLORS[0].three} />
     </instancedMesh>

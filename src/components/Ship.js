@@ -71,7 +71,7 @@ function ShipModel(props, { children }) {
   }, [gameStarted, gameOver])
 
   useFrame((state, delta) => {
-    const accelDelta = 1 * delta * 1.5 // 1.5
+    const accelDelta = 1 * delta * 2 // 1.5
 
     const time = clock.getElapsedTime()
 
@@ -138,7 +138,7 @@ function ShipModel(props, { children }) {
 
     if (!mutation.gameOver && mutation.gameSpeed > 0) {
       if ((left && !right)) {
-        mutation.horizontalVelocity = Math.max(-0.5 /* -0.5 */, mutation.horizontalVelocity - accelDelta)
+        mutation.horizontalVelocity = Math.max(-0.7 /* -0.5 */, mutation.horizontalVelocity - accelDelta)
 
         // wing trail
         rightWingTrail.current.scale.x = fastSine / 30
@@ -148,7 +148,7 @@ function ShipModel(props, { children }) {
       }
 
       if ((!left && right)) {
-        mutation.horizontalVelocity = Math.min(0.7, mutation.horizontalVelocity + accelDelta)
+        mutation.horizontalVelocity = Math.min(0.7 /* 0.7 */, mutation.horizontalVelocity + accelDelta)
 
         // wing trail
         leftWingTrail.current.scale.x = fastSine / 30

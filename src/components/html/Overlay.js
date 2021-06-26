@@ -2,6 +2,7 @@ import { useProgress } from '@react-three/drei'
 import { useState, useEffect } from 'react'
 
 import Loader from './CustomLoader'
+import Author from './Author'
 
 import cubeRunLogo from '../../textures/cuberun-logo.png'
 
@@ -53,6 +54,7 @@ const Overlay = () => {
             <>
               <button onClick={handleStart} className="game__menu-button">START</button>
               <button onClick={handleMusic} className="game__menu-button">MUSIC {musicEnabled ? 'OFF' : 'ON'}</button>
+              <Author />
             </>
           )}
         </div>

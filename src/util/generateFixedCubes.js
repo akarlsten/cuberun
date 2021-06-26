@@ -25,14 +25,63 @@ function makeTunnel(tunnelLength = 10, gapSize = 3) {
     return {
       x: index % 2 === 0 ? CUBE_SIZE * 2 : -CUBE_SIZE * 2,
       y: CUBE_SIZE / 2,
-      z: -(((segments / 2 - 2) * CUBE_SIZE) + (index * CUBE_SIZE * 0.8))
+      z: -(((segments / 2 - 2) * CUBE_SIZE) + (index * CUBE_SIZE * 0.7))
     }
   })
 
   return tunnelCoordinates
 }
 
-export default function generateCubeTunnel() {
+function makeDiamond(size = 21, tunnelLength = 10) {
+  const wallEndOffset = -((segments / 2 - 2) * CUBE_SIZE)
+  const tunnelEndOffset = tunnelLength * CUBE_SIZE * 0.7
+
+  const outerLeftWall = [...Array(size)].map((cube, index) => {
+    return {
+      x: index <= size / 2 ? -CUBE_SIZE * 3 - index * CUBE_SIZE : (-CUBE_SIZE * 3 - size * CUBE_SIZE) + index * CUBE_SIZE,
+      y: CUBE_SIZE / 2,
+      z: wallEndOffset - tunnelEndOffset - index * CUBE_SIZE * 2
+    }
+  })
+
+  const outerRightWall = [...Array(size)].map((cube, index) => {
+    return {
+      x: index <= size / 2 ? CUBE_SIZE * 3 + index * CUBE_SIZE : (CUBE_SIZE * 3 + size * CUBE_SIZE) - index * CUBE_SIZE,
+      y: CUBE_SIZE / 2,
+      z: wallEndOffset - tunnelEndOffset - index * CUBE_SIZE * 2
+    }
+  })
+
+  const innerSize = Math.floor(size / 2)
+
+  const innerLeftWall = [...Array(innerSize)].map((cube, index) => {
+    return {
+      x: index < innerSize / 2 ? (-CUBE_SIZE / 2) - index * CUBE_SIZE : (-CUBE_SIZE / 2) - (innerSize * CUBE_SIZE) + index * CUBE_SIZE,
+      y: CUBE_SIZE / 2,
+      z: wallEndOffset - tunnelEndOffset - (Math.floor(size / 1.5) * CUBE_SIZE) - index * CUBE_SIZE * 2
+    }
+  })
+
+  const innerRightWall = [...Array(innerSize)].map((cube, index) => {
+    return {
+      x: index < innerSize / 2 ? (CUBE_SIZE / 2) + index * CUBE_SIZE : (CUBE_SIZE / 2) + (innerSize * CUBE_SIZE) - index * CUBE_SIZE,
+      y: CUBE_SIZE / 2,
+      z: wallEndOffset - tunnelEndOffset - (Math.floor(size / 1.5) * CUBE_SIZE) - index * CUBE_SIZE * 2
+    }
+  })
+
+  return [...outerLeftWall, ...outerRightWall, ...innerLeftWall, ...innerRightWall]
+}
+
+export function generateDiamond() {
+  const initialWall = makeWall()
+  const tunnel = makeTunnel()
+  const diamond = makeDiamond()
+
+  return [...initialWall, ...tunnel, ...diamond]
+}
+
+export function generateCubeTunnel() {
   const initialWall = makeWall()
   const tunnel = makeTunnel()
 
