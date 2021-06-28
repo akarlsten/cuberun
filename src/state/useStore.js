@@ -13,6 +13,7 @@ const useStore = create((set, get) => {
     gameStarted: false,
     musicEnabled: true,
     hasInteracted: false,
+    isSpeedingUp: false,
     controls: {
       left: false,
       right: false,
@@ -22,6 +23,7 @@ const useStore = create((set, get) => {
     ship: createRef(),
     sun: createRef(),
     sfx: createRef(),
+    setIsSpeedingUp: (speedingUp) => set(state => ({ isSpeedingUp: speedingUp })),
     setInteracted: () => set(state => ({ hasInteracted: true })),
     incrementLevel: () => set(state => ({ level: state.level + 1 })),
     setCurrentSpeed: (speed) => set(state => ({ currentSpeed: speed })),

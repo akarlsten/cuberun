@@ -87,3 +87,66 @@
   color: #FFF;
   cursor: pointer;
 }
+
+
+@media screen and (max-width: 992px) {
+.game__logo {
+  height: 360px;
+  width: 720px;
+}
+
+.game__logo-small {
+  height: 175px;
+  width: 350px;
+}
+
+.game__menu-button {
+  font-size: 4rem;
+  text-shadow: 0 0 15px #fe2079;
+}
+
+.game__score-gameover {
+  font-size: 8rem;
+  text-shadow: 0 0 10px #fe2079;
+}
+
+.game__score-title {
+  font-size: 3rem;
+}
+
+.game__score {
+  font-size: 6rem;
+}
+}
+
+@media screen and (max-width: 600px) {
+.game__logo {
+  height: 175px;
+  width: 350px;
+}
+
+.game__logo-small {
+  height: 128px;
+  width: 256px;
+}
+
+.game__menu-button {
+  font-size: 3rem;
+  text-shadow: 0 0 15px #fe2079;
+}
+
+.game__score-gameover {
+  font-size: 4rem;
+  text-shadow: 0 0 10px #fe2079;
+}
+
+.game__score-title {
+  font-size: 2.5rem;
+    text-shadow: 0 0 5px #fe2079;
+}
+
+.game__score {
+  font-size: 5rem;
+  text-shadow: 0 0 10px #fe2079;
+}
+}

@@ -1,6 +1,5 @@
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { Perf } from 'r3f-perf'
-import { useEffect, useRef, useState, Suspense } from 'react'
 
 import { useStore } from '../state/useStore'
 
@@ -11,7 +10,9 @@ import Effects from './Effects'
 import Skybox from './Skybox'
 import Cubes from './Cubes'
 import FixedCubes from './FixedCubes'
+import Chevrons from './Chevrons'
 import Walls from './Walls'
+import Arch from './Arch'
 
 // State/dummy components
 import KeyboardControls from './KeyboardControls'
@@ -46,6 +47,8 @@ export default function CubeWorld({ color, bgColor }) {
         <Walls />
         <Cubes />
         <FixedCubes />
+        <Chevrons />
+        <Arch />
         <Ground groundColor={bgColor} />
         <Perf />
         <KeyboardControls />

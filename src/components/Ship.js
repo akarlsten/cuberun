@@ -99,7 +99,7 @@ function ShipModel(props, { children }) {
     // Curving during turns
     ship.current.rotation.z = mutation.horizontalVelocity * 1.5
     ship.current.rotation.y = Math.PI - mutation.horizontalVelocity * 0.4
-    ship.current.rotation.x = Math.abs(mutation.horizontalVelocity) / 10 // max/min velocity is -0.5/0.5, divide by ten to get our desired max rotation of 0.05
+    ship.current.rotation.x = -Math.abs(mutation.horizontalVelocity) / 10 // max/min velocity is -0.5/0.5, divide by ten to get our desired max rotation of 0.05
 
     // Ship Jitter - small incidental movements
     ship.current.position.y -= slowSine / 200

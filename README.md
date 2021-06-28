@@ -15,6 +15,7 @@ A Cubefield-like game built with react-three-fiber.
 - [x] Write music track for game (32 bar loop enough?) - Maybe increase playback rate with gameSpeed
 - [ ] Package game as a single component to allow use on my website? Otherwise host on Netlify 
 - [x] Favicon
+- [ ] Add mobile onscreen controls
 
 
 ### Potentials

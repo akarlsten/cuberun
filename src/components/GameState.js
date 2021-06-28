@@ -11,6 +11,7 @@ export default function GameState() {
   const setCurrentSpeed = useStore(s => s.setCurrentSpeed)
   const gameStarted = useStore(s => s.gameStarted)
   const setGameStarted = useStore(s => s.setGameStarted)
+  const setIsSpeedingUp = useStore(s => s.setIsSpeedingUp)
 
   const setGameOver = useStore(s => s.setGameOver)
 
@@ -25,6 +26,7 @@ export default function GameState() {
 
     if (!mutation.gameOver) {
       if (mutation.gameSpeed < mutation.desiredSpeed) {
+        setIsSpeedingUp(true)
         if (mutation.gameSpeed + accelDelta > mutation.desiredSpeed) {
           mutation.gameSpeed = mutation.desiredSpeed
         } else {
@@ -32,6 +34,8 @@ export default function GameState() {
         }
 
         setCurrentSpeed(mutation.gameSpeed)
+      } else {
+        setIsSpeedingUp(false)
       }
     }
 

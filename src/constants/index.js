@@ -1,6 +1,14 @@
 import * as THREE from 'three'
 
+/**
+ * The size of each ground plane in meters, 1000 is fine
+ */
 export const PLANE_SIZE = 1000
+
+/**
+ * How many ground planes must we traverse per level, default 6
+ */
+export const LEVEL_SIZE = 6
 
 export const CUBE_SIZE = 20
 

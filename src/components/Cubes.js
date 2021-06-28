@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import { useRef, useMemo } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 
-import { CUBE_AMOUNT, CUBE_SIZE, PLANE_SIZE, COLORS, WALL_RADIUS } from '../constants'
+import { CUBE_AMOUNT, CUBE_SIZE, PLANE_SIZE, COLORS, WALL_RADIUS, LEVEL_SIZE } from '../constants'
 import { useStore, mutation } from '../state/useStore'
 
 import randomInRange from '../util/randomInRange'
@@ -25,7 +25,7 @@ export default function InstancedCubes() {
     for (let i = 0; i < CUBE_AMOUNT; i++) {
       const x = randomInRange(negativeBound, positiveBound)
       const y = 10
-      const z = -800 + randomInRange(-400, 200)
+      const z = -900 + randomInRange(-400, 100)
 
       temp.push({ x, y, z })
     }
@@ -42,10 +42,17 @@ export default function InstancedCubes() {
           mutation.gameOver = true
         }
 
-        // TODO: Optimize this so all the calculations dont happen at once after diamond stretch, maybe by having the placements still happen but offset
-        if (ship.current.position.z > -(level * PLANE_SIZE * 4) - PLANE_SIZE * 1.5 || ship.current.position.z < -(level * PLANE_SIZE * 4) - PLANE_SIZE * 3) {
-          if (cube.z - ship.current.position.z > 15) {
-            cube.z = ship.current.position.z - 1000 + randomInRange(-500, 0)
+
+        if (cube.z - ship.current.position.z > 15) {
+          const currentLevelZPos = -(level * PLANE_SIZE * LEVEL_SIZE) // 4
+          const diamondStart = currentLevelZPos - PLANE_SIZE * (LEVEL_SIZE - 2.5) // 1.5
+          const diamondEnd = currentLevelZPos - PLANE_SIZE * (LEVEL_SIZE) // 3
+
+          if (ship.current.position.z > diamondStart || ship.current.position.z < diamondEnd) {
+            cube.z = ship.current.position.z - PLANE_SIZE + randomInRange(-500, 0)
+            cube.x = randomInRange(negativeBound, positiveBound)
+          } else {
+            cube.z = ship.current.position.z - (PLANE_SIZE * 3) + randomInRange(-500, 300)
             cube.x = randomInRange(negativeBound, positiveBound)
           }
         }

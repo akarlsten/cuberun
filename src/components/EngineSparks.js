@@ -59,7 +59,7 @@ const EngineSparks = forwardRef((_, mesh) => {
   })
 
   return (
-    <instancedMesh ref={mesh} args={[null, null, 50]}>
+    <instancedMesh ref={mesh} args={[null, null, 20]}>
       <sphereBufferGeometry args={[0.2]} />
       <meshBasicMaterial color="tomato" />
     </instancedMesh>

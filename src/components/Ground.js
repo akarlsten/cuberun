@@ -53,7 +53,7 @@ function Ground() {
         if (moveCounter.current === 1 || Math.abs(ship.current.position.z) - Math.abs(lastMove.current) <= 10) {
 
           // change the level every 4 moves or 4000 meters
-          if (moveCounter.current % 4 === 0) {
+          if (moveCounter.current % 6 === 0) {
             incrementLevel()
             mutation.colorLevel++
             mutation.desiredSpeed += GAME_SPEED_MULTIPLIER

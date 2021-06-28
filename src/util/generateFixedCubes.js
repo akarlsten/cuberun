@@ -3,7 +3,7 @@ import { PLANE_SIZE, CUBE_SIZE, WALL_RADIUS } from '../constants/index'
 const segments = (PLANE_SIZE - WALL_RADIUS / 2) / CUBE_SIZE
 const negativeBound = -(PLANE_SIZE / 2) + WALL_RADIUS / 2
 
-function makeWall(hasGap = true, gapSize = 3) {
+export function makeWall(hasGap = true, gapSize = 3) {
   const wallCoordinates = [...Array(segments)].map((cube, index) => {
     return {
       x: negativeBound + index * CUBE_SIZE, // -500, -480, -460, etc
@@ -40,7 +40,7 @@ function makeDiamond(size = 21, tunnelLength = 10) {
     return {
       x: index <= size / 2 ? -CUBE_SIZE * 3 - index * CUBE_SIZE : (-CUBE_SIZE * 3 - size * CUBE_SIZE) + index * CUBE_SIZE,
       y: CUBE_SIZE / 2,
-      z: wallEndOffset - tunnelEndOffset - index * CUBE_SIZE * 2
+      z: wallEndOffset - tunnelEndOffset - index * CUBE_SIZE * 1.75
     }
   })
 
@@ -48,17 +48,17 @@ function makeDiamond(size = 21, tunnelLength = 10) {
     return {
       x: index <= size / 2 ? CUBE_SIZE * 3 + index * CUBE_SIZE : (CUBE_SIZE * 3 + size * CUBE_SIZE) - index * CUBE_SIZE,
       y: CUBE_SIZE / 2,
-      z: wallEndOffset - tunnelEndOffset - index * CUBE_SIZE * 2
+      z: wallEndOffset - tunnelEndOffset - index * CUBE_SIZE * 1.75
     }
   })
 
-  const innerSize = Math.floor(size / 2)
+  const innerSize = Math.floor(size / 2) - 2 // TODO: maybe remove -2
 
   const innerLeftWall = [...Array(innerSize)].map((cube, index) => {
     return {
       x: index < innerSize / 2 ? (-CUBE_SIZE / 2) - index * CUBE_SIZE : (-CUBE_SIZE / 2) - (innerSize * CUBE_SIZE) + index * CUBE_SIZE,
       y: CUBE_SIZE / 2,
-      z: wallEndOffset - tunnelEndOffset - (Math.floor(size / 1.5) * CUBE_SIZE) - index * CUBE_SIZE * 2
+      z: wallEndOffset - tunnelEndOffset - (Math.floor(size / 1.5) * CUBE_SIZE) - index * CUBE_SIZE * 1.75
     }
   })
 
@@ -66,11 +66,14 @@ function makeDiamond(size = 21, tunnelLength = 10) {
     return {
       x: index < innerSize / 2 ? (CUBE_SIZE / 2) + index * CUBE_SIZE : (CUBE_SIZE / 2) + (innerSize * CUBE_SIZE) - index * CUBE_SIZE,
       y: CUBE_SIZE / 2,
-      z: wallEndOffset - tunnelEndOffset - (Math.floor(size / 1.5) * CUBE_SIZE) - index * CUBE_SIZE * 2
+      z: wallEndOffset - tunnelEndOffset - (Math.floor(size / 1.5) * CUBE_SIZE) - index * CUBE_SIZE * 1.75
     }
   })
 
-  return [...outerLeftWall, ...outerRightWall, ...innerLeftWall, ...innerRightWall]
+  const firstDiamond = [...outerLeftWall, ...outerRightWall, ...innerLeftWall, ...innerRightWall]
+  const secondDiamond = firstDiamond.map(coordinates => ({ ...coordinates, z: coordinates.z - (size * CUBE_SIZE * 1.75) }))
+
+  return [...firstDiamond, ...secondDiamond]
 }
 
 export function generateDiamond() {
