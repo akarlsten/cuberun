@@ -19,7 +19,7 @@ const Overlay = () => {
   const gameOver = useStore(s => s.gameOver)
   const setGameStarted = useStore(s => s.setGameStarted)
   const musicEnabled = useStore(s => s.musicEnabled)
-  const toggleMusic = useStore(s => s.toggleMusic)
+  const enableMusic = useStore(s => s.enableMusic)
 
   useEffect(() => {
     if (gameStarted || gameOver) {
@@ -35,12 +35,16 @@ const Overlay = () => {
     return () => clearTimeout(t)
   }, [active, opaque])
 
+  useEffect(() => {
+    localStorage.setItem('musicEnabled', JSON.stringify(musicEnabled))
+  }, [musicEnabled])
+
   const handleStart = () => {
     setGameStarted(true)
   }
 
   const handleMusic = () => {
-    toggleMusic()
+    enableMusic(!musicEnabled)
   }
 
   return shown ? (

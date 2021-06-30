@@ -10,9 +10,12 @@ export const PLANE_SIZE = 1000
  */
 export const LEVEL_SIZE = 6
 
+export const LEFT_BOUND = (-PLANE_SIZE / 2) * 0.6
+export const RIGHT_BOUND = (PLANE_SIZE / 2) * 0.6
+
 export const CUBE_SIZE = 20
 
-export const CUBE_AMOUNT = 100
+export const CUBE_AMOUNT = 60
 
 export const INITIAL_GAME_SPEED = 0.6
 

@@ -23,14 +23,6 @@ export default function Chevrons() {
     if (PLANE_SIZE === 1000) {
       const coords = [
         {
-          x: -440,
-          z: -40
-        },
-        {
-          x: -360,
-          z: -120
-        },
-        {
           x: -280,
           z: -200
         },
@@ -53,14 +45,6 @@ export default function Chevrons() {
         {
           x: 280,
           z: -200
-        },
-        {
-          x: 360,
-          z: -120
-        },
-        {
-          x: 440,
-          z: -40
         }
       ]
 
@@ -138,7 +122,7 @@ export default function Chevrons() {
 
   return (
     <instancedMesh ref={mesh} args={[null, null, wallCoords.length]}>
-      <coneBufferGeometry args={[15, 35, 3]} />
+      <coneBufferGeometry args={[15, 50, 3]} />
       <meshBasicMaterial fog={false} ref={material} color={COLORS[0].three} />
     </instancedMesh>
   )

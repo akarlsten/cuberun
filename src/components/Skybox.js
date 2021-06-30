@@ -20,7 +20,7 @@ function Sun() {
 
   useFrame((state, delta) => {
     if (ship.current) {
-      sun.current.position.z = ship.current.position.z - 1000
+      sun.current.position.z = ship.current.position.z - 2000
       sun.current.position.x = ship.current.position.x
 
       // // TODO: implement
@@ -41,9 +41,9 @@ function Sun() {
   })
 
   return (
-    <mesh ref={sun} scale={[1, 1, 1]} position={[0, 0, -1000]}>
-      <sphereGeometry attach="geometry" args={[200, 30, 30]} />
-      <meshPhongMaterial fog={false} emissive={sunColor} emissiveIntensity={1} attach="material" color="red" />
+    <mesh ref={sun} scale={[1, 1, 1]} position={[0, 0, -2000]}>
+      <sphereGeometry attach="geometry" args={[300, 30, 30]} />
+      <meshStandardMaterial fog={false} emissive={sunColor} emissiveIntensity={1} attach="material" color={COLORS[1].three} />
     </mesh>
   )
 }
@@ -58,10 +58,17 @@ function Sky() {
 
   const ship = useStore((s) => s.ship)
 
+  useLayoutEffect(() => {
+    texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping
+    texture.repeat.set(1.8, 1.8)
+    texture.anisotropy = 16
+  }, [])
+
 
   useFrame((state, delta) => {
     sky.current.rotation.z += delta * 0.02 * mutation.gameSpeed
     stars.current.rotation.z += delta * 0.02 * mutation.gameSpeed
+    sky.current.emissive = mutation.globalColor
 
     if (ship.current) {
       sky.current.position.x = ship.current.position.x
@@ -74,12 +81,12 @@ function Sky() {
 
   return (
     <>
-      <Stars ref={stars} radius={400} depth={50} count={20000} factor={20} saturation={1} fade />
-      <mesh ref={sky} scale={[-1, 1, 1]} position={[0, 10, -50]} rotation={[0, 0, 10]}>
-        <pointLight ref={pointLight1} position={[0, 5000, 0]} intensity={0.9} />
-        <pointLight ref={pointLight2} position={[0, -5000, 0]} intensity={0.9} />
-        <sphereGeometry attach="geometry" args={[1000, 10, 10]} />
-        <meshPhongMaterial fog={false} side={THREE.BackSide} attach="material" map={texture} />
+      <Stars ref={stars} radius={800} depth={100} count={10000} factor={40} saturation={1} fade />
+      <mesh ref={sky} scale={[-1, 1, 1]} position={[0, 10, -50]} rotation={[0, 0, Math.PI]}>
+        <pointLight ref={pointLight1} position={[0, 10000, 0]} intensity={0.9} />
+        <pointLight ref={pointLight2} position={[0, -10000, 0]} intensity={0.9} />
+        <sphereGeometry attach="geometry" args={[2000, 10, 10]} />
+        <meshPhongMaterial emissive={COLORS[0].three} emissiveIntensity={0.1} fog={false} side={THREE.BackSide} attach="material" map={texture} />
       </mesh>
     </>
   )

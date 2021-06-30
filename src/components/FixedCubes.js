@@ -43,7 +43,7 @@ export default function InstancedCubes() {
           mutation.gameOver = true
         }
 
-        if (ship.current.position.z < -PLANE_SIZE && ship.current.position.z < -(level * PLANE_SIZE * LEVEL_SIZE)) { // 4
+        if (ship.current.position.z < -PLANE_SIZE && ship.current.position.z < -(level * PLANE_SIZE * LEVEL_SIZE) - 250) { // 4
           cube.x = diamondCoords[i].x
           cube.y = diamondCoords[i].y
           cube.z = -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE - 2) + diamondCoords[i].z

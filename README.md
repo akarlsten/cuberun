@@ -13,12 +13,11 @@ A Cubefield-like game built with react-three-fiber.
 - [x] Make skybox spin in time with gameSpeed
 - [x] Find way to make rainbow level interpolate quickly between all colors
 - [x] Write music track for game (32 bar loop enough?) - Maybe increase playback rate with gameSpeed
-- [ ] Package game as a single component to allow use on my website? Otherwise host on Netlify 
 - [x] Favicon
 - [ ] Add mobile onscreen controls
-
+- [ ] Maybe slimmen track down
 
 ### Potentials
 
 - [ ] Add cool wormhole graphic from: https://github.com/Mamboleoo/InfiniteTubes/blob/master/js/demo3.js - help: https://discourse.threejs.org/t/react-three-fiber-tunnel-tube-with-catmullromcurve3/21277/3 or https://github.com/pmndrs/react-three-fiber/discussions/906
-- [ ] Create framework for defined cube positions, to create tunnels and such
+- [x] Create framework for defined cube positions, to create tunnels and such

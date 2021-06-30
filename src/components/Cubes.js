@@ -2,14 +2,14 @@ import * as THREE from 'three'
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 
-import { CUBE_AMOUNT, CUBE_SIZE, PLANE_SIZE, COLORS, WALL_RADIUS, LEVEL_SIZE } from '../constants'
+import { CUBE_AMOUNT, CUBE_SIZE, PLANE_SIZE, COLORS, WALL_RADIUS, LEVEL_SIZE, LEFT_BOUND, RIGHT_BOUND } from '../constants'
 import { useStore, mutation } from '../state/useStore'
 
 import randomInRange from '../util/randomInRange'
 import distance2D from '../util/distance2D'
 
-const negativeBound = -(PLANE_SIZE / 2) + WALL_RADIUS / 2
-const positiveBound = (PLANE_SIZE / 2) - WALL_RADIUS / 2
+const negativeBound = LEFT_BOUND + WALL_RADIUS / 2
+const positiveBound = RIGHT_BOUND - WALL_RADIUS / 2
 
 export default function InstancedCubes() {
   const mesh = useRef()
@@ -52,7 +52,7 @@ export default function InstancedCubes() {
             cube.z = ship.current.position.z - PLANE_SIZE + randomInRange(-500, 0)
             cube.x = randomInRange(negativeBound, positiveBound)
           } else {
-            cube.z = ship.current.position.z - (PLANE_SIZE * 3) + randomInRange(-500, 300)
+            cube.z = ship.current.position.z - (PLANE_SIZE * 3.3) + randomInRange(-500, 300)
             cube.x = randomInRange(negativeBound, positiveBound)
           }
         }

@@ -72,6 +72,42 @@
   margin: 0;
 }
 
+.game__scorecontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-shadow: 0 0 20px #fe2079;
+}
+
+.game__score-highscore {
+  font-size: 3rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  color: #eee;
+  font-family: 'Commando', Inconsolata, monospace;
+}
+
+.game__score-number {
+  color: #fe2079;
+  margin-right: 1rem;
+}
+
+.game__score-left {
+  margin-right: 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game__score-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .game__menu-button {
   margin-top: 2rem;
   background: none;
@@ -120,6 +156,15 @@
 }
 
 @media screen and (max-width: 600px) {
+  .game__scorecontainer {
+  flex-direction: column;
+  justify-content: center;
+  }
+
+.game__score-left {
+    margin-right: 0;
+  }
+
 .game__logo {
   height: 175px;
   width: 350px;

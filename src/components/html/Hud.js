@@ -16,7 +16,6 @@ export default function Hud() {
   const isSpeedingUp = useStore(s => s.isSpeedingUp)
 
   const [shown, setShown] = useState(false)
-  const [showSpeedup, setShowSpeedup] = useState(false)
 
   const [showControls, setShowControls] = useState(false)
   const [left, setLeftPressed] = useState(false)
@@ -41,16 +40,6 @@ export default function Hud() {
   }, [gameStarted, gameOver])
 
   useEffect(() => {
-    if (level > 0) {
-      if (isSpeedingUp) {
-        setShowSpeedup(true)
-      } else {
-        setShowSpeedup(false)
-      }
-    }
-  }, [isSpeedingUp])
-
-  useEffect(() => {
     if (isMobile) {
       setShowControls(true)
     } else {
@@ -68,7 +57,7 @@ export default function Hud() {
 
   return shown ? (
     <div className="hud">
-      {showSpeedup && (
+      {level > 0 && isSpeedingUp && (
         <div className="center">
           <h3 className="center__speedup">SPEED UP</h3>
         </div>

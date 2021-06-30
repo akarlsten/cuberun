@@ -119,6 +119,10 @@
 }
 
 @media screen and (max-width: 992px) {
+  .bottomLeft {
+    left: 2vh;
+  }
+  
   .score__number {
     font-size: 4rem;
   }

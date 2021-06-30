@@ -18,10 +18,20 @@ export default function Arch() {
   const arch5 = useRef()
   const arch6 = useRef()
 
+  // latter arches
+  const arch7 = useRef()
+  const arch8 = useRef()
+  const arch9 = useRef()
+  const arch10 = useRef()
+
   useFrame((state, delta) => {
     if (ship.current) {
-      if (ship.current.position.z < -PLANE_SIZE && ship.current.position.z < -(level * PLANE_SIZE * LEVEL_SIZE)) {
+      if (ship.current.position.z < -PLANE_SIZE && ship.current.position.z < -(level * PLANE_SIZE * LEVEL_SIZE) - 400) {
         arches.current.position.z = -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE - 2) - 300
+        arch7.current.visible = true
+        arch8.current.visible = true
+        arch9.current.visible = true
+        arch10.current.visible = true
       }
     }
 
@@ -41,6 +51,11 @@ export default function Arch() {
       arch5.current.material.color = COLORS[4].three
       arch6.current.material.color = COLORS[5].three
     }
+
+    arch7.current.material.color = mutation.globalColor
+    arch8.current.material.color = mutation.globalColor
+    arch9.current.material.color = mutation.globalColor
+    arch10.current.material.color = mutation.globalColor
   })
 
   return (
@@ -68,6 +83,22 @@ export default function Arch() {
       <mesh ref={arch6} position={[0, 0, -400]} rotation={[0, 0, Math.PI]}>
         <torusBufferGeometry args={[50, 6, 3, 30]} />
         <meshBasicMaterial fog={false} attach="material" color={COLORS[5].three} />
+      </mesh>
+      <mesh visible={false} ref={arch7} position={[0, 0, -1980]} rotation={[0, 0, Math.PI]}>
+        <torusBufferGeometry args={[50, 10, 3, 30]} />
+        <meshBasicMaterial fog={false} attach="material" color={COLORS[0].three} />
+      </mesh>
+      <mesh visible={false} ref={arch8} position={[0, 0, -1920]} rotation={[0, 0, Math.PI]}>
+        <torusBufferGeometry args={[50, 10, 3, 30]} />
+        <meshBasicMaterial fog={false} attach="material" color={COLORS[0].three} />
+      </mesh>
+      <mesh visible={false} ref={arch9} position={[0, 0, -1880]} rotation={[0, 0, Math.PI]}>
+        <torusBufferGeometry args={[50, 10, 3, 30]} />
+        <meshBasicMaterial fog={false} attach="material" color={COLORS[0].three} />
+      </mesh>
+      <mesh visible={false} ref={arch10} position={[0, 0, -1820]} rotation={[0, 0, Math.PI]}>
+        <torusBufferGeometry args={[50, 10, 3, 30]} />
+        <meshBasicMaterial fog={false} attach="material" color={COLORS[0].three} />
       </mesh>
     </group>
   )

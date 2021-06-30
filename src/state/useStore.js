@@ -11,8 +11,7 @@ const useStore = create((set, get) => {
     level: 0,
     gameOver: false,
     gameStarted: false,
-    musicEnabled: true,
-    hasInteracted: false,
+    musicEnabled: JSON.parse(localStorage.getItem('musicEnabled')) ?? true,
     isSpeedingUp: false,
     controls: {
       left: false,
@@ -24,13 +23,12 @@ const useStore = create((set, get) => {
     sun: createRef(),
     sfx: createRef(),
     setIsSpeedingUp: (speedingUp) => set(state => ({ isSpeedingUp: speedingUp })),
-    setInteracted: () => set(state => ({ hasInteracted: true })),
     incrementLevel: () => set(state => ({ level: state.level + 1 })),
     setCurrentSpeed: (speed) => set(state => ({ currentSpeed: speed })),
     setScore: (score) => set(state => ({ score: score })),
     setGameStarted: (started) => set(state => ({ gameStarted: started })),
     setGameOver: (over) => set(state => ({ gameOver: over })),
-    toggleMusic: () => set(state => ({ musicEnabled: !state.musicEnabled }))
+    enableMusic: (enabled) => set(state => ({ musicEnabled: enabled }))
   }
 })
 

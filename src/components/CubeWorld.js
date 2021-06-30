@@ -13,6 +13,7 @@ import FixedCubes from './FixedCubes'
 import Chevrons from './Chevrons'
 import Walls from './Walls'
 import Arch from './Arch'
+import Hyperspace from './Hyperspace'
 
 // State/dummy components
 import KeyboardControls from './KeyboardControls'
@@ -49,8 +50,9 @@ export default function CubeWorld({ color, bgColor }) {
         <FixedCubes />
         <Chevrons />
         <Arch />
+        <Hyperspace />
         <Ground groundColor={bgColor} />
-        <Perf />
+        {/* <Perf /> */}
         <KeyboardControls />
         <Effects />
         <GlobalColor />

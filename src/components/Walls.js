@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 
 import { useStore, mutation } from '../state/useStore'
-import { PLANE_SIZE, WALL_RADIUS, COLORS } from '../constants'
+import { PLANE_SIZE, WALL_RADIUS, COLORS, LEFT_BOUND, RIGHT_BOUND } from '../constants'
 
 export default function Walls() {
   const ship = useStore((s) => s.ship)
@@ -16,7 +16,7 @@ export default function Walls() {
       rightWall.current.position.z = ship.current.position.z
       leftWall.current.position.z = ship.current.position.z
 
-      if (ship.current.position.x <= (-PLANE_SIZE / 2) + (WALL_RADIUS / 2) || ship.current.position.x >= (PLANE_SIZE / 2) - (WALL_RADIUS / 2)) {
+      if (ship.current.position.x <= LEFT_BOUND + (WALL_RADIUS / 2) || ship.current.position.x >= RIGHT_BOUND - (WALL_RADIUS / 2)) {
         mutation.gameSpeed = 0
         mutation.gameOver = true
       }
@@ -28,10 +28,10 @@ export default function Walls() {
 
   return (
     <>
-      <Cone args={[WALL_RADIUS, PLANE_SIZE * 2, 8]} position={[-PLANE_SIZE / 2, 0, -5]} rotation={[Math.PI / 2, 0, Math.PI]} ref={leftWall}>
+      <Cone args={[WALL_RADIUS, PLANE_SIZE * 2, 8]} position={[LEFT_BOUND, 0, -5]} rotation={[Math.PI / 2, 0, Math.PI]} ref={leftWall}>
         <meshBasicMaterial attach="material" color={COLORS[0].three} />
       </Cone>
-      <Cone args={[WALL_RADIUS, PLANE_SIZE * 2, 8]} position={[PLANE_SIZE / 2, 0, -5]} rotation={[Math.PI / 2, 0, Math.PI]} ref={rightWall}>
+      <Cone args={[WALL_RADIUS, PLANE_SIZE * 2, 8]} position={[RIGHT_BOUND, 0, -5]} rotation={[Math.PI / 2, 0, Math.PI]} ref={rightWall}>
         <meshBasicMaterial attach="material" color={COLORS[0].three} />
       </Cone>
     </>
