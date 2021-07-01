@@ -24,6 +24,15 @@ export default function Arch() {
   const arch9 = useRef()
   const arch10 = useRef()
 
+  const levelColor = (base) => {
+    if (base + level > 5) {
+      const subtractor = 5 * Math.floor((base + level) / 5)
+      return base + level - 1 - subtractor
+    } else {
+      return base + level
+    }
+  }
+
   useFrame((state, delta) => {
     if (ship.current) {
       if (ship.current.position.z < -PLANE_SIZE && ship.current.position.z < -(level * PLANE_SIZE * LEVEL_SIZE) - 400) {
@@ -36,6 +45,7 @@ export default function Arch() {
     }
 
 
+    // TODO: maybe set arches to globalcolor always
     if (mutation.colorLevel === 6) {
       arch1.current.material.color = mutation.globalColor
       arch2.current.material.color = mutation.globalColor
@@ -43,19 +53,23 @@ export default function Arch() {
       arch4.current.material.color = mutation.globalColor
       arch5.current.material.color = mutation.globalColor
       arch6.current.material.color = mutation.globalColor
+      arch7.current.material.color = mutation.globalColor
+      arch8.current.material.color = mutation.globalColor
+      arch9.current.material.color = mutation.globalColor
+      arch10.current.material.color = mutation.globalColor
     } else {
-      arch1.current.material.color = COLORS[0].three
-      arch2.current.material.color = COLORS[1].three
-      arch3.current.material.color = COLORS[2].three
-      arch4.current.material.color = COLORS[3].three
-      arch5.current.material.color = COLORS[4].three
-      arch6.current.material.color = COLORS[5].three
-    }
+      arch1.current.material.color = COLORS[levelColor(0)].three
+      arch2.current.material.color = COLORS[levelColor(1)].three
+      arch3.current.material.color = COLORS[levelColor(2)].three
+      arch4.current.material.color = COLORS[levelColor(3)].three
+      arch5.current.material.color = COLORS[levelColor(4)].three
+      arch6.current.material.color = COLORS[levelColor(5)].three
 
-    arch7.current.material.color = mutation.globalColor
-    arch8.current.material.color = mutation.globalColor
-    arch9.current.material.color = mutation.globalColor
-    arch10.current.material.color = mutation.globalColor
+      arch7.current.material.color = COLORS[levelColor(0)].three
+      arch8.current.material.color = COLORS[levelColor(0)].three
+      arch9.current.material.color = COLORS[levelColor(0)].three
+      arch10.current.material.color = COLORS[levelColor(0)].three
+    }
   })
 
   return (

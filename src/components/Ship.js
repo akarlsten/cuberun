@@ -7,6 +7,8 @@ import EngineSparks from './EngineSparks'
 
 import shipModel from '../models/spaceship.gltf'
 
+import { COLORS } from '../constants'
+
 
 import { useStore, mutation } from '../state/useStore'
 
@@ -25,10 +27,11 @@ function ShipModel(props, { children }) {
 
   const outerExhaust = useRef()
   const innerExhaust = useRef()
-  const engineSparks = useRef()
 
   const leftWingTrail = useRef()
   const rightWingTrail = useRef()
+
+  const bodyDetail = useRef()
 
   const { clock } = useThree()
 
@@ -58,14 +61,12 @@ function ShipModel(props, { children }) {
       innerExhaust.current.material.visible = false
       leftWingTrail.current.material.visible = false
       rightWingTrail.current.material.visible = false
-      engineSparks.current.material.visible = false
       pointLight.current.visible = false
     } else {
       outerExhaust.current.material.visible = true
       innerExhaust.current.material.visible = true
       leftWingTrail.current.material.visible = true
       rightWingTrail.current.material.visible = true
-      engineSparks.current.material.visible = true
       pointLight.current.visible = true
     }
   }, [gameStarted, gameOver])
@@ -158,19 +159,18 @@ function ShipModel(props, { children }) {
       }
     }
 
-    pointLight.current.intensity = 10 + (fastSine * 5)
-    outerExhaust.current.scale.x = 0.15 + fastSine / 15
-    outerExhaust.current.scale.y = 0.30 + slowSine / 10
-    innerExhaust.current.scale.x = 0.10 + fastSine / 15
-    innerExhaust.current.scale.y = 0.25 + slowSine / 10
+    pointLight.current.intensity = 20 + (fastSine / 15)
+    outerExhaust.current.scale.x = 0.25 + fastSine / 15
+    outerExhaust.current.scale.y = 0.35 + slowSine / 10
+    innerExhaust.current.scale.x = 0.15 + fastSine / 15
+    innerExhaust.current.scale.y = 0.30 + slowSine / 10
 
     if (mutation.desiredSpeed > mutation.gameSpeed) {
-      pointLight.current.intensity = 30 + (fastSine * 5)
-      outerExhaust.current.scale.x = 0.25 + fastSine / 15
-      outerExhaust.current.scale.y = 0.35 + slowSine / 10
-      innerExhaust.current.scale.x = 0.15 + fastSine / 15
-      innerExhaust.current.scale.y = 0.30 + slowSine / 10
+      pointLight.current.intensity = 30 + (fastSine / 15)
+      ship.current.position.z -= mutation.gameSpeed * delta * 165 / 4
     }
+
+    bodyDetail.current.material.color = mutation.globalColor
   })
 
   return (
@@ -187,8 +187,8 @@ function ShipModel(props, { children }) {
           <meshBasicMaterial attach="material" color="orange" />
         </mesh>
         <mesh receiveShadow castShadow geometry={nodes.Ship_Body_3.geometry} material={materials['Gray Metal']} />
-        <mesh geometry={nodes.Ship_Body_4.geometry}>
-          <meshBasicMaterial attach="material" color="white" />
+        <mesh ref={bodyDetail} geometry={nodes.Ship_Body_4.geometry}>
+          <meshLambertMaterial attach="material" color="white" />
         </mesh>
         <mesh ref={leftWingTrail} scale={[0.1, 0.05, 2]} position={[1.4, 0.2, -7]}>
           <dodecahedronBufferGeometry args={[1.5, 3]} />
@@ -199,14 +199,13 @@ function ShipModel(props, { children }) {
           <meshBasicMaterial transparent opacity={0.8} color="white" />
         </mesh>
         <mesh ref={outerExhaust} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4]}>
-          <dodecahedronBufferGeometry args={[1.5, 3]} />
+          <dodecahedronBufferGeometry args={[1.55, 3]} />
           <MeshDistortMaterial speed={2} distort={0.2} radius={1} transparent opacity={0.6} color="red" />
         </mesh>
         <mesh ref={innerExhaust} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4]}>
-          <dodecahedronBufferGeometry args={[1.5, 3]} />
+          <dodecahedronBufferGeometry args={[1.55, 3]} />
           <meshBasicMaterial color="white" />
         </mesh>
-        <EngineSparks position={[0, -2, -4]} ref={engineSparks} />
       </group>
     </>
   )

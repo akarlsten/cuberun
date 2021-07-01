@@ -6,7 +6,7 @@ import * as THREE from 'three'
 import { useStore, mutation } from '../state/useStore'
 import { PLANE_SIZE, WALL_RADIUS, COLORS, LEVEL_SIZE } from '../constants'
 
-import galaxyTexture from '../textures/galaxyTexture.jpg'
+import galaxyTexture from '../textures/galaxyTextureBW.png'
 
 function HyperspaceTunnel() {
   const texture = useTexture(galaxyTexture)
@@ -100,14 +100,14 @@ function HyperspaceTunnel() {
 
     // TODO: tube should be 300 to be as wide as arena
 
-    repeatY.current = 0.3 + (Math.sin(clock.getElapsedTime() / 2)) * 1.5
+    repeatY.current = 0.3 + (Math.sin(clock.getElapsedTime() / 3)) * 1.5
     repeatX.current = 6 + (Math.sin(clock.getElapsedTime() / 2)) * 4
     tunnel.current.material.map.offset.x += 0.01
-    tunnel.current.material.map.offset.y += 0.01
+    tunnel.current.material.map.offset.y += 0.005
     tunnel.current.material.map.repeat.set(repeatX.current, repeatY.current)
     tunnel.current.material.emissive = mutation.globalColor
     tunnel2.current.material.map.offset.x += 0.01
-    tunnel2.current.material.map.offset.y += 0.01
+    tunnel2.current.material.map.offset.y += 0.005
     tunnel2.current.material.map.repeat.set(repeatX.current, repeatY.current)
     tunnel2.current.material.emissive = mutation.globalColor
   })

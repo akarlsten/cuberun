@@ -83,8 +83,7 @@ function Sky() {
     <>
       <Stars ref={stars} radius={800} depth={100} count={10000} factor={40} saturation={1} fade />
       <mesh ref={sky} scale={[-1, 1, 1]} position={[0, 10, -50]} rotation={[0, 0, Math.PI]}>
-        <pointLight ref={pointLight1} position={[0, 10000, 0]} intensity={0.9} />
-        <pointLight ref={pointLight2} position={[0, -10000, 0]} intensity={0.9} />
+        <hemisphereLight intensity={0.7} />
         <sphereGeometry attach="geometry" args={[2000, 10, 10]} />
         <meshPhongMaterial emissive={COLORS[0].three} emissiveIntensity={0.1} fog={false} side={THREE.BackSide} attach="material" map={texture} />
       </mesh>

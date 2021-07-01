@@ -50,10 +50,20 @@ export default function InstancedCubes() {
 
           if (ship.current.position.z > diamondStart || ship.current.position.z < diamondEnd) {
             cube.z = ship.current.position.z - PLANE_SIZE + randomInRange(-500, 0)
+            cube.y = -CUBE_SIZE
             cube.x = randomInRange(negativeBound, positiveBound)
           } else {
-            cube.z = ship.current.position.z - (PLANE_SIZE * 3.3) + randomInRange(-500, 300)
+            cube.z = ship.current.position.z - (PLANE_SIZE * 3.3) + randomInRange(-500, 0)
+            cube.y = -CUBE_SIZE
             cube.x = randomInRange(negativeBound, positiveBound)
+          }
+        }
+
+        if (cube.y < CUBE_SIZE / 2) {
+          if (cube.y + delta * 100 > CUBE_SIZE / 2) {
+            cube.y = CUBE_SIZE / 2
+          } else {
+            cube.y += delta * 100
           }
         }
       }
