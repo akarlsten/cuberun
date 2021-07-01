@@ -53,9 +53,6 @@ function Sky() {
   const sky = useRef()
   const stars = useRef()
 
-  const pointLight1 = useRef()
-  const pointLight2 = useRef()
-
   const ship = useStore((s) => s.ship)
 
   useLayoutEffect(() => {
@@ -93,8 +90,6 @@ function Sky() {
 
 function Fog() {
   const fog = useRef()
-
-  const level = useStore(s => s.level)
 
   useFrame((state, delta) => {
     fog.current.near = 100
