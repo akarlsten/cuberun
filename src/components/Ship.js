@@ -167,7 +167,6 @@ function ShipModel(props, { children }) {
 
     if (mutation.desiredSpeed > mutation.gameSpeed) {
       pointLight.current.intensity = 30 + (fastSine / 15)
-      ship.current.position.z -= mutation.gameSpeed * delta * 165 / 4
     }
 
     bodyDetail.current.material.color = mutation.globalColor
@@ -200,7 +199,7 @@ function ShipModel(props, { children }) {
         </mesh>
         <mesh ref={outerExhaust} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4]}>
           <dodecahedronBufferGeometry args={[1.55, 3]} />
-          <MeshDistortMaterial speed={2} distort={0.2} radius={1} transparent opacity={0.6} color="red" />
+          <meshLambertMaterial transparent opacity={0.6} color="red" />
         </mesh>
         <mesh ref={innerExhaust} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4]}>
           <dodecahedronBufferGeometry args={[1.55, 3]} />
