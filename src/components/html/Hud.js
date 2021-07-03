@@ -26,31 +26,29 @@ export default function Hud() {
   const [left, setLeftPressed] = useState(false)
   const [right, setRightPressed] = useState(false)
 
-  // performance optimization for the rapidly updating speedometer - see https://github.com/pmndrs/racing-game/blob/main/src/ui/Speed/Text.tsx
+  // performance optimization for the rapidly updating speedometer and score - see https://github.com/pmndrs/racing-game/blob/main/src/ui/Speed/Text.tsx
+  let then = Date.now()
+
   const speedRef = useRef()
+  const scoreRef = useRef()
 
   let currentSpeed = getSpeed()
-  let newSpeed
-
-  useEffect(() => addEffect(() => {
-    newSpeed = getSpeed()
-
-    if (speedRef.current) {
-      speedRef.current.innerText = newSpeed
-      currentSpeed = newSpeed
-    }
-  }))
-
-  // same here
-  const scoreRef = useRef()
   let currentScore = getScore()
-  let newScore
 
   useEffect(() => addEffect(() => {
-    currentScore = getScore()
-    if (scoreRef.current) {
-      scoreRef.current.innerText = currentScore
-      currentScore = newScore
+    const now = Date.now()
+
+    if (now - then > 33.3333) { // throttle these to a max of 30 updates/sec
+      if (speedRef.current) {
+        speedRef.current.innerText = getSpeed()
+      }
+
+      if (scoreRef.current) {
+        scoreRef.current.innerText = getScore()
+        then = Date.now()
+      }
+
+      then = now
     }
   }))
 
