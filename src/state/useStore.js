@@ -34,6 +34,7 @@ const useStore = create((set, get) => {
 
 const mutation = {
   gameOver: false,
+  score: 0,
   gameSpeed: 0.0,
   desiredSpeed: 0.0,
   horizontalVelocity: 0,

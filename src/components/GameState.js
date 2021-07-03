@@ -40,19 +40,21 @@ export default function GameState() {
           mutation.gameSpeed += accelDelta
         }
 
-        setCurrentSpeed(mutation.gameSpeed)
+        // setCurrentSpeed(mutation.gameSpeed)
       } else {
         setIsSpeedingUp(false)
       }
     }
 
     if (ship.current) {
-      if (Math.abs(ship.current.position.z) - score > 13) {
-        setScore(Math.abs(ship.current.position.z) - 10)
-      }
+      mutation.score = Math.abs(ship.current.position.z) - 10
+      // if (Math.abs(ship.current.position.z) - score > 13) {
+      //   setScore(Math.abs(ship.current.position.z) - 10)
+      // }
     }
 
     if (gameStarted && mutation.gameOver) {
+      setScore(Math.abs(ship.current.position.z) - 10)
       setGameOver(true)
     }
   })

@@ -25,7 +25,7 @@ export default function InstancedCubes() {
     const temp = []
     for (let i = 0; i < diamondCoords.length; i++) {
       const x = tunnelCoords[i]?.x || 0
-      const y = CUBE_SIZE / 2
+      const y = 0
       const z = 300 + tunnelCoords[i]?.z || 10
 
       temp.push({ x, y, z })
@@ -49,6 +49,7 @@ export default function InstancedCubes() {
 
         if (ship.current.position.z < -PLANE_SIZE && ship.current.position.z < -(level * PLANE_SIZE * LEVEL_SIZE) - 250) { // 4
           cube.x = diamondCoords[i].x
+          cube.y = 0
           cube.z = -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE - 2) + diamondCoords[i].z
         }
 
@@ -73,7 +74,7 @@ export default function InstancedCubes() {
 
   return (
     <instancedMesh ref={mesh} args={[null, null, diamondCoords.length]}>
-      <boxBufferGeometry args={[20, 20, 20]} />
+      <boxBufferGeometry args={[20, 40, 20]} />
       <meshBasicMaterial ref={material} color={COLORS[0].three} />
     </instancedMesh>
   )
