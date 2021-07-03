@@ -41,7 +41,7 @@ function Sun() {
   })
 
   return (
-    <mesh ref={sun} scale={[1, 1, 1]} position={[0, 0, -2000]}>
+    <mesh ref={sun} position={[0, 0, -2000]}>
       <sphereGeometry attach="geometry" args={[300, 30, 30]} />
       <meshStandardMaterial fog={false} emissive={sunColor} emissiveIntensity={1} attach="material" color={COLORS[1].three} />
     </mesh>
@@ -79,7 +79,7 @@ function Sky() {
   return (
     <>
       <Stars ref={stars} radius={800} depth={100} count={10000} factor={40} saturation={1} fade />
-      <mesh ref={sky} scale={[-1, 1, 1]} position={[0, 10, -50]} rotation={[0, 0, Math.PI]}>
+      <mesh ref={sky} position={[0, 10, -50]} rotation={[0, 0, Math.PI]}>
         <hemisphereLight intensity={0.7} />
         <sphereGeometry attach="geometry" args={[2000, 10, 10]} />
         <meshPhongMaterial emissive={COLORS[0].three} emissiveIntensity={0.1} fog={false} side={THREE.BackSide} attach="material" map={texture} />

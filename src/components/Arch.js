@@ -25,9 +25,9 @@ export default function Arch() {
   const arch10 = useRef()
 
   const levelColor = (base) => {
-    if (base + level > 5) {
-      const subtractor = 5 * Math.floor((base + level) / 5)
-      return base + level - 1 - subtractor
+    if (base + level >= 6) {
+      const subtractor = 6 * Math.floor((base + level) / 6)
+      return base + level - subtractor
     } else {
       return base + level
     }

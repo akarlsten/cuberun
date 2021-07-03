@@ -102,6 +102,7 @@ function HyperspaceTunnel() {
 
     repeatY.current = 0.3 + (Math.sin(clock.getElapsedTime() / 3)) * 1.5
     repeatX.current = 6 + (Math.sin(clock.getElapsedTime() / 2)) * 4
+
     tunnel.current.material.map.offset.x += 0.01 * delta * 165
     tunnel.current.material.map.offset.y += 0.005 * delta * 165
     tunnel.current.material.map.repeat.set(repeatX.current, repeatY.current)

@@ -57,13 +57,16 @@ const Overlay = () => {
           ) : (
             <>
               <button onClick={handleStart} className="game__menu-button">START</button>
-              <button onClick={handleMusic} className="game__menu-button">MUSIC {musicEnabled ? 'OFF' : 'ON'}</button>
-              <Author />
+              <div className="game__menu-options">
+                <button onClick={handleMusic} className="game__menu-button game__menu-button-music">MUSIC {musicEnabled ? 'OFF' : 'ON'}</button>
+                <span className="game__menu-warning">Photosensitivity warning - Game contains flashing lights</span>
+                <Author />
+              </div>
             </>
           )}
         </div>
       </div>
-    </div>
+    </div >
   ) : null
 }
 

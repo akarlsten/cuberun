@@ -1,7 +1,6 @@
 
 .author {
-  position: absolute;
-  bottom: 1rem;
+  margin-top: 2rem;
   color: #fe2079;
   font-family: 'Road Rage', Inconsolata, monospace;
   text-shadow: 0 0 40px #fe2079;

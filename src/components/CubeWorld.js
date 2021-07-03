@@ -1,7 +1,6 @@
 import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react'
 import { Preload } from '@react-three/drei'
-import { Perf } from 'r3f-perf'
 
 import { useStore } from '../state/useStore'
 
@@ -12,7 +11,6 @@ import Effects from './Effects'
 import Skybox from './Skybox'
 import Cubes from './Cubes'
 import FixedCubes from './FixedCubes'
-import Chevrons from './Chevrons'
 import Walls from './Walls'
 import Arch from './Arch'
 import Hyperspace from './Hyperspace'
@@ -35,7 +33,7 @@ export default function CubeWorld({ color, bgColor }) {
 
   return (
     <>
-      <Canvas gl={{ antialias: false, alpha: false }} mode='concurrent' dpr={[1, 1.5]} style={{ background: `${bgColor}` }}>
+      <Canvas gl={{ antialias: false, alpha: false }} dpr={[1, 2]} style={{ background: `${bgColor}` }}>
         <Suspense fallback={null}>
           <GameState />
           <Skybox />
@@ -51,11 +49,10 @@ export default function CubeWorld({ color, bgColor }) {
           <Walls />
           <Cubes />
           <FixedCubes />
-          <Chevrons />
+          {/* <Chevrons /> */}
           <Arch />
           <Hyperspace />
           <Ground groundColor={bgColor} />
-          {/* <Perf /> */}
           <KeyboardControls />
           <Effects />
           <GlobalColor />

@@ -8,9 +8,10 @@ import '../../styles/gameMenu.css'
 import { useStore, mutation } from '../../state/useStore'
 
 const GameOverScreen = () => {
+  const previousScores = localStorage.getItem('highscores') ? JSON.parse(localStorage.getItem('highscores')) : [...Array(3).fill(0)]
   const [shown, setShown] = useState(false)
   const [opaque, setOpaque] = useState(false)
-  const [highScores, setHighscores] = useState(JSON.parse(localStorage.getItem('highscores')) ?? [...Array(3)])
+  const [highScores, setHighscores] = useState(previousScores)
 
   const gameOver = useStore(s => s.gameOver)
   const score = useStore(s => s.score)
@@ -61,8 +62,8 @@ const GameOverScreen = () => {
             <h1 className="game__score-title">HIGH SCORES</h1>
             {highScores.map((newScore, i) => (
               <div key={`${i}-${score}`} className="game__score-highscore">
-                <span className="game__score-number">{score.toFixed(0) === newScore ?? '> '}{i + 1}</span>
-                <span className="game__score-score">{newScore > 0 ? newScore : '-'}</span>
+                <span className="game__score-number">{i + 1}</span>
+                <span style={{ textDecoration: score.toFixed(0) === newScore ? 'underline' : 'none' }} className="game__score-score">{newScore > 0 ? newScore : '-'}</span>
               </div>
             ))}
           </div>

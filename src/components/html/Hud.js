@@ -64,8 +64,8 @@ export default function Hud() {
       )}
       {showControls && (
         <div className="controls">
-          <button onTouchStart={() => setLeftPressed(true)} onTouchEnd={() => setLeftPressed(false)} className={`control control__left ${left ? 'control-active' : ''}`}>🡄</button>
-          <button onTouchStart={() => setRightPressed(true)} onTouchEnd={() => setRightPressed(false)} className={`control control__right ${right ? 'control-active' : ''}`}>🡆</button>
+          <button onTouchStart={() => setLeftPressed(true)} onTouchEnd={() => setLeftPressed(false)} className={`control control__left ${left ? 'control-active' : ''}`}>{'<'}</button>
+          <button onTouchStart={() => setRightPressed(true)} onTouchEnd={() => setRightPressed(false)} className={`control control__right ${right ? 'control-active' : ''}`}>{'>'}</button>
         </div>
       )}
       <div className="bottomLeft">

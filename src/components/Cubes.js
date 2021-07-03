@@ -35,13 +35,17 @@ export default function InstancedCubes() {
   useFrame((state, delta) => {
     cubes.forEach((cube, i) => {
       if (ship.current) {
-        const distanceToShip = distance2D(ship.current.position.x, ship.current.position.z, cube.x, cube.z)
 
-        if (distanceToShip < 12) {
-          mutation.gameSpeed = 0
-          mutation.gameOver = true
+        if (cube.z - ship.current.position.z > -15) { // No need to run the rather expensive distance function if the ship is too far away
+          if (cube.x - ship.current.position.x > -15 || cube.x - ship.current.position.x < 15) {
+            const distanceToShip = distance2D(ship.current.position.x, ship.current.position.z, cube.x, cube.z)
+
+            if (distanceToShip < 12) {
+              mutation.gameSpeed = 0
+              mutation.gameOver = true
+            }
+          }
         }
-
 
         if (cube.z - ship.current.position.z > 15) {
           const currentLevelZPos = -(level * PLANE_SIZE * LEVEL_SIZE) // 4
