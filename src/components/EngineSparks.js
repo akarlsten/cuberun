@@ -14,7 +14,7 @@ const EngineSparks = forwardRef((_, mesh) => {
     for (let i = 0; i < 50; i++) {
       const speedFactor = Math.random() * (2 - 1.3) + 1.3
       const x = (Math.random() * 2 - 1) / 100
-      const y = (Math.random() * 2 - 1) / 30
+      const y = -0.2 - (Math.random() * 2 - 1) / 30
       const z = -34 + Math.random() * 30
 
       temp.push({ x, y, z, speedFactor })
@@ -24,24 +24,24 @@ const EngineSparks = forwardRef((_, mesh) => {
 
   useFrame((state, delta) => {
     sparks.forEach((spark, i) => {
-      spark.z -= delta * spark.speedFactor * 10 // * 1 + mutation.gameSpeed
+      spark.z -= delta * spark.speedFactor * 15 // * 1 + mutation.gameSpeed
 
       if (spark.z < -10) {
         spark.z = -2
-        spark.x = (Math.random() * 2 - 1) / 100
-        spark.y = (Math.random() * 2 - 1) / 30
+        spark.x = (Math.random() * 2 - 1) / 2.5
+        spark.y = -0.2 - (Math.random() * 2 - 1) / 30
       }
 
-      dummy.scale.set(0.1, 0.1, 5)
+      dummy.scale.set(0.5, 0.5, 10 * Math.random())
 
 
 
-      spark.x += Math.sin(clock.getElapsedTime() * spark.speedFactor * 10) / 100
-      spark.y -= Math.sin(clock.getElapsedTime() * spark.speedFactor * 10) / 100
+      // spark.x += Math.sin(clock.getElapsedTime() * spark.speedFactor * 10) / 100
+      // spark.y -= Math.sin(clock.getElapsedTime() * spark.speedFactor * 10) / 100
 
-      if (mutation.desiredSpeed > mutation.gameSpeed) {
-        dummy.scale.set(0.2, 0.2, 10)
-      }
+      // if (mutation.desiredSpeed > mutation.gameSpeed) {
+      //   dummy.scale.set(0.2, 0.2, 10)
+      // }
 
       dummy.position.set(
         spark.x,
@@ -61,7 +61,7 @@ const EngineSparks = forwardRef((_, mesh) => {
   return (
     <instancedMesh ref={mesh} args={[null, null, 20]}>
       <sphereBufferGeometry args={[0.2]} />
-      <meshBasicMaterial color="tomato" />
+      <meshBasicMaterial transparent opacity={0.5} color="tomato" />
     </instancedMesh>
   )
 })

@@ -1,6 +1,6 @@
 import React, { useRef, useLayoutEffect, useEffect, Suspense } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useGLTF, PerspectiveCamera, MeshDistortMaterial } from '@react-three/drei'
+import { useGLTF, PerspectiveCamera, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 
 import EngineSparks from './EngineSparks'
@@ -8,6 +8,8 @@ import EngineSparks from './EngineSparks'
 import shipModel from '../models/spaceship.gltf'
 
 import { COLORS } from '../constants'
+
+import noiseTexture from '../textures/noise.png'
 
 
 import { useStore, mutation } from '../state/useStore'
@@ -27,6 +29,12 @@ function ShipModel(props, { children }) {
 
   const outerExhaust = useRef()
   const innerExhaust = useRef()
+  const outerExhaustPattern = useRef()
+
+  const coneExhaust = useRef()
+  const outerConeExhaust = useRef()
+  const noise = useTexture(noiseTexture)
+
 
   const leftWingTrail = useRef()
   const rightWingTrail = useRef()
@@ -70,6 +78,12 @@ function ShipModel(props, { children }) {
       pointLight.current.visible = true
     }
   }, [gameStarted, gameOver])
+
+  useLayoutEffect(() => {
+    noise.wrapS = noise.wrapT = THREE.MirroredRepeatWrapping
+    noise.repeat.set(1, 1)
+    noise.anisotropy = 16
+  }, [])
 
   useFrame((state, delta) => {
     const accelDelta = 1 * delta * 2 // 1.5
@@ -162,14 +176,29 @@ function ShipModel(props, { children }) {
     pointLight.current.intensity = 20 + (fastSine / 15)
     outerExhaust.current.scale.x = 0.25 + fastSine / 15
     outerExhaust.current.scale.y = 0.35 + slowSine / 10
+    outerExhaustPattern.current.scale.x = 0.25 + fastSine / 15
+    outerExhaustPattern.current.scale.y = 0.35 + slowSine / 10
     innerExhaust.current.scale.x = 0.15 + fastSine / 15
     innerExhaust.current.scale.y = 0.30 + slowSine / 10
+
+    coneExhaust.current.scale.z = fastSine / 15
+    coneExhaust.current.scale.x = 0.7 + fastSine / 15
+    outerConeExhaust.current.scale.z = fastSine / 15
+    outerConeExhaust.current.scale.x = 0.9 + fastSine / 15
 
     if (mutation.desiredSpeed > mutation.gameSpeed) {
       pointLight.current.intensity = 30 + (fastSine / 15)
     }
 
     bodyDetail.current.material.color = mutation.globalColor
+
+    outerExhaustPattern.current.material.visible = false
+    outerExhaust.current.material.visible = false
+    innerExhaust.current.material.visible = false
+
+    //outerConeExhaust.current.material.alphaMap.offset.x += 0.01 * delta * 165
+    outerConeExhaust.current.material.alphaMap.offset.y -= 0.02 * delta * 165
+    outerConeExhaust.current.material.alphaMap.repeat.set(1 + (0.1 * slowSine), 1)
   })
 
   return (
@@ -197,12 +226,24 @@ function ShipModel(props, { children }) {
           <dodecahedronBufferGeometry args={[1.5, 3]} />
           <meshBasicMaterial transparent opacity={0.8} color="white" />
         </mesh>
+        <mesh ref={outerExhaustPattern} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4]}>
+          <dodecahedronBufferGeometry args={[1.55, 3]} />
+          <meshLambertMaterial transparent opacity={0.4} color="hotpink" />
+        </mesh>
         <mesh ref={outerExhaust} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4]}>
           <dodecahedronBufferGeometry args={[1.55, 3]} />
           <meshLambertMaterial transparent opacity={0.6} color="red" />
         </mesh>
         <mesh ref={innerExhaust} scale={[0.1, 0.05, 2]} position={[0, -0.3, -4]}>
           <dodecahedronBufferGeometry args={[1.55, 3]} />
+          <meshBasicMaterial color="white" />
+        </mesh>
+        <mesh ref={outerConeExhaust} position={[0, -0.3, -8]} rotation={[Math.PI / 2, 0, Math.PI]}>
+          <coneBufferGeometry args={[0.5, 15, 8, 1, true]} />
+          <meshLambertMaterial transparent alphaMap={noise} color="red" />
+        </mesh>
+        <mesh ref={coneExhaust} position={[0, -0.3, -8]} rotation={[Math.PI / 2, 0, Math.PI]}>
+          <coneBufferGeometry args={[0.35 /* 0.35 */, 15, 8, 1, true]} />
           <meshBasicMaterial color="white" />
         </mesh>
       </group>

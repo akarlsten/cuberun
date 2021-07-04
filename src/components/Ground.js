@@ -14,7 +14,7 @@ import gridPurple from '../textures/grid-purple.png'
 import gridPink from '../textures/grid-pink.png'
 import gridRainbow from '../textures/grid-rainbow.png'
 
-const TEXTURE_SIZE = PLANE_SIZE * 0.075
+const TEXTURE_SIZE = PLANE_SIZE * 0.05 // 0.075
 const MOVE_DISTANCE = PLANE_SIZE * 2
 
 const color = new THREE.Color(0x000000)
