@@ -33,6 +33,8 @@ export default function InstancedCubes() {
     return temp
   }, [])
 
+  const currentLevelMinusDiamondStart = useMemo(() => -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE - 2), [level])
+
   useFrame((state, delta) => {
     cubes.forEach((cube, i) => {
       if (ship.current) {
@@ -47,10 +49,10 @@ export default function InstancedCubes() {
           }
         }
 
-        if (ship.current.position.z < -PLANE_SIZE && ship.current.position.z < -(level * PLANE_SIZE * LEVEL_SIZE) - 250) { // 4
+        if (mutation.shouldShiftItems) { // 4
           cube.x = diamondCoords[i].x
           cube.y = 0
-          cube.z = -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE - 2) + diamondCoords[i].z
+          cube.z = currentLevelMinusDiamondStart + diamondCoords[i].z
         }
 
       }

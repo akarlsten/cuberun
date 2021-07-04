@@ -3,6 +3,12 @@
   src: local('Road Rage'), url(../fonts/Road_Rage.otf) format('opentype');
 }
 
+@font-face {
+  font-family: 'Commando';
+  src: local('Commando'), url(../fonts/commando.ttf) format('truetype');
+}
+
+
 .game__container {
   position: absolute;
   top: 0;

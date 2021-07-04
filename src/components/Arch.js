@@ -35,8 +35,8 @@ export default function Arch() {
 
   useFrame((state, delta) => {
     if (ship.current) {
-      if (ship.current.position.z < -PLANE_SIZE && ship.current.position.z < -(level * PLANE_SIZE * LEVEL_SIZE) - 400) {
-        arches.current.position.z = -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE - 2) - 300
+      if (mutation.shouldShiftItems) {
+        arches.current.position.z = mutation.currentLevelLength - PLANE_SIZE * (LEVEL_SIZE - 2) - 300
         arch7.current.visible = true
         arch8.current.visible = true
         arch9.current.visible = true

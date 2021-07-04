@@ -1,6 +1,6 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
-import { useRef, useLayoutEffect, useState, Suspense } from 'react'
+import { useRef, useLayoutEffect, useState, Suspense, useMemo } from 'react'
 import * as THREE from 'three'
 
 import { useStore, mutation } from '../state/useStore'
@@ -79,19 +79,24 @@ function HyperspaceTunnel() {
     texture.anisotropy = 16
   }, [])
 
+  const lowerBound = useMemo(() => -4250 - PLANE_SIZE * (level * LEVEL_SIZE), [level])
+  const upperBound = useMemo(() => -6500 - PLANE_SIZE * (level * LEVEL_SIZE), [level])
+  const prevLowerBound = useMemo(() => -4250 - PLANE_SIZE * ((level - 1) * LEVEL_SIZE), [level])
+  const prevUpperBound = useMemo(() => -6500 - PLANE_SIZE * ((level - 1) * LEVEL_SIZE), [level])
+
   useFrame((state, delta) => {
     if (ship.current) {
-      if (ship.current.position.z < -PLANE_SIZE && ship.current.position.z < -(level * PLANE_SIZE * LEVEL_SIZE) - 400) {
-        tunnel.current.position.z = -4300 - (level * PLANE_SIZE * LEVEL_SIZE)
-        tunnel2.current.position.z = -4300 - (level * PLANE_SIZE * LEVEL_SIZE)
+      if (mutation.shouldShiftItems) {
+        tunnel.current.position.z = lowerBound - 50
+        tunnel2.current.position.z = lowerBound - 50
       }
     }
 
     if (ship.current) {
-      if ((ship.current.position.z < -4250 - PLANE_SIZE * (level * LEVEL_SIZE) &&
-        ship.current.position.z > -6500 - PLANE_SIZE * (level * LEVEL_SIZE)) ||
-        (ship.current.position.z < -4250 - PLANE_SIZE * ((level - 1) * LEVEL_SIZE) &&
-          ship.current.position.z > -6500 - PLANE_SIZE * ((level - 1) * LEVEL_SIZE))) {
+      if ((ship.current.position.z < lowerBound &&
+        ship.current.position.z > upperBound ||
+        (ship.current.position.z < prevLowerBound &&
+          ship.current.position.z > prevUpperBound))) {
         tunnel2.current.visible = true
       } else {
         tunnel2.current.visible = false

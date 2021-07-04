@@ -32,10 +32,19 @@ export default function InstancedCubes() {
     return temp
   }, [])
 
+  const diamondStart = useMemo(() => -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE - 2.5), [level])
+  const diamondEnd = useMemo(() => -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE), [level])
+
   useFrame((state, delta) => {
+    let isWithinDiamond = false
+    if (ship.current) {
+      if (ship.current.position.z > diamondStart || ship.current.position.z < diamondEnd) {
+        isWithinDiamond = true
+      }
+    }
+
     cubes.forEach((cube, i) => {
       if (ship.current) {
-
         if (cube.z - ship.current.position.z > -15) { // No need to run the rather expensive distance function if the ship is too far away
           if (cube.x - ship.current.position.x > -15 || cube.x - ship.current.position.x < 15) {
             const distanceToShip = distance2D(ship.current.position.x, ship.current.position.z, cube.x, cube.z)
@@ -48,11 +57,7 @@ export default function InstancedCubes() {
         }
 
         if (cube.z - ship.current.position.z > 15) {
-          const currentLevelZPos = -(level * PLANE_SIZE * LEVEL_SIZE) // 4
-          const diamondStart = currentLevelZPos - PLANE_SIZE * (LEVEL_SIZE - 2.5) // 1.5
-          const diamondEnd = currentLevelZPos - PLANE_SIZE * (LEVEL_SIZE) // 3
-
-          if (ship.current.position.z > diamondStart || ship.current.position.z < diamondEnd) {
+          if (isWithinDiamond) {
             cube.z = ship.current.position.z - PLANE_SIZE + randomInRange(-500, 0)
             cube.y = -CUBE_SIZE
             cube.x = randomInRange(negativeBound, positiveBound)

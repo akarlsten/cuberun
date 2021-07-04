@@ -45,6 +45,7 @@ const styles = {
   inner: {
     width: 200,
     height: 20,
+    borderRadius: '10px',
     background: 'white',
     textAlign: 'center',
     boxShadow: '0 0 20px 0px #fe2079',
@@ -52,6 +53,7 @@ const styles = {
   bar: {
     height: 20,
     width: '100%',
+    borderRadius: '10px',
     background: '#fe2079',
     transition: 'transform 200ms',
     transformOrigin: 'left center',

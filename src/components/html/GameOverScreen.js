@@ -15,7 +15,6 @@ const GameOverScreen = () => {
 
   const gameOver = useStore(s => s.gameOver)
   const score = useStore(s => s.score)
-  const setGameStarted = useStore(s => s.setGameStarted)
 
   useEffect(() => {
     let t

@@ -39,6 +39,8 @@ const mutation = {
   desiredSpeed: 0.0,
   horizontalVelocity: 0,
   colorLevel: 0,
+  shouldShiftItems: false,
+  currentLevelLength: 0,
   globalColor: new Color()
 }
 
