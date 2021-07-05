@@ -1,4 +1,4 @@
-import { PLANE_SIZE, CUBE_SIZE, WALL_RADIUS, LEFT_BOUND, RIGHT_BOUND } from '../constants/index'
+import { PLANE_SIZE, CUBE_SIZE, WALL_RADIUS, LEFT_BOUND } from '../constants/index'
 
 const segments = (PLANE_SIZE - WALL_RADIUS / 2) / CUBE_SIZE
 const negativeBound = -(PLANE_SIZE / 2) + WALL_RADIUS / 2

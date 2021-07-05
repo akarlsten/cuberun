@@ -12,8 +12,6 @@ const getScore = () => `${mutation.score.toFixed(0)}`
 
 export default function Hud() {
   const set = useStore((state) => state.set)
-  const score = useStore(s => s.score)
-  const speed = useStore(s => s.currentSpeed)
   const level = useStore(s => s.level)
 
   const gameOver = useStore(s => s.gameOver)
@@ -45,7 +43,6 @@ export default function Hud() {
 
       if (scoreRef.current) {
         scoreRef.current.innerText = getScore()
-        then = Date.now()
       }
 
       then = now
@@ -76,15 +73,15 @@ export default function Hud() {
     } else {
       setShowControls(false)
     }
-  }, [isMobile])
+  }, [])
 
   useEffect(() => {
     set((state) => ({ ...state, controls: { ...state.controls, left } }))
-  }, [left])
+  }, [set, left])
 
   useEffect(() => {
     set((state) => ({ ...state, controls: { ...state.controls, right } }))
-  }, [right])
+  }, [set, right])
 
   return shown ? (
     <div className="hud">

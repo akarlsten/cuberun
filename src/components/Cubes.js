@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import { Object3D } from 'three'
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 
@@ -18,7 +18,7 @@ export default function InstancedCubes() {
   const ship = useStore(s => s.ship)
   const level = useStore(s => s.level)
 
-  const dummy = useMemo(() => new THREE.Object3D(), [])
+  const dummy = useMemo(() => new Object3D(), [])
   const cubes = useMemo(() => {
     // Setup initial cube positions
     const temp = []

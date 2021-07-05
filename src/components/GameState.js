@@ -6,18 +6,14 @@ import { INITIAL_GAME_SPEED, PLANE_SIZE, LEVEL_SIZE } from '../constants'
 
 // this is supposedly a performance improvement
 const shipSelector = s => s.ship
-const scoreSelector = s => s.score
 const setScoreSelector = s => s.setScore
-const setCurrentSpeedSelector = s => s.setCurrentSpeed
 const gameStartedSelector = s => s.gameStarted
 const setIsSpeedingUpSelector = s => s.setIsSpeedingUp
 const setGameOverSelector = s => s.setGameOver
 
 export default function GameState() {
   const ship = useStore(shipSelector)
-  const score = useStore(scoreSelector)
   const setScore = useStore(setScoreSelector)
-  const setCurrentSpeed = useStore(setCurrentSpeedSelector)
   const gameStarted = useStore(gameStartedSelector)
   const setIsSpeedingUp = useStore(setIsSpeedingUpSelector)
   const setGameOver = useStore(setGameOverSelector)

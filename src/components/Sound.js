@@ -1,8 +1,8 @@
-import * as THREE from 'three'
+import { AudioListener, AudioLoader } from 'three'
 import { useRef, useEffect, useState, Suspense } from 'react'
-import { useLoader, useFrame, useThree } from '@react-three/fiber'
+import { useLoader } from '@react-three/fiber'
 
-import { useStore, mutation } from '../state/useStore'
+import { useStore } from '../state/useStore'
 
 import speedUp from '../audio/speedup.mp3'
 
@@ -16,9 +16,9 @@ function Sound() {
   const level = useStore(s => s.level)
   const gameStarted = useStore(s => s.gameStarted)
 
-  const [listener] = useState(() => new THREE.AudioListener())
+  const [listener] = useState(() => new AudioListener())
 
-  const speedUpSound = useLoader(THREE.AudioLoader, speedUp)
+  const speedUpSound = useLoader(AudioLoader, speedUp)
 
 
   useEffect(() => {
@@ -34,14 +34,14 @@ function Sound() {
       camera.current.add(listener)
       return () => camera.current.remove(listener)
     }
-  }, [speedUpSound, musicEnabled])
+  }, [speedUpSound, musicEnabled, camera, listener])
 
   useEffect(() => {
     if (gameStarted && level > 0) {
       sound.current.setBuffer(speedUpSound)
       sound.current.play()
     }
-  }, [gameStarted, level])
+  }, [gameStarted, level, speedUpSound])
 
   return (
     <group ref={soundOrigin}>

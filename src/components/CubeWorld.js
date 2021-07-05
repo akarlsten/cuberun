@@ -7,13 +7,11 @@ import { useStore } from '../state/useStore'
 // THREE components
 import Ship from './Ship'
 import Ground from './Ground'
-import Effects from './Effects'
 import Skybox from './Skybox'
 import Cubes from './Cubes'
-import FixedCubes from './FixedCubes'
 import Walls from './Walls'
-import Arch from './Arch'
-import Hyperspace from './Hyperspace'
+import CubeTunnel from './CubeTunnel'
+import Effects from './Effects'
 
 // State/dummy components
 import KeyboardControls from './KeyboardControls'
@@ -48,10 +46,7 @@ export default function CubeWorld({ color, bgColor }) {
           </Ship>
           <Walls />
           <Cubes />
-          <FixedCubes />
-          {/* <Chevrons /> */}
-          <Arch />
-          <Hyperspace />
+          <CubeTunnel />
           <Ground groundColor={bgColor} />
           <KeyboardControls />
           <Effects />

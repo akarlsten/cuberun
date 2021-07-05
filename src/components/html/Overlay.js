@@ -8,7 +8,7 @@ import cubeRunLogo from '../../textures/cuberun-logo.png'
 
 import '../../styles/gameMenu.css'
 
-import { useStore, mutation } from '../../state/useStore'
+import { useStore } from '../../state/useStore'
 
 const Overlay = () => {
   const [shown, setShown] = useState(true)

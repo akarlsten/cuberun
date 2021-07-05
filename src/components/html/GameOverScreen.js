@@ -1,11 +1,10 @@
-import { useProgress } from '@react-three/drei'
 import { useState, useEffect } from 'react'
 
 import cubeRunLogo from '../../textures/cuberun-logo.png'
 
 import '../../styles/gameMenu.css'
 
-import { useStore, mutation } from '../../state/useStore'
+import { useStore } from '../../state/useStore'
 
 const GameOverScreen = () => {
   const previousScores = localStorage.getItem('highscores') ? JSON.parse(localStorage.getItem('highscores')) : [...Array(3).fill(0)]
@@ -20,7 +19,7 @@ const GameOverScreen = () => {
     let t
     if (gameOver !== opaque) t = setTimeout(() => setOpaque(gameOver), 500)
     return () => clearTimeout(t)
-  }, [gameOver])
+  }, [gameOver, opaque])
 
   useEffect(() => {
     if (gameOver) {
@@ -41,7 +40,7 @@ const GameOverScreen = () => {
         localStorage.setItem('highscores', JSON.stringify(resortedScores))
       }
     }
-  }, [gameOver])
+  }, [gameOver, highScores, score])
 
   const handleRestart = () => {
     window.location.reload() // TODO: make a proper restart

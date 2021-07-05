@@ -1,6 +1,6 @@
-import * as THREE from 'three'
-import React, { useRef, useState, Suspense, useMemo, useLayoutEffect, useCallback } from 'react'
-import { extend, useFrame, useLoader, useThree } from '@react-three/fiber'
+import { Color, RepeatWrapping } from 'three'
+import React, { useRef, Suspense, useLayoutEffect } from 'react'
+import { useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import { useStore, mutation } from '../state/useStore'
 
@@ -17,7 +17,7 @@ import gridRainbow from '../textures/grid-rainbow.png'
 const TEXTURE_SIZE = PLANE_SIZE * 0.05 // 0.075
 const MOVE_DISTANCE = PLANE_SIZE * 2
 
-const color = new THREE.Color(0x000000)
+const color = new Color(0x000000)
 
 function Ground() {
   const ground = useRef()
@@ -33,15 +33,15 @@ function Ground() {
 
   useLayoutEffect(() => {
     textures.forEach(texture => {
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping
+      texture.wrapS = texture.wrapT = RepeatWrapping
       texture.repeat.set(TEXTURE_SIZE, TEXTURE_SIZE)
       texture.anisotropy = 16
     })
-  }, [])
+  }, [textures])
 
   const moveCounter = useRef(1)
   const lastMove = useRef(0)
-  const { clock } = useThree()
+
   useFrame((state, delta) => {
 
     if (ship.current) {
@@ -162,7 +162,6 @@ function LoadingGround() {
         color={`black`}
         roughness={1}
         metalness={0}
-        roughness={1}
       />
     </mesh>
   )

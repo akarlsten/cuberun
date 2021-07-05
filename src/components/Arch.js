@@ -1,9 +1,8 @@
-import { Cone } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 
 import { useStore, mutation } from '../state/useStore'
-import { PLANE_SIZE, WALL_RADIUS, COLORS, LEVEL_SIZE } from '../constants'
+import { PLANE_SIZE, COLORS, LEVEL_SIZE } from '../constants'
 
 export default function Arch() {
   const ship = useStore((s) => s.ship)

@@ -1,10 +1,8 @@
-import * as THREE from 'three'
+import { AudioListener, AudioLoader } from 'three'
 import { useRef, useEffect, useState, Suspense } from 'react'
-import { useLoader, useFrame, useThree } from '@react-three/fiber'
+import { useLoader, useFrame } from '@react-three/fiber'
 
-import { useStore, mutation } from '../state/useStore'
-
-import { INITIAL_GAME_SPEED } from '../constants'
+import { useStore } from '../state/useStore'
 
 import introSong from '../audio/intro-loop.mp3'
 import mainSong from '../audio/main.mp3'
@@ -20,10 +18,10 @@ function Music() {
   const camera = useStore(s => s.camera)
   const level = useStore(s => s.level)
 
-  const [listener] = useState(() => new THREE.AudioListener())
+  const [listener] = useState(() => new AudioListener())
 
-  const introTheme = useLoader(THREE.AudioLoader, introSong)
-  const mainTheme = useLoader(THREE.AudioLoader, mainSong)
+  const introTheme = useLoader(AudioLoader, introSong)
+  const mainTheme = useLoader(AudioLoader, mainSong)
   const themeFilter = useRef()
 
   const introVolume = useRef(1)
@@ -36,6 +34,7 @@ function Music() {
     introPlayer.current.setBuffer(introTheme)
   }, [introTheme])
 
+  // creates a lowpass filter with the browser audio API
   useEffect(() => {
     themePlayer.current.setBuffer(mainTheme)
     themeFilter.current = themePlayer.current.context.createBiquadFilter()
@@ -77,7 +76,7 @@ function Music() {
       return () => camera.current.remove(listener)
     }
 
-  }, [musicEnabled, introTheme, mainTheme, gameStarted, gameOver, camera])
+  }, [musicEnabled, introTheme, mainTheme, gameStarted, gameOver, camera, listener])
 
   useEffect(() => {
     if (level > 0 && level % 2 === 0) {

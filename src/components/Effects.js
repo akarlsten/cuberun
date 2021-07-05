@@ -1,4 +1,3 @@
-import * as THREE from 'three'
 import { useRef, useEffect } from 'react'
 import { extend, useThree, useFrame } from '@react-three/fiber'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
@@ -9,14 +8,13 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader'
 
-import { mutation } from '../state/useStore'
 
 extend({ EffectComposer, ShaderPass, RenderPass, UnrealBloomPass, SSAOPass, AfterimagePass })
 
 
 export default function Effects() {
   const composer = useRef()
-  const { scene, gl, size, camera, clock } = useThree()
+  const { scene, gl, size, camera } = useThree()
 
   useEffect(() => void composer.current.setSize(size.width, size.height), [size])
   useFrame((state, delta) => {
@@ -33,7 +31,6 @@ export default function Effects() {
   return (
     <effectComposer ref={composer} args={[gl]}>
       <renderPass attachArray="passes" scene={scene} camera={camera} />
-      {/* <afterimagePass attachArray="passes" args={[0]} /> */}
       <unrealBloomPass attachArray="passes" args={[undefined, 0.8 /* strength: 1 */, 1, 0.4 /* 0.4 */]} />
       <shaderPass attachArray="passes" args={[FXAAShader]} material-uniforms-resolution-value={[1 / size.width, 1 / size.height]} />
     </effectComposer>

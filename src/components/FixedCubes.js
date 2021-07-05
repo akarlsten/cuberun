@@ -1,8 +1,8 @@
-import * as THREE from 'three'
+import { Object3D } from 'three'
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 
-import { PLANE_SIZE, COLORS, LEVEL_SIZE, CUBE_SIZE } from '../constants'
+import { PLANE_SIZE, COLORS, LEVEL_SIZE } from '../constants'
 import { useStore, mutation } from '../state/useStore'
 
 import distance2D from '../util/distance2D'
@@ -19,7 +19,7 @@ export default function InstancedCubes() {
   const tunnelCoords = useMemo(() => generateCubeTunnel(), [])
   const diamondCoords = useMemo(() => generateDiamond(), [])
 
-  const dummy = useMemo(() => new THREE.Object3D(), [])
+  const dummy = useMemo(() => new Object3D(), [])
   const cubes = useMemo(() => {
     // Setup initial cube positions
     const temp = []
@@ -31,7 +31,7 @@ export default function InstancedCubes() {
       temp.push({ x, y, z })
     }
     return temp
-  }, [])
+  }, [diamondCoords, tunnelCoords])
 
   const currentLevelMinusDiamondStart = useMemo(() => -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE - 2), [level])
 

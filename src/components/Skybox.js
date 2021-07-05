@@ -1,7 +1,7 @@
-import { Suspense, useState, useRef, useMemo, useLayoutEffect } from 'react'
+import { Suspense, useRef, useMemo, useLayoutEffect } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import { useTexture, Stars } from '@react-three/drei'
-import * as THREE from 'three'
+import { Color, BackSide, MirroredRepeatWrapping } from 'three'
 
 import galaxyTexture from '../textures/galaxy.jpg'
 
@@ -10,30 +10,17 @@ import { mutation, useStore } from '../state/useStore'
 import { COLORS } from '../constants'
 
 function Sun() {
-  const { clock, camera } = useThree()
+  const { clock } = useThree()
 
   const sun = useStore((s) => s.sun)
   const ship = useStore((s) => s.ship)
-  const level = useStore(s => s.level)
 
-  const sunColor = useMemo(() => new THREE.Color(1, 0.694, 0.168), [sun])
+  const sunColor = useMemo(() => new Color(1, 0.694, 0.168), [])
 
   useFrame((state, delta) => {
     if (ship.current) {
       sun.current.position.z = ship.current.position.z - 2000
       sun.current.position.x = ship.current.position.x
-
-      // // TODO: implement
-      // if (level >= 0) {
-      //   sun.current.material.emissive.set(COLORS[mutation.colorLevel].three)
-      //   sun.current.material.color.set(COLORS[mutation.colorLevel].three)
-      // }
-
-      // if (mutation.gameSpeed > 1) {
-      //   sun.current.scale.x = mutation.gameSpeed
-      //   sun.current.scale.y = mutation.gameSpeed
-      //   sun.current.scale.z = mutation.gameSpeed
-      // }
     }
 
     sun.current.scale.x += Math.sin(clock.getElapsedTime() * 3) / 3000
@@ -56,10 +43,10 @@ function Sky() {
   const ship = useStore((s) => s.ship)
 
   useLayoutEffect(() => {
-    texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping
+    texture.wrapS = texture.wrapT = MirroredRepeatWrapping
     texture.repeat.set(1.8, 1.8)
     texture.anisotropy = 16
-  }, [])
+  }, [texture])
 
 
   useFrame((state, delta) => {
@@ -82,7 +69,7 @@ function Sky() {
       <mesh ref={sky} position={[0, 10, -50]} rotation={[0, 0, Math.PI]}>
         <hemisphereLight intensity={0.7} />
         <sphereGeometry attach="geometry" args={[2000, 10, 10]} />
-        <meshPhongMaterial emissive={COLORS[0].three} emissiveIntensity={0.1} fog={false} side={THREE.BackSide} attach="material" map={texture} />
+        <meshPhongMaterial emissive={COLORS[0].three} emissiveIntensity={0.1} fog={false} side={BackSide} attach="material" map={texture} />
       </mesh>
     </>
   )
