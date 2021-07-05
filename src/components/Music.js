@@ -1,8 +1,8 @@
-import { AudioListener, AudioLoader } from 'three'
+import { AudioListener, AudioLoader, AudioAnalyser } from 'three'
 import { useRef, useEffect, useState, Suspense } from 'react'
 import { useLoader, useFrame } from '@react-three/fiber'
 
-import { useStore } from '../state/useStore'
+import { mutation, useStore } from '../state/useStore'
 
 import introSong from '../audio/intro-loop.mp3'
 import mainSong from '../audio/main.mp3'
@@ -17,12 +17,15 @@ function Music() {
   const gameOver = useStore(s => s.gameOver)
   const camera = useStore(s => s.camera)
   const level = useStore(s => s.level)
+  const hasInteracted = useStore(s => s.hasInteracted)
 
   const [listener] = useState(() => new AudioListener())
 
   const introTheme = useLoader(AudioLoader, introSong)
   const mainTheme = useLoader(AudioLoader, mainSong)
+
   const themeFilter = useRef()
+  const audioAnalyzer = useRef()
 
   const introVolume = useRef(1)
   const themeVolume = useRef(0)
@@ -31,16 +34,24 @@ function Music() {
   const startCrossfade = useRef(false)
 
   useEffect(() => {
+    if (hasInteracted && musicEnabled) {
+      themePlayer.current.context.resume()
+    }
+  }, [hasInteracted, musicEnabled])
+
+  useEffect(() => {
     introPlayer.current.setBuffer(introTheme)
   }, [introTheme])
 
-  // creates a lowpass filter with the browser audio API
+  // creates a lowpass filter with the browser audio API, also an audio analyzer
   useEffect(() => {
     themePlayer.current.setBuffer(mainTheme)
     themeFilter.current = themePlayer.current.context.createBiquadFilter()
     themeFilter.current.type = "lowpass"
     themeFilter.current.frequency.value = 0
     themePlayer.current.setFilter(themeFilter.current)
+
+    audioAnalyzer.current = new AudioAnalyser(themePlayer.current, 64)
   }, [mainTheme])
 
   useEffect(() => {
@@ -72,8 +83,9 @@ function Music() {
     themePlayer.current.setLoop(true)
 
     if (camera.current) {
-      camera.current.add(listener)
-      return () => camera.current.remove(listener)
+      const cam = camera.current
+      cam.add(listener)
+      return () => cam.remove(listener)
     }
 
   }, [musicEnabled, introTheme, mainTheme, gameStarted, gameOver, camera, listener])
@@ -88,6 +100,11 @@ function Music() {
 
   useFrame((state, delta) => {
     if (musicEnabled) {
+
+      if (audioAnalyzer.current) {
+        mutation.currentMusicLevel = audioAnalyzer.current.getAverageFrequency()
+      }
+
       // start playing main theme "on the beat" when game starts
       if (gameStarted && !themePlayer.current.isPlaying) {
         if (introPlayer.current.context.currentTime.toFixed(1) % 9.6 === 0) {

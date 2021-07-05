@@ -8,22 +8,28 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader'
 
+import { useStore, mutation } from '../state/useStore'
 
 extend({ EffectComposer, ShaderPass, RenderPass, UnrealBloomPass, SSAOPass, AfterimagePass })
+
+
 
 
 export default function Effects() {
   const composer = useRef()
   const { scene, gl, size, camera } = useThree()
 
+  const musicEnabled = useStore(s => s.musicEnabled)
+
   useEffect(() => void composer.current.setSize(size.width, size.height), [size])
   useFrame((state, delta) => {
-    // const bloom = composer.current.passes[1]
+    if (musicEnabled) {
+      const bloom = composer.current.passes[1]
 
-    // if (mutation.gameOver) {
-    //   bloom.strength = Math.max(1, 1 + Math.sin(clock.getElapsedTime() * 15))
-    // }
-
+      const bloomFactor = 0.45 + mutation.currentMusicLevel / 300
+      bloom.strength = bloomFactor > 0.8 ? bloomFactor : 0.8
+      bloom.radius = bloomFactor + 0.2 > 1 ? bloomFactor + 0.2 : 1
+    }
     composer.current.render()
   }, 1)
 

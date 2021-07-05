@@ -31,8 +31,9 @@ function Sound() {
     }
 
     if (camera.current) {
-      camera.current.add(listener)
-      return () => camera.current.remove(listener)
+      const cam = camera.current
+      cam.add(listener)
+      return () => cam.remove(listener)
     }
   }, [speedUpSound, musicEnabled, camera, listener])
 

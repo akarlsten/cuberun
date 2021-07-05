@@ -27,15 +27,37 @@ export function makeWall(hasGap = true, gapSize = 3) {
 
 function makeTunnel(tunnelLength = 10, gapSize = 3) {
 
-  const tunnelCoordinates = [...Array(tunnelLength * 2)].map((cube, index) => {
-    return {
-      x: index % 2 === 0 ? CUBE_SIZE * 2 : -CUBE_SIZE * 2,
-      y: CUBE_SIZE / 2,
-      z: -(((segments / 2 - 2) * CUBE_SIZE) + (index * CUBE_SIZE * 0.7))
-    }
-  })
+  // const tunnelCoordinates = [...Array(tunnelLength * 2)].map((cube, index) => {
+  //   return {
+  //     x: index % 2 === 0 ? CUBE_SIZE * 2 : -CUBE_SIZE * 2,
+  //     y: CUBE_SIZE / 2,
+  //     z: -(((segments / 2 - 2) * CUBE_SIZE) + (index * CUBE_SIZE * 0.7))
+  //   }
+  // })
 
-  return tunnelCoordinates
+  const coords = [
+    { x: 40, y: 10, z: -450 },
+    { x: -40, y: 10, z: -450 },
+    { x: 40, y: 10, z: -478 },
+    { x: -40, y: 10, z: -478 },
+    { x: 40, y: 10, z: -506 },
+    { x: -40, y: 10, z: -506 },
+    { x: 40, y: 10, z: -534 },
+    { x: -40, y: 10, z: -534 },
+    { x: 40, y: 10, z: -562 },
+    { x: -40, y: 10, z: -562 },
+    { x: 40, y: 10, z: -590 },
+    { x: -40, y: 10, z: -590 },
+    { x: 40, y: 10, z: -618 },
+    { x: -40, y: 10, z: -618 },
+    { x: 40, y: 10, z: -646 },
+    { x: -40, y: 10, z: -646 },
+    { x: 40, y: 10, z: -674 },
+    { x: -40, y: 10, z: -674 },
+    { x: 40, y: 10, z: -702 },
+    { x: -40, y: 10, z: -702 }]
+
+  return coords
 }
 
 function makeDiamond(size = 21, tunnelLength = 10) {
@@ -44,7 +66,7 @@ function makeDiamond(size = 21, tunnelLength = 10) {
 
   const outerLeftWall = [...Array(size)].map((cube, index) => {
     return {
-      x: index <= size / 2 ? -CUBE_SIZE * 3 - index * CUBE_SIZE : (-CUBE_SIZE * 3 - size * CUBE_SIZE) + index * CUBE_SIZE,
+      x: index === 0 ? -70 : index <= size / 2 ? -CUBE_SIZE * 3 - index * CUBE_SIZE : (-CUBE_SIZE * 3 - size * CUBE_SIZE) + index * CUBE_SIZE,
       y: CUBE_SIZE / 2,
       z: wallEndOffset - tunnelEndOffset - index * CUBE_SIZE * 1.75
     }
@@ -52,7 +74,7 @@ function makeDiamond(size = 21, tunnelLength = 10) {
 
   const outerRightWall = [...Array(size)].map((cube, index) => {
     return {
-      x: index <= size / 2 ? CUBE_SIZE * 3 + index * CUBE_SIZE : (CUBE_SIZE * 3 + size * CUBE_SIZE) - index * CUBE_SIZE,
+      x: index === 0 ? 70 : index <= size / 2 ? CUBE_SIZE * 3 + index * CUBE_SIZE : (CUBE_SIZE * 3 + size * CUBE_SIZE) - index * CUBE_SIZE,
       y: CUBE_SIZE / 2,
       z: wallEndOffset - tunnelEndOffset - index * CUBE_SIZE * 1.75
     }
@@ -62,7 +84,7 @@ function makeDiamond(size = 21, tunnelLength = 10) {
 
   const innerLeftWall = [...Array(innerSize)].map((cube, index) => {
     return {
-      x: index < innerSize / 2 ? (-CUBE_SIZE / 2) - index * CUBE_SIZE : (-CUBE_SIZE / 2) - (innerSize * CUBE_SIZE) + index * CUBE_SIZE,
+      x: index === 1 ? (-CUBE_SIZE / 2) - index * CUBE_SIZE * 1.1 : index < innerSize / 2 ? (-CUBE_SIZE / 2) - index * CUBE_SIZE : (-CUBE_SIZE / 2) - (innerSize * CUBE_SIZE) + index * CUBE_SIZE,
       y: CUBE_SIZE / 2,
       z: wallEndOffset - tunnelEndOffset - (Math.floor(size / 1.5) * CUBE_SIZE) - index * CUBE_SIZE * 1.75
     }
@@ -70,20 +92,20 @@ function makeDiamond(size = 21, tunnelLength = 10) {
 
   const innerRightWall = [...Array(innerSize)].map((cube, index) => {
     return {
-      x: index < innerSize / 2 ? (CUBE_SIZE / 2) + index * CUBE_SIZE : (CUBE_SIZE / 2) + (innerSize * CUBE_SIZE) - index * CUBE_SIZE,
+      x: index === 1 ? (CUBE_SIZE / 2) + index * CUBE_SIZE * 1.1 : index < innerSize / 2 ? (CUBE_SIZE / 2) + index * CUBE_SIZE : (CUBE_SIZE / 2) + (innerSize * CUBE_SIZE) - index * CUBE_SIZE,
       y: CUBE_SIZE / 2,
       z: wallEndOffset - tunnelEndOffset - (Math.floor(size / 1.5) * CUBE_SIZE) - index * CUBE_SIZE * 1.75
     }
   })
 
-  const firstDiamond = [...outerLeftWall, ...outerRightWall, ...innerLeftWall, ...innerRightWall]
-  const secondDiamond = firstDiamond.map(coordinates => ({ ...coordinates, z: coordinates.z - (size * CUBE_SIZE * 1.75) }))
+  const middlePiece = { x: 0, y: CUBE_SIZE / 2, z: wallEndOffset - tunnelEndOffset - (Math.floor(size / 1.5) * CUBE_SIZE) + CUBE_SIZE }
+
+  const firstDiamond = [...outerLeftWall, ...outerRightWall, middlePiece, ...innerLeftWall, ...innerRightWall]
+  const secondDiamond = firstDiamond.map((coordinates, index) => ({ ...coordinates, z: index >= 42 ? coordinates.z - 700 /* 735 */ : coordinates.z - (size * CUBE_SIZE * 1.75) }))
 
   const finalTunnel = [
-    { x: 60, y: 10, z: -2025 },
-    { x: -60, y: 10, z: -2025 },
-    { x: 40, y: 10, z: -2045 },
-    { x: -40, y: 10, z: -2045 },
+    { x: 60, y: 10, z: -2045 },
+    { x: -60, y: 10, z: -2045 },
     { x: 40, y: 10, z: -2065 },
     { x: -40, y: 10, z: -2065 },
     { x: 40, y: 10, z: -2085 },

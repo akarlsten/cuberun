@@ -25,7 +25,7 @@ export default function CustomLoader({ active, progress, dataInterpolation = def
       <div>
         <div style={{ ...styles.inner }}>
           <div style={{ ...styles.bar, transform: `scaleX(${progress / 100})` }}></div>
-          <div style={{ marginTop: '1rem' }}>
+          <div style={{ marginTop: '1.5rem' }}>
             <span ref={progressSpanRef} style={{ ...styles.data }} />
           </div>
         </div>
@@ -43,17 +43,16 @@ const styles = {
     zIndex: 1000,
   },
   inner: {
-    width: 200,
-    height: 20,
-    borderRadius: '10px',
-    background: 'white',
+    width: 206,
+    height: 26,
     textAlign: 'center',
+    borderRadius: '5px',
     boxShadow: '0 0 20px 0px #fe2079',
+    border: '3px solid #fe2079'
   },
   bar: {
     height: 20,
     width: '100%',
-    borderRadius: '10px',
     background: '#fe2079',
     transition: 'transform 200ms',
     transformOrigin: 'left center',
