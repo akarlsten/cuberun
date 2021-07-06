@@ -61,6 +61,7 @@ const Overlay = () => {
               <div className="game__menu-options">
                 <button onClick={handleMusic} className="game__menu-button game__menu-button-music">{`TURN MUSIC ${musicEnabled ? 'OF>F' : 'O<N'}`}</button>
                 <span className="game__menu-musicinfo">some visual effects depend on the music</span>
+                <span className="game__menu-controls">Controls: ⬅ a / d ➡ </span>
                 <span className="game__menu-warning">Photosensitivity warning - Game contains flashing lights</span>
                 <Author />
               </div>

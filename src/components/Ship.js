@@ -230,12 +230,15 @@ function ShipModel(props, { children }) {
       }
     }
 
-    innerConeExhaust.current.scale.z = fastSine / 15
-    innerConeExhaust.current.scale.x = innerConeScaleFactor.current + fastSine / 15
-    coneExhaust.current.scale.z = fastSine / 15
-    coneExhaust.current.scale.x = 0.85 + fastSine / 15
-    outerConeExhaust.current.scale.z = 0.9 + fastSine / 15
-    outerConeExhaust.current.scale.x = 0.9 + fastSine / 15
+
+    const scaleFactor = mutation.currentMusicLevel > 0.8 ? mutation.currentMusicLevel + 0.2 : 1
+
+    innerConeExhaust.current.scale.z = (fastSine / 15)
+    innerConeExhaust.current.scale.x = (innerConeScaleFactor.current + fastSine / 15) * scaleFactor
+    coneExhaust.current.scale.z = (fastSine / 15)
+    coneExhaust.current.scale.x = (0.85 + fastSine / 15) * scaleFactor
+    outerConeExhaust.current.scale.z = (0.9 + fastSine / 15)
+    outerConeExhaust.current.scale.x = (0.9 + fastSine / 15) * scaleFactor
 
     bodyDetail.current.material.color = mutation.globalColor
   })

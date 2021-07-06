@@ -23,7 +23,7 @@ function Sun() {
       sun.current.position.x = ship.current.position.x
     }
 
-    const scaleFactor = 0.45 + mutation.currentMusicLevel / 300
+    const scaleFactor = mutation.currentMusicLevel
 
     if (scaleFactor > 0.8 && sun.current.scale.x < 1.05) {
       sun.current.scale.x += scaleFactor * delta * 2

@@ -1,15 +1,21 @@
 import { AudioListener, AudioLoader, AudioAnalyser } from 'three'
 import { useRef, useEffect, useState, Suspense } from 'react'
 import { useLoader, useFrame } from '@react-three/fiber'
+import { MathUtils } from 'three'
+
 
 import { mutation, useStore } from '../state/useStore'
 
 import introSong from '../audio/intro-loop.mp3'
-import mainSong from '../audio/main.mp3'
+
+import mainSong from '../audio/main-nodrums.mp3'
+import mainSongDrums from '../audio/main-onlydrums.mp3'
 
 function Music() {
   const introPlayer = useRef()
   const themePlayer = useRef()
+  const drumPlayer = useRef()
+
   const soundOrigin = useRef()
 
   const musicEnabled = useStore(s => s.musicEnabled)
@@ -23,19 +29,21 @@ function Music() {
 
   const introTheme = useLoader(AudioLoader, introSong)
   const mainTheme = useLoader(AudioLoader, mainSong)
+  const mainThemeDrums = useLoader(AudioLoader, mainSongDrums)
 
   const themeFilter = useRef()
   const audioAnalyzer = useRef()
 
   const introVolume = useRef(1)
   const themeVolume = useRef(0)
+  const drumVolume = useRef(0)
 
   const introPlaying = useRef(true)
   const startCrossfade = useRef(false)
 
   useEffect(() => {
     if (hasInteracted && musicEnabled) {
-      themePlayer.current.context.resume()
+      introPlayer.current.context.resume()
     }
   }, [hasInteracted, musicEnabled])
 
@@ -51,8 +59,13 @@ function Music() {
     themeFilter.current.frequency.value = 0
     themePlayer.current.setFilter(themeFilter.current)
 
-    audioAnalyzer.current = new AudioAnalyser(themePlayer.current, 64)
   }, [mainTheme])
+
+  useEffect(() => {
+    drumPlayer.current.setBuffer(mainThemeDrums)
+
+    audioAnalyzer.current = new AudioAnalyser(drumPlayer.current, 32)
+  }, [mainThemeDrums])
 
   useEffect(() => {
     if (!musicEnabled) {
@@ -62,6 +75,7 @@ function Music() {
 
       if (themePlayer.current?.isPlaying) {
         themePlayer.current.stop()
+        drumPlayer.current.stop()
       }
 
     }
@@ -81,6 +95,7 @@ function Music() {
 
     introPlayer.current.setLoop(true)
     themePlayer.current.setLoop(true)
+    drumPlayer.current.setLoop(true)
 
     if (camera.current) {
       const cam = camera.current
@@ -88,13 +103,15 @@ function Music() {
       return () => cam.remove(listener)
     }
 
-  }, [musicEnabled, introTheme, mainTheme, gameStarted, gameOver, camera, listener])
+  }, [musicEnabled, introTheme, mainTheme, mainThemeDrums, gameStarted, gameOver, camera, listener])
 
   useEffect(() => {
     if (level > 0 && level % 2 === 0) {
       themePlayer.current.setPlaybackRate(1 + level * 0.02)
+      drumPlayer.current.setPlaybackRate(1 + level * 0.02)
     } else if (level === 0) {
       themePlayer.current.setPlaybackRate(1)
+      drumPlayer.current.setPlaybackRate(1)
     }
   }, [level])
 
@@ -102,7 +119,8 @@ function Music() {
     if (musicEnabled) {
 
       if (audioAnalyzer.current) {
-        mutation.currentMusicLevel = audioAnalyzer.current.getAverageFrequency()
+        const audioLevel = MathUtils.inverseLerp(0, 255, audioAnalyzer.current.getFrequencyData()[0])
+        mutation.currentMusicLevel = audioLevel
       }
 
       // start playing main theme "on the beat" when game starts
@@ -110,7 +128,9 @@ function Music() {
         if (introPlayer.current.context.currentTime.toFixed(1) % 9.6 === 0) {
           startCrossfade.current = true
           themePlayer.current.play()
+          drumPlayer.current.play()
           themePlayer.current.setVolume(0)
+          drumPlayer.current.setVolume(0)
         }
       }
 
@@ -118,14 +138,17 @@ function Music() {
       if (gameStarted && !gameOver && themeVolume.current < 1) {
         if (!themePlayer.current.isPlaying) {
           themePlayer.current.play()
+          drumPlayer.current.play()
         }
 
         themeFilter.current.frequency.value += delta * 4000
 
         if (themeVolume.current + delta * 0.2 > 1) {
           themeVolume.current = 1
+          drumVolume.current = 1
         } else {
           themeVolume.current += delta * 0.2
+          drumVolume.current += delta * 0.2
         }
 
         if (introVolume.current - delta * 0.2 < 0) {
@@ -136,6 +159,7 @@ function Music() {
 
         introPlayer.current.setVolume(introVolume.current)
         themePlayer.current.setVolume(themeVolume.current)
+        drumPlayer.current.setVolume(drumVolume.current)
       }
 
 
@@ -149,8 +173,10 @@ function Music() {
 
         if (themeVolume.current - delta * 0.2 < 0) {
           themeVolume.current = 0
+          drumVolume.current = 0
         } else {
           themeVolume.current -= delta * 0.2
+          drumVolume.current -= delta * 0.2
         }
 
         if (introVolume.current + delta * 0.2 > 1) {
@@ -161,6 +187,7 @@ function Music() {
 
         introPlayer.current.setVolume(introVolume.current)
         themePlayer.current.setVolume(themeVolume.current)
+        drumPlayer.current.setVolume(drumVolume.current)
       }
     }
   })
@@ -169,6 +196,7 @@ function Music() {
     <group ref={soundOrigin}>
       <audio ref={introPlayer} args={[listener]} />
       <audio ref={themePlayer} args={[listener]} />
+      <audio ref={drumPlayer} args={[listener]} />
     </group>
   )
 }

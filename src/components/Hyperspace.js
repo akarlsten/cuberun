@@ -93,6 +93,17 @@ function HyperspaceTunnel() {
     tunnel2.current.material.map.offset.y += 0.005 * delta * 165
     tunnel2.current.material.map.repeat.set(repeatX.current, repeatY.current)
     tunnel2.current.material.emissive = mutation.globalColor
+
+
+    const scaleFactor = mutation.currentMusicLevel
+
+    if (scaleFactor > 0.8 && tunnels.current.scale.x > 0.95) {
+      tunnels.current.scale.x -= scaleFactor * delta * 1
+      tunnels.current.scale.y -= scaleFactor * delta * 1
+    } else if (tunnels.current.scale.x < 1) {
+      tunnels.current.scale.x += scaleFactor * delta * 0.5
+      tunnels.current.scale.y += scaleFactor * delta * 0.5
+    }
   })
 
   return (

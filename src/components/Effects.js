@@ -19,6 +19,8 @@ export default function Effects() {
   const composer = useRef()
   const { scene, gl, size, camera } = useThree()
 
+  const bloomFactor = useRef(0)
+
   const musicEnabled = useStore(s => s.musicEnabled)
 
   useEffect(() => void composer.current.setSize(size.width, size.height), [size])
@@ -26,9 +28,17 @@ export default function Effects() {
     if (musicEnabled) {
       const bloom = composer.current.passes[1]
 
-      const bloomFactor = 0.45 + mutation.currentMusicLevel / 300
-      bloom.strength = bloomFactor > 0.8 ? bloomFactor : 0.8
-      bloom.radius = bloomFactor + 0.2 > 1 ? bloomFactor + 0.2 : 1
+      // const bloomFactor = mutation.currentMusicLevel
+      // console.log(bloomFactor)
+
+      if (mutation.currentMusicLevel > bloomFactor.current) {
+        bloomFactor.current = mutation.currentMusicLevel
+      } else {
+        bloomFactor.current -= delta * 0.5
+      }
+
+      bloom.strength = bloomFactor.current > 0.8 ? bloomFactor.current : 0.8
+      // bloom.radius = bloomFactor + 0.2 > 1 ? bloomFactor + 0.2 : 1
     }
     composer.current.render()
   }, 1)

@@ -69,6 +69,17 @@ export default function Arch() {
       arch9.current.material.color = COLORS[levelColor(0)].three
       arch10.current.material.color = COLORS[levelColor(0)].three
     }
+
+
+    const scaleFactor = mutation.currentMusicLevel
+
+    if (scaleFactor > 0.8 && arches.current.scale.x > 0.95) {
+      arches.current.scale.x -= scaleFactor * delta * 1
+      arches.current.scale.y -= scaleFactor * delta * 1
+    } else if (arches.current.scale.x < 1) {
+      arches.current.scale.x += scaleFactor * delta * 0.5
+      arches.current.scale.y += scaleFactor * delta * 0.5
+    }
   })
 
   return (
