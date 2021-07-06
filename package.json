@@ -5,9 +5,9 @@
   "dependencies": {
     "@react-three/drei": "^5.3.1",
     "@react-three/fiber": "^6.2.2",
-    "react": "@experimental",
+    "react": "@alpha",
     "react-device-detect": "^1.17.0",
-    "react-dom": "@experimental",
+    "react-dom": "@alpha",
     "react-scripts": "4.0.3",
     "three": "^0.129.0",
     "zustand": "^3.5.2"
