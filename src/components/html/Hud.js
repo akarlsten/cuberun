@@ -45,6 +45,7 @@ export default function Hud() {
         scoreRef.current.innerText = getScore()
       }
 
+      // eslint-disable-next-line
       then = now
     }
   }))
