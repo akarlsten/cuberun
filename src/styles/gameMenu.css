@@ -26,7 +26,6 @@
 
 .game__subcontainer {
   margin: 2rem;
-  margin-bottom: 1rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -224,6 +223,10 @@
 }
 .game__menu-controls {
   font-size: 1.5rem
+}
+
+.game__subcontainer {
+  margin-bottom: 1rem;
 }
 }
 

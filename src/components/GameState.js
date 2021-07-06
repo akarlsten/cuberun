@@ -54,7 +54,7 @@ export default function GameState() {
       mutation.score = Math.abs(ship.current.position.z) - 10
 
       // optimization, instead of calculating this for all elements we do it once per frame here
-      mutation.shouldShiftItems = ship.current.position.z < -PLANE_SIZE && ship.current.position.z < mutation.currentLevelLength - 400
+      mutation.shouldShiftItems = ship.current.position.z < -400 && ship.current.position.z < mutation.currentLevelLength - 400 && ship.current.position.z > mutation.currentLevelLength - 1000
     }
 
     if (gameStarted && mutation.gameOver) {

@@ -31,9 +31,9 @@ const Overlay = () => {
 
   useEffect(() => {
     let t
-    if (active !== opaque) t = setTimeout(() => setOpaque(active), 300)
+    if (hasLoaded === opaque) t = setTimeout(() => setOpaque(!hasLoaded), 300)
     return () => clearTimeout(t)
-  }, [active, opaque])
+  }, [hasLoaded, opaque])
 
   useEffect(() => {
     localStorage.setItem('musicEnabled', JSON.stringify(musicEnabled))

@@ -25,21 +25,21 @@ export default function InstancedCubes() {
     for (let i = 0; i < CUBE_AMOUNT; i++) {
       const x = randomInRange(negativeBound, positiveBound)
       const y = 10
-      const z = -900 + randomInRange(-400, 100)
+      const z = -900 + randomInRange(-400, 400)
 
       temp.push({ x, y, z })
     }
     return temp
   }, [])
 
-  const diamondStart = useMemo(() => -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE - 2.5), [level])
+  const diamondStart = useMemo(() => -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE - 2.6), [level])
   const diamondEnd = useMemo(() => -(level * PLANE_SIZE * LEVEL_SIZE) - PLANE_SIZE * (LEVEL_SIZE), [level])
 
   useFrame((state, delta) => {
-    let isWithinDiamond = false
+    let isOutsideDiamond = false
     if (ship.current) {
       if (ship.current.position.z > diamondStart || ship.current.position.z < diamondEnd) {
-        isWithinDiamond = true
+        isOutsideDiamond = true
       }
     }
 
@@ -57,12 +57,12 @@ export default function InstancedCubes() {
         }
 
         if (cube.z - ship.current.position.z > 15) {
-          if (isWithinDiamond) {
-            cube.z = ship.current.position.z - PLANE_SIZE + randomInRange(-500, 0)
+          if (isOutsideDiamond) {
+            cube.z = ship.current.position.z - PLANE_SIZE + randomInRange(-200, 0)
             cube.y = -CUBE_SIZE
             cube.x = randomInRange(negativeBound, positiveBound)
           } else {
-            cube.z = ship.current.position.z - (PLANE_SIZE * 3.3) + randomInRange(-500, 0)
+            cube.z = ship.current.position.z - (PLANE_SIZE * 3.1) + randomInRange(-200, 0)
             cube.y = -CUBE_SIZE
             cube.x = randomInRange(negativeBound, positiveBound)
           }
