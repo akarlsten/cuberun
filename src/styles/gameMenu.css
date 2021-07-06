@@ -26,6 +26,7 @@
 
 .game__subcontainer {
   margin: 2rem;
+  margin-bottom: 1rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -167,6 +168,10 @@
   text-shadow: 0 0 20px #fe2079;
 }
 
+.game__menu-controls > p {
+  margin-bottom: 0;
+}
+
 .game__menu-button:hover {
   color: #FFF;
   cursor: pointer;
@@ -190,7 +195,7 @@
 }
 
 .game__menu-button-music {
-  font-size: 2rem;
+  font-size: 2.5rem;
 }
 
 .game__menu-warning {
@@ -208,6 +213,10 @@
 
 .game__score {
   font-size: 6rem;
+}
+
+.game__menu-warning {
+  font-size: 1.5rem;
 }
 
 .game__menu-musicinfo {
