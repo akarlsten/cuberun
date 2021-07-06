@@ -9,9 +9,10 @@
   <meta name="description" content="Avoid the cubes!" />
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <link rel="prefetch" href="/fonts/commando.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="prefetch" href="/fonts/Road_Rage.otf" as="font" type="font/otf" crossorigin>
-  <link rel="prefetch" as="image" href="/cuberun-logo.png">
+  <link rel="preload" href="%PUBLIC_URL%/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="%PUBLIC_URL%/fonts/commando.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="%PUBLIC_URL%/fonts/Road_Rage.otf" as="font" type="font/otf" crossorigin>
+  <link rel="prefetch" as="image" href="%PUBLIC_URL%/cuberun-logo.png">
   <title>CubeRun</title>
 </head>
 
