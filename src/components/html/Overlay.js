@@ -58,7 +58,7 @@ const Overlay = () => {
       <div className="game__menu">
         <img className="game__logo" src="cuberun-logo.png" alt="Cuberun Logo" />
         <div className="game__subcontainer">
-          {active && !hasLoaded ? (
+          {!hasLoaded ? (
             <Loader active={active} progress={progress} />
           ) : (
             <>
