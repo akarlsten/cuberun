@@ -16,7 +16,6 @@ export default function Hud() {
 
   const gameOver = useStore(s => s.gameOver)
   const gameStarted = useStore(s => s.gameStarted)
-  const isSpeedingUp = useStore(s => s.isSpeedingUp)
 
   const [shown, setShown] = useState(false)
 
@@ -29,9 +28,20 @@ export default function Hud() {
 
   const speedRef = useRef()
   const scoreRef = useRef()
+  const isSpeedingUpRef = useRef()
 
   let currentSpeed = getSpeed()
   let currentScore = getScore()
+
+  useEffect(() => addEffect(() => {
+    if (isSpeedingUpRef.current) {
+      if (mutation.isSpeedingUp) {
+        isSpeedingUpRef.current.style.visibility = 'visible'
+      } else {
+        isSpeedingUpRef.current.style.visibility = 'hidden'
+      }
+    }
+  }))
 
   useEffect(() => addEffect(() => {
     const now = Date.now()
@@ -86,8 +96,8 @@ export default function Hud() {
 
   return shown ? (
     <div className="hud">
-      {level > 0 && isSpeedingUp && (
-        <div className="center">
+      {level > 0 && (
+        <div ref={isSpeedingUpRef} className="center">
           <h3 className="center__speedup">SPEED UP</h3>
         </div>
       )}
