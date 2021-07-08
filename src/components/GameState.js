@@ -35,7 +35,7 @@ export default function GameState() {
   useFrame((state, delta) => {
 
     // acceleration logic
-    const accelDelta = 1 * delta * 0.25
+    const accelDelta = 1 * delta * 0.15
     if (!mutation.gameOver) {
       if (mutation.gameSpeed < mutation.desiredSpeed) {
         setIsSpeedingUp(true)

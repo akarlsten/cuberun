@@ -16,20 +16,14 @@ export default function Hud() {
 
   const gameOver = useStore(s => s.gameOver)
   const gameStarted = useStore(s => s.gameStarted)
+  const isSpeedingUp = useStore(s => s.isSpeedingUp)
 
   const [shown, setShown] = useState(false)
-  const [showSpeedUp, setShowSpeedUp] = useState(false)
 
   const [showControls, setShowControls] = useState(false)
   const [left, setLeftPressed] = useState(false)
   const [right, setRightPressed] = useState(false)
 
-  // A bit wonky, but just using regular state means it's sometimes skipped on slow devices
-  useEffect(() => addEffect(() => {
-    if (useStore.getState().isSpeedingUp !== showSpeedUp) {
-      setShowSpeedUp(useStore.getState().isSpeedingUp)
-    }
-  }))
 
   // performance optimization for the rapidly updating speedometer and score - see https://github.com/pmndrs/racing-game/blob/main/src/ui/Speed/Text.tsx
   let then = Date.now()
@@ -93,7 +87,7 @@ export default function Hud() {
 
   return shown ? (
     <div className="hud">
-      {level > 0 && showSpeedUp && (
+      {level > 0 && isSpeedingUp && (
         <div className="center">
           <h3 className="center__speedup">SPEED UP</h3>
         </div>
