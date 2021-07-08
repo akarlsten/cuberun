@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 100%;
 }
 
@@ -38,7 +38,7 @@
   max-width: 100%;
   max-height: 100%;
   width: 1024px;
-  margin-top: 30%;
+  margin-top: 2rem;
 }
 
 .game__logo-small {
@@ -142,7 +142,7 @@
 }
 
 .game__menu-warning {
-  margin-top: 1rem;
+  margin-top: 8rem;
   font-family: 'Commando', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 2rem;
   color: #fe2079;
@@ -159,7 +159,7 @@
 }
 
 .game__menu-controls {
-  margin-top: 0.5rem;
+  margin-top: 2rem;
   margin-bottom: 0.5rem;
   font-family: 'Road Rage', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 2rem;
@@ -168,7 +168,7 @@
 }
 
 .game__menu-controls > p {
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .game__menu-button:hover {
@@ -216,6 +216,7 @@
 
 .game__menu-warning {
   font-size: 1.5rem;
+  margin-top: 0;
 }
 
 .game__menu-musicinfo {
@@ -234,7 +235,13 @@
   .game__menu-musicinfo {
     font-size: 1rem;
   }
+
+  .game__subcontainer {
+    margin: 0;
+  }
   .game__menu-controls {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   font-size: 1.2rem
 }
   .game__scorecontainer {
@@ -252,8 +259,8 @@
   }
 
 .game__logo {
-  height: 175px;
-  width: 350px;
+  height: 128px;
+  width: 256px;
 }
 
 .game__logo-small {
