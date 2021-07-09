@@ -8,14 +8,12 @@ import { INITIAL_GAME_SPEED, PLANE_SIZE, LEVEL_SIZE } from '../constants'
 const shipSelector = s => s.ship
 const setScoreSelector = s => s.setScore
 const gameStartedSelector = s => s.gameStarted
-const setIsSpeedingUpSelector = s => s.setIsSpeedingUp
 const setGameOverSelector = s => s.setGameOver
 
 export default function GameState() {
   const ship = useStore(shipSelector)
   const setScore = useStore(setScoreSelector)
   const gameStarted = useStore(gameStartedSelector)
-  const setIsSpeedingUp = useStore(setIsSpeedingUpSelector)
   const setGameOver = useStore(setGameOverSelector)
 
   const level = useStore(s => s.level)
@@ -38,14 +36,11 @@ export default function GameState() {
     const accelDelta = 1 * delta * 0.15
     if (!mutation.gameOver) {
       if (mutation.gameSpeed < mutation.desiredSpeed) {
-        setIsSpeedingUp(true)
         if (mutation.gameSpeed + accelDelta > mutation.desiredSpeed) {
           mutation.gameSpeed = mutation.desiredSpeed
         } else {
           mutation.gameSpeed += accelDelta
         }
-      } else {
-        setIsSpeedingUp(false)
       }
     }
 
