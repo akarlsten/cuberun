@@ -16,7 +16,6 @@ export default function Hud() {
 
   const gameOver = useStore(s => s.gameOver)
   const gameStarted = useStore(s => s.gameStarted)
-  const isSpeedingUp = useStore(s => s.isSpeedingUp)
 
   const [shown, setShown] = useState(false)
 
