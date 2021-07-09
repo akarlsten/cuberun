@@ -7,23 +7,31 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0% {
     color: #eee;
-    opacity: 100%;
+    opacity: 1;
   }
   50% {
     color: #fe2079;
-    opacity: 70%;
+    opacity: 0.7;
+  }
+  100% {
+    color: #eee;
+    opacity: 1;
   }
 }
 
 @keyframes wiggle {
-  0%, 100% {
+  0% {
     transform: translateY(0%);
   }
 
   50% {
     transform: translateY(10%);
+  }
+
+  100% {
+    transform: translateY(0%);
   }
 }
 
@@ -39,6 +47,7 @@
 }
 
 .center__speedup {
+  color: #eee;
   animation: pulse 0.5s ease-in-out infinite, wiggle 0.3s ease-in infinite;
 }
 

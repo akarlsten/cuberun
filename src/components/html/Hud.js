@@ -16,6 +16,7 @@ export default function Hud() {
 
   const gameOver = useStore(s => s.gameOver)
   const gameStarted = useStore(s => s.gameStarted)
+  const isSpeedingUp = useStore(s => s.isSpeedingUp)
 
   const [shown, setShown] = useState(false)
 
@@ -29,11 +30,9 @@ export default function Hud() {
 
   const speedRef = useRef()
   const scoreRef = useRef()
-  const msgRef = useRef()
 
   let currentSpeed = getSpeed()
   let currentScore = getScore()
-  let currentMessage = ""
 
   useEffect(() => addEffect(() => {
     const now = Date.now()
@@ -45,14 +44,6 @@ export default function Hud() {
 
       if (scoreRef.current) {
         scoreRef.current.innerText = getScore()
-      }
-
-      if (msgRef.current) {
-        if (level > 0 && mutation.gameSpeed < mutation.desiredSpeed) {
-          msgRef.current.innerText = "SPEED UP"
-        } else {
-          msgRef.current.innerText = ""
-        }
       }
 
       // eslint-disable-next-line
@@ -96,9 +87,11 @@ export default function Hud() {
 
   return shown ? (
     <div className="hud">
-      <div className="center">
-        <h3 ref={msgRef} className="center__speedup">{currentMessage}</h3>
-      </div>
+      {level > 0 && isSpeedingUp && (
+        <div className="center">
+          <h3 className="center__speedup">SPEED UP</h3>
+        </div>
+      )}
       {showControls && (
         <div className="controls">
           <button onTouchStart={() => setLeftPressed(true)} onTouchEnd={() => setLeftPressed(false)} className={`control control__left ${left ? 'control-active' : ''}`}>{'<'}</button>
