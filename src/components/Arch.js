@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 import { useStore, mutation } from '../state/useStore'
 import { PLANE_SIZE, COLORS, LEVEL_SIZE } from '../constants'

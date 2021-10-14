@@ -55,6 +55,7 @@ export default function GlobalColor({ materialRef }) {
       // regular levels
     } else if (mutation.colorLevel > previousLevel.current) {
       mutation.globalColor.lerpColors(COLORS[previousLevel.current].three, COLORS[mutation.colorLevel].three, colorAlpha.current)
+
       if (colorAlpha.current + (delta * mutation.gameSpeed) * 0.5 > 1) {
         colorAlpha.current = 1
       } else {

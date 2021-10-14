@@ -14,8 +14,7 @@ import { useStore, mutation } from '../state/useStore'
 const v = new Vector3()
 
 function ShipModel(props, { children }) {
-  const { nodes, materials } = useGLTF(shipModel)
-
+  const { nodes, materials } = useGLTF(shipModel, "https://www.gstatic.com/draco/versioned/decoders/1.4.0/")
   // tie ship and camera ref to store to allow getting at them elsewhere
   const ship = useStore((s) => s.ship)
   const camera = useStore((s) => s.camera)
@@ -286,7 +285,7 @@ function ShipModel(props, { children }) {
 }
 
 
-useGLTF.preload(shipModel)
+useGLTF.preload(shipModel, "https://www.gstatic.com/draco/versioned/decoders/1.4.0/")
 
 function Loading() {
   return (
