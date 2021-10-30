@@ -1,0 +1,202 @@
+name: Android CI
+
+# Triggers the workflow on push or pull request events
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+       ref: ${{ github.event.release.target_commitish }} # This is the branch the release was created from. Normally main, but can be a dev branch
+
+    - name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+
+    - name: set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+
+    # Runs a set of commands using the runners shell
+    - name: Install dependencies
+      if: runner.os != 'windows'
+      run: |
+        npm install
+        npm install -g @ionic/cli cordova
+        npm install @capacitor/core @capacitor/cli @capacitor/android
+
+    - name: Build web in production mode
+      if: runner.os != 'windows'
+      run: |
+        npm run build
+        zip -r web.zip build
+
+    - name: Using Capacitor to generate android project
+      run: |
+       npx cap init
+       if [ $? -ne 0 ]; then
+        npx cap init cubeworld com.adamkarlsten.cubeworld --web-dir build
+       fi
+       npx cap add android
+       npx cap sync
+
+    - name: Using Capacitor - Grant execute permission for gradlew
+      if: runner.os != 'windows'
+      run: |
+        cd android
+        chmod +x gradlew
+
+    - name: Using Capacitor - Cache Gradle packages
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Using Capacitor to build APKs
+      working-directory: ./android
+      run: |
+        ./gradlew assembleDebug --stacktrace
+        ./gradlew assemble
+        ./gradlew bundleRelease
+
+
+    - name: Generate and sign Java keytool
+      if: runner.os != 'windows'
+      env:
+       MY_ZIP_PASSWORD: ${{ secrets.MY_ZIP_PASSWORD }}
+       BUILD_TOOLS: ${{env.BUILD_TOOLS}}
+      run: |
+       echo "Get latest Android build tool version"
+       export BUILD_TOOLS=$(ls $ANDROID_SDK_ROOT/build-tools | tail -1)
+       echo "BUILD_TOOLS=$BUILD_TOOLS"
+       echo "BUILD_TOOLS=$BUILD_TOOLS" >> $GITHUB_ENV
+       if [ ! -n "${MY_ZIP_PASSWORD}" ]; then
+           export MY_ZIP_PASSWORD="Test123"
+       fi
+
+       echo "Create keys and signing our apk"
+       mkdir -p keys
+       echo "Generate a Private Certificate by keytool"
+       echo "https://developer.android.com/studio/build/building-cmdline#sign_cmdline"
+       keytool -genkeypair -v -noprompt \
+        -storetype PKCS12 \
+        -alias my-android-release-key \
+        -keystore keys/my-android-release-key.keystore \
+        -keyalg RSA -keysize 2048 -validity 10000 \
+        -storepass ${MY_ZIP_PASSWORD} \
+        -keypass ${MY_ZIP_PASSWORD} \
+        -dname "CN=nguoianphu.com, OU=NA, O=Company, L=HOCHIMINH, S=HOCHIMINH, C=VN"
+       echo "Export the certificate for the upload key to PEM format"
+       keytool -export -rfc -v -noprompt \
+           -storepass ${MY_ZIP_PASSWORD} \
+           -keypass ${MY_ZIP_PASSWORD} \
+           -keystore keys/my-android-release-key.keystore \
+           -alias my-android-release-key \
+           -file keys/my-android-release-upload-certificat.pem
+
+       echo "Sign the APK with the key we just created"
+       cd $ANDROID_SDK_ROOT/build-tools/$BUILD_TOOLS
+       echo "Align the unsigned APK using zipalign"
+       ./zipalign -v 4 \
+           $GITHUB_WORKSPACE/android/app/build/outputs/apk/release/app-release-unsigned.apk \
+           $GITHUB_WORKSPACE/android/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
+
+       echo "Sign your APK with your private key using apksigner"
+       ./apksigner sign \
+           --ks $GITHUB_WORKSPACE/keys/my-android-release-key.keystore \
+           --ks-key-alias my-android-release-key \
+           --ks-pass pass:${MY_ZIP_PASSWORD} \
+           --key-pass pass:${MY_ZIP_PASSWORD} \
+           --out $GITHUB_WORKSPACE/android/app/build/outputs/apk/release/app-release.apk \
+           $GITHUB_WORKSPACE/android/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
+
+       echo "Verify that your APK is signed \
+               to confirm that an APK's signature \
+               will be verified successfully \
+               on all versions of the Android platform supported by the APK"
+       ./apksigner verify --verbose --print-certs $GITHUB_WORKSPACE/android/app/build/outputs/apk/release/app-release.apk
+
+       cd $GITHUB_WORKSPACE/android
+       echo "Sign Android App Bundle by jarsigner"
+       echo "https://medium.com/androiddevelopers/building-your-first-app-bundle-bbcd228bf631"
+       jarsigner -storepass ${MY_ZIP_PASSWORD} \
+           -keypass ${MY_ZIP_PASSWORD} \
+           -keystore $GITHUB_WORKSPACE/keys/my-android-release-key.keystore \
+           app/build/outputs/bundle/release/app-release.aab my-android-release-key
+
+       echo "zip keys and certificates with password"
+       cd $GITHUB_WORKSPACE
+       7z a -tzip -p${MY_ZIP_PASSWORD} keys.zip -r keys
+
+    - name: Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        body_path: CHANGELOG.md
+        files: |
+          ./web.zip
+          ./keys.zip
+          ./android/app/build/outputs/apk/release/app-release.apk
+          ./android/app/build/outputs/apk/debug/app-debug.apk
+          ./android/app/build/outputs/bundle/release/app-release.aab
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Capacitor_APKs_Release
+        path: |
+          ./android/app/build/outputs/apk/release/
+          ./android/app/build/outputs/bundle/release/
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Capacitor_APKs_Debug
+        path: |
+          ./android/app/build/outputs/apk/debug/
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Web
+        path: |
+          ./web.zip
+
+    - name: Cleanup Gradle Cache
+      # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
+      # Restoring these files from a GitHub Actions cache might cause problems for future builds.
+      run: |
+        rm -f ~/.gradle/caches/modules-2/modules-2.lock
+        rm -f ~/.gradle/caches/modules-2/gc.properties

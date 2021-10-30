@@ -1,0 +1,6 @@
+{
+  "appId": "com.adamkarlsten.cubeworld",
+  "appName": "cubeworld",
+  "webDir": "build",
+  "bundledWebRuntime": false
+}
